@@ -18,15 +18,7 @@ Lightweight and easy to run in the browser
 
 Players select clothing items and place them onto the model. Items are designed to fit the base character, making it easy to create different looks without resizing or editing.
 
-## Project Structure
-
-/assets – Model base and clothing illustrations
-
-/src – Code for interaction and UI
-
-index.html – Main game page
-
-Future Ideas
+## Future Ideas
 
 Additional seasonal outfits
 
