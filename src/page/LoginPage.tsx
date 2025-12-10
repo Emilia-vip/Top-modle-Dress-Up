@@ -87,7 +87,7 @@ function LoginPage() {
       {/* Gubbar */}
       <div className="flex items-center ml-4">
         <img src={gubbeImage} alt="Gubbe" className="w-90 h-auto" />
-        <img src={gubbeImage1} alt="Gubbe" className="w-80 h-auto -ml-30" />
+        <img src={gubbeImage1} alt="Gubbe" className="w-90 h-auto -ml-30" />
       </div>
     </div>
   );

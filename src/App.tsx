@@ -5,7 +5,7 @@ import { AuthContext } from "./contexts/AuthContext";
 import { useContext } from "react";
 
 function App() {
-
+  
   const { user, loading } = useContext(AuthContext);
   return (
 
@@ -13,6 +13,6 @@ function App() {
       {!loading && <RouterProvider router={user ? appRouter : authRouter} />}
     </div>
   );
-}
+};
 
 export default App;
