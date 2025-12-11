@@ -1,23 +1,21 @@
 // App.tsx
+
 import React, { useContext, useEffect, useState } from 'react';
 import { RouterProvider } from 'react-router';
 import authRouter from './routes/AuthRouter';
 import appRouter from './routes/AppRouter';
 import { AuthContext } from './contexts/AuthContext';
 import { fetchClothingData } from './data/clothes';
-// import GamePage from './page/GamePage';
-// import { dolls, tops, bottoms } from './data/clothes';
 
 function App() {
   const { user, loading: authLoading } = useContext(AuthContext);
 
-  // State för att hålla den hämtade datan
   const [data, setData] = useState<any | null>(null);
-  // Lokalt laddnings-state för datahämtning
   const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
     setDataLoading(true);
+
     fetchClothingData()
       .then((fetchedData) => {
         setData(fetchedData);
@@ -30,7 +28,6 @@ function App() {
       });
   }, []);
 
-  // Om auth fortfarande laddar, visa något lämpligt
   if (authLoading || dataLoading) {
     return (
       <div className="App loading-screen">
@@ -49,8 +46,9 @@ function App() {
 
   return (
     <div className="w-full h-screen flex items-start justify-center">
-      {/* Rendera RouterProvider som vanligt */}
-      {!authLoading && <RouterProvider router={user ? appRouter : authRouter} />}
+
+      {/* 👇 Här är den ENDA viktiga ändringen */}
+      <RouterProvider router={user ? appRouter(data) : authRouter} />
 
     </div>
   );
