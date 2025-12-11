@@ -147,13 +147,6 @@ const GamePage: React.FC<Props> = ({ dolls, tops, bottoms }) => {
               currentName={currentBottom?.name || 'Inget'}
             />
 
-            {/* Accessoar-knapp (Stil bibehållen) */}
-            <div className="flex justify-center">
-                 <div className="w-24 h-24 bg-white/10 backdrop-blur-sm rounded-xl border-2 border-purple-900 flex flex-col items-center justify-center text-white shadow-xl transition duration-150 p-1">
-                    <div className="text-3xl text-gray-500"><Zap /></div>
-                    <div className="text-xs text-gray-400 font-semibold mt-1">Accessoar</div>
-                 </div>
-            </div>
         </div>
 
         {/* 3. Dockans område (Centrerad Layering) */}
