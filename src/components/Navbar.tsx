@@ -7,9 +7,9 @@ export default function Navbar() {
 
   return (
     <header
-      className="fixed top-0 left-0 w-full flex justify-center items-center gap-6 p-4 bg-gray-900 bg-opacity-40 backdrop-blur-md rounded-b-2xl shadow-2xl shadow-black z-50"
+      className="fixed top-3 left-0 w-full flex justify-center items-center gap-6 p-4 bg-gray-900 bg-opacity-40 backdrop-blur-md rounded-2xl shadow-2xl shadow-black z-50"
     >
-      {/* Länkar */}
+      {/* Navbar */}
       <div className="flex gap-6">
         <NavLink
           to="/"
