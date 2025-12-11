@@ -128,6 +128,9 @@ const BOTTOMSLIGHT = [
     },
     
 ]
+export const dolls = DOLLS;
+export const tops = { dark: TOPSDARK, light: TOPSLIGHT };
+export const bottoms = { dark: BOTTOMSDARK, light: BOTTOMSLIGHT };
 
 // Exportera datat i en struktur som är enkel att använda i App/GamePage
 export function fetchClothingData() {
