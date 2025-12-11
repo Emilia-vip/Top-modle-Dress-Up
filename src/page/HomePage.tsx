@@ -46,8 +46,7 @@ function HomePage() {
           <div>
             <h3 className="text-xl font-medium text-white">2. Utforska garderoben</h3>
             <p className="leading-relaxed">
-              Bläddra bland tröjor, byxor, klänningar, frisyrer, skor och olika
-              accessoarer. Varje kategori innehåller flera alternativ att prova.
+              Bläddra bland tröjor, byxor, klänningar och skor. Varje kategori innehåller flera alternativ att prova.
             </p>
           </div>
 
