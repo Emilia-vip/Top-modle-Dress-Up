@@ -5,7 +5,8 @@ import authRouter from './routes/AuthRouter';
 import appRouter from './routes/AppRouter';
 import { AuthContext } from './contexts/AuthContext';
 import { fetchClothingData } from './data/clothes';
-import GamePage from './page/GamePage';
+// import GamePage from './page/GamePage';
+// import { dolls, tops, bottoms } from './data/clothes';
 
 function App() {
   const { user, loading: authLoading } = useContext(AuthContext);
@@ -51,9 +52,6 @@ function App() {
       {/* Rendera RouterProvider som vanligt */}
       {!authLoading && <RouterProvider router={user ? appRouter : authRouter} />}
 
-      <div className="App">
-        <GamePage dolls={data.dolls} tops={data.tops} bottoms={data.bottoms} />
-      </div>
     </div>
   );
 }
