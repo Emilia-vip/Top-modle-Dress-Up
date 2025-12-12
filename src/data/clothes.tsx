@@ -24,15 +24,10 @@ import bottom4light from '../assets/lightskin/bottom/jenas-blue.png';
 
 
 const DOLLS = {
-    'dark' : {
-        id: 'dark',
-        image: dollDark,
-    },
-    'light' : {
-        id: 'light',
-        image: dollLight,
-    }
-}
+    dark: dollDark,
+    light: dollLight
+};
+
 
 const TOPSDARK = [
     {

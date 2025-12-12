@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom'; 
-import { ChevronLeft, ChevronRight, Shirt, Users, Zap } from 'lucide-react'; 
+import { ChevronLeft, ChevronRight, Shirt, Users,} from 'lucide-react'; 
 
 // Definiera den förväntade datastrukturen (objekt med dark/light)
 type ClothingItem = { name: string; image: string };
