@@ -153,4 +153,4 @@ export function fetchClothingData() {
       });
     }, 500);
   });
-}
+};
