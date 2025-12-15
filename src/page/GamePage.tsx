@@ -1,7 +1,6 @@
-// src/page/GamePage.tsx
-
-import React, { useState, useMemo, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Shirt, Users, Zap } from "lucide-react";
+import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom'; 
+import { ChevronLeft, ChevronRight, Shirt, Users,} from 'lucide-react'; 
 
 // Datatyper
 type ClothingItem = { name: string; image: string };
@@ -82,19 +81,65 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
           "url('https://t3.ftcdn.net/jpg/09/00/33/46/360_F_900334673_iPcSROckgtgBmsRh3WiUENMKxsnmfEBW.jpg')",
       }}
     >
-      {/* SPELOMRÅDE */}
-      <div className="relative w-full max-w-6xl h-[520px] flex items-center justify-center">
+      
+      {/* 1. Huvudnavigering (Med router-länkar) */}
+      <div className="w-full max-w-5xl flex justify-center py-4 z-50">
+        <div className="bg-white/10 backdrop-blur-md rounded-full px-8 py-3 flex space-x-6 shadow-2xl">
+          
+          {[
+            { name: 'Home', path: '/' }, 
+            { name: 'Profile', path: '/profile' }, 
+            { name: 'Game', path: '/game' }, 
+            { name: 'Rating', path: '/rating' }
+          ].map((item) => (
+            <Link 
+              key={item.name} 
+              to={item.path}
+              className={`px-5 py-2 text-white font-semibold rounded-full transition 
+                        ${item.name === 'Game' ? 'bg-indigo-700' : 'bg-indigo-500/80 hover:bg-indigo-600'}`}
+            >
+              {item.name}
+            </Link>
+          ))}
+          
+          <button 
+            onClick={handleLogout} 
+            className="px-5 py-2 text-white font-semibold rounded-full bg-red-500/80 hover:bg-red-600 transition"
+          >
+            Logga ut
+          </button>
 
+        </div>
+      </div>
 
-        {/* VÄNSTER KONTROLLER */}
-        <div className="absolute left-0 flex flex-col space-y-8">
-          <CarouselControls
-            onClickPrev={prevTop}
-            onClickNext={nextTop}
-            icon={<Shirt />}
-            title="Tröja"
-            currentName={currentTop?.name || "Ingen"}
-          />
+      {/* 2. Spelområdet (Docka och kontroller) */}
+      <div className="flex relative items-center justify-center w-full max-w-6xl h-[600px] mt-10">
+
+        {/* Spotlight circle behind doll (Din CSS-stil) */}
+        <div className="absolute w-96 h-96 border-8 border-white rounded-full opacity-60 z-10"></div>
+        
+        {/* KLÄDESKONTROLLER (Vänster) */}
+        <div className="absolute left-10 top-1/2 -translate-y-1/2 flex flex-col space-y-8 z-40">
+            
+            {/* Topp-kontroll (Shirt) */}
+            <CarouselControls 
+              onClickPrev={prevTop} 
+              onClickNext={nextTop} 
+              icon={<Shirt />} 
+              title="Tröja/Top" 
+              currentName={currentTop?.name || 'Inget'}
+            />
+             
+            {/* Bottom-kontroll (Byxor/Kjol) */}
+            <CarouselControls 
+              onClickPrev={prevBottom} 
+              onClickNext={nextBottom} 
+              icon={<Users />}
+              title="Byxor/Kjol" 
+              currentName={currentBottom?.name || 'Inget'}
+            />
+
+        </div>
 
           <CarouselControls
             onClickPrev={prevBottom}

@@ -7,6 +7,7 @@ import appRouter from './routes/AppRouter';
 import { AuthContext } from './contexts/AuthContext';
 import { fetchClothingData } from './data/clothes';
 
+
 function App() {
   const { user, loading: authLoading } = useContext(AuthContext);
 
