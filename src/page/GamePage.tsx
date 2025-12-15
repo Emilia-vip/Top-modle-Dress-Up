@@ -1,40 +1,46 @@
 // src/page/GamePage.tsx
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Shirt, Users, Zap } from "lucide-react";
 
 // Datatyper
 type ClothingItem = { name: string; image: string };
 type ClothingCollection = { dark: ClothingItem[]; light: ClothingItem[] };
-type DollCollection = { dark: string; light: string };
+
 
 type Props = {
-  dolls: DollCollection;
   tops: ClothingCollection;
   bottoms: ClothingCollection;
 };
 
-const GamePage: React.FC<Props> = ({ dolls, tops, bottoms }) => {
+const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
   const [selectedSkin, setSelectedSkin] = useState<"dark" | "light">("dark");
   const [currentTopIndex, setCurrentTopIndex] = useState(0);
   const [currentBottomIndex, setCurrentBottomIndex] = useState(0);
+
+    useEffect(() => {
+    setCurrentTopIndex(0);
+    setCurrentBottomIndex(0);
+  }, [selectedSkin]);
+
 
   const currentTopsArray = useMemo(() => tops[selectedSkin], [tops, selectedSkin]);
   const currentBottomsArray = useMemo(() => bottoms[selectedSkin], [bottoms, selectedSkin]);
 
   const currentTop = currentTopsArray[currentTopIndex];
   const currentBottom = currentBottomsArray[currentBottomIndex];
-  const selectedDoll = dolls[selectedSkin];
+  
 
   const nextTop = () =>
-    setCurrentTopIndex((previousState) => (previousState + 1) % currentTopsArray.length);
+  setCurrentTopIndex((i) => (i + 1) % currentTopsArray.length);
   const prevTop = () =>
-    setCurrentTopIndex((previousState) => (previousState - 1 + currentTopsArray.length) % currentTopsArray.length);
+  setCurrentTopIndex((i) => (i - 1 + currentTopsArray.length) % currentTopsArray.length);
 
   const nextBottom = () =>
-    setCurrentBottomIndex((previousState) => (previousState + 1) % currentBottomsArray.length);
+  setCurrentBottomIndex((i) => (i + 1) % currentBottomsArray.length);
   const prevBottom = () =>
-    setCurrentBottomIndex((previousState) => (previousState - 1 + currentBottomsArray.length) % currentBottomsArray.length);
+  setCurrentBottomIndex((i) => (i - 1 + currentBottomsArray.length) % currentBottomsArray.length);
+
 
   const CarouselControls: React.FC<{
     onClickPrev: () => void;
@@ -103,24 +109,20 @@ const GamePage: React.FC<Props> = ({ dolls, tops, bottoms }) => {
         </div>
 
           {/* DOCKA */}
-          <div className="relative w-[280px] h-[480px] z-10">
-            <img
-              src={selectedDoll}
-              className="absolute inset-0 w-full h-full object-contain"
-            />
-          {currentBottom && (
-            <img
-              src={currentBottom.image}
-              className="absolute inset-0 w-full h-full object-contain"
-            />
-          )}
-          {currentTop && (
-            <img
-              src={currentTop.image}
-              className="absolute inset-0 w-full h-full object-contain"
-            />
-          )}
-        </div>
+          <div className="relative w-[300px] h-[450px]">
+  {currentBottom && (
+    <img
+      src={currentBottom.image}
+      className="absolute inset-0 w-full h-full object-contain"
+    />
+  )}
+  {currentTop && (
+    <img
+      src={currentTop.image}
+      className="absolute inset-0 w-full h-full object-contain"
+    />
+  )}
+</div>
 
         {/* HÖGER – SKIN */}
         <div className="absolute right-0 flex flex-col space-y-4">

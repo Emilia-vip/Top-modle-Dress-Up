@@ -1,6 +1,8 @@
 // IMPORTERA BASDOCKOR
-import dollDark from '../assets/character/character-dark.png';
-import dollLight from '../assets/character/character-light.png';
+import dollDarkUpper from '../assets/character/character-dark-upperbody.png';
+import dollDarkLower from '../assets/character/character-dark-lowerbody.png';
+import dollLightUpper from '../assets/character/character-light-upperbody.png';
+import dollLightLower from '../assets/character/character-light-lowerbody.png';
 
 // IMPORTERA KLÄDER 
 import top1dark from '../assets/darkskin/top/beige-troja.png';
@@ -13,7 +15,7 @@ import bottom3dark from '../assets/darkskin/bottom/jeans-beige-shoes.png';
 import bottom4dark from '../assets/darkskin/bottom/jeans-white-shoes.png';
 
 
-import top1light from '../assets//lightskin/top/beige-crop-top.png';
+import top1light from '../assets/lightskin/top/beige-crop-top.png';
 import top2light from '../assets/lightskin/top/beige-sweatshirt.png';
 import top3light from '../assets/lightskin/top/blue-skirt.png';
 import top4light from '../assets/lightskin/top/pink-t-shirt.png';
@@ -23,13 +25,12 @@ import bottom3light from '../assets/lightskin/bottom/jeans.png';
 import bottom4light from '../assets/lightskin/bottom/jenas-blue.png';
 
 
-const DOLLS = {
-    dark: dollDark,
-    light: dollLight
-};
-
-
 const TOPSDARK = [
+    {
+        id: 'Upper-Body-Dark',
+        name: 'Upper body',
+        image: dollDarkUpper
+    },
     {
         id: 'top-1dark',
         name: 'beige shirt',
@@ -55,6 +56,11 @@ const TOPSDARK = [
 
 const BOTTOMSDARK = [
     {
+        id: 'Lower-Body-Dark',
+        name: 'Lower body',
+        image: dollDarkLower
+    },
+    {
         id: 'bottom-1dark',
         name: 'black pants',
         image: bottom1dark
@@ -79,6 +85,11 @@ const BOTTOMSDARK = [
 
 const TOPSLIGHT = [
     {
+        id: 'Upper-Body-Light',
+        name: 'Upper body',
+        image: dollLightUpper
+    },
+    {
         id: 'top-1light',
         name: 'crop top beige',
         image: top1light
@@ -102,6 +113,11 @@ const TOPSLIGHT = [
 
 const BOTTOMSLIGHT = [
     {
+        id: 'Lower-Body-Light',
+        name: 'Lower body',
+        image: dollLightLower
+    },
+    {
         id: 'bottom-1light',
         name: 'black pants',
         image: bottom1light
@@ -123,7 +139,7 @@ const BOTTOMSLIGHT = [
     },
     
 ]
-export const dolls = DOLLS;
+
 export const tops = { dark: TOPSDARK, light: TOPSLIGHT };
 export const bottoms = { dark: BOTTOMSDARK, light: BOTTOMSLIGHT };
 
@@ -132,13 +148,9 @@ export function fetchClothingData() {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
-        dolls: DOLLS,
         tops: { dark: TOPSDARK, light: TOPSLIGHT },
         bottoms: { dark: BOTTOMSDARK, light: BOTTOMSLIGHT },
       });
     }, 500);
   });
 }
-
-
-export default fetchClothingData;
