@@ -71,40 +71,40 @@ function SignupPage() {
         }}
       >
         <h1 className="text-3xl font-light text-center mb-6 text-white tracking-wider">
-          Skapa konto
+          Create account
         </h1>
 
-        <label className="text-gray-300">Namn</label>
+        <label className="text-gray-300">Username</label>
         <MyTextInput
           value={formData.name}
           onChange={(e) => updateField("name", e.target.value)}
           className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-5 py-3 focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
-          placeholder="Ditt namn"
+          placeholder="Username"
         />
 
-        <label className="text-gray-300">Telefon</label>
+        <label className="text-gray-300">Phone</label>
         <MyTextInput
           value={formData.phone}
           onChange={(e) => updateField("phone", e.target.value)}
           className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-5 py-3 focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
-          placeholder="Telefonnummer"
+          placeholder="Phone number"
         />
 
-        <label className="text-gray-300">E-post</label>
+        <label className="text-gray-300">Email</label>
         <MyTextInput
           value={formData.email}
           onChange={(e) => updateField("email", e.target.value)}
           className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-5 py-3 focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
-          placeholder="E-post...."
+          placeholder="Email...."
         />
 
-        <label className="text-gray-300">Lösenord</label>
+        <label className="text-gray-300">Password</label>
         <MyTextInput
           type="password"
           value={formData.password}
           onChange={(e) => updateField("password", e.target.value)}
           className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-5 py-3 focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
-          placeholder="Lösenord...."
+          placeholder="Password...."
         />
 
         {errorMessage && (
@@ -115,7 +115,7 @@ function SignupPage() {
           onClick={submitRegister}
           className="w-full bg-gray-700 bg-opacity-20 hover:bg-gray-600 hover:bg-opacity-30 text-white font-semibold py-3 rounded-full shadow-lg transition-all duration-300 mt-2 border border-gray-500 hover:border-white"
         >
-          Skapa konto
+          Sign up
         </button>
       </div>
 
