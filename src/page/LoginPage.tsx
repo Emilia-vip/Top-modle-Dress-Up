@@ -11,18 +11,18 @@ import gubbeImage1 from "../assets/darksin-galablue.png"
 
 function LoginPage() {
   const { saveLogin } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const login = async () => {
-    if (!email || !password) {
+    if (!username || !password) {
       alert("Please fill in all fields");
       return;
     }
     try {
       const response = await axios.post<AuthResponse>(`${BASE_URL}/login`, {
-        email,
+        username,
         password,
       });
       saveLogin(response.data);
@@ -52,12 +52,12 @@ function LoginPage() {
           Logga in
         </h1>
 
-        <label className="text-gray-300">E-post</label>
+        <label className="text-gray-300">Username</label>
         <MyTextInput
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-5 py-3 focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
-          placeholder="E-post...."
+          placeholder="Username...."
         />
 
         <label className="text-gray-300">Lösenord</label>
