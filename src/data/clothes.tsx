@@ -25,12 +25,6 @@ import bottom3light from '../assets/lightskin/bottom/jeans.png';
 import bottom4light from '../assets/lightskin/bottom/jenas-blue.png';
 
 
-const DOLLS = {
-    dark: dollDark,
-    light: dollLight
-};
-
-
 const TOPSDARK = [
     {
         id: 'Upper-Body-Dark',
