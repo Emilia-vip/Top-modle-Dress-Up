@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext, useCallback } from "react";
-import axios from "axios";
 import backstage from "../assets/backstage.png";
 import { BASE_URL } from "../constants";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
@@ -7,6 +6,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import apiClient from "../api/client";
 import type { Outfit } from "../type";
 import { tops, bottoms } from "../data/clothes";
+
 
 function ProfilePage() {
   const { user } = useContext(AuthContext);
@@ -39,10 +39,11 @@ function ProfilePage() {
     );
   };
 
+  // 1. Hämta användardata
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/user/me`);
+        const res = await apiClient.get("/user/me");
         const data = res.data;
 
         setUsername(data.username || "");
@@ -64,7 +65,6 @@ function ProfilePage() {
       setOutfitsLoading(false);
       return;
     }
-
     try {
       const response = await apiClient.get<Outfit[]>(
         `/outfits/user/${user.username}`
@@ -87,6 +87,7 @@ function ProfilePage() {
     return () => window.removeEventListener("focus", handleFocus);
   }, [fetchOutfits]);
 
+  // 3. Spara profiländringar
   const handleSave = async () => {
     try {
       const updateData: any = {};
@@ -106,7 +107,7 @@ function ProfilePage() {
   };
 
   if (loading) {
-    return <div className="text-white text-center mt-20">Laddar...</div>;
+    return <div className="text-white text-center mt-20">Laddar profil...</div>;
   }
 
   return (
@@ -127,21 +128,21 @@ function ProfilePage() {
           <input
             value={username}
             readOnly
-            className="w-full border px-4 py-2 rounded-2xl text-black bg-gray-100 cursor-not-allowed"
+            className="w-full border px-4 py-2 rounded-2xl text-gray-600 bg-gray-100 cursor-not-allowed mb-3"
           />
 
           <label className="ml-4">Email</label>
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border px-4 py-2 rounded-2xl text-black"
+            className="w-full border px-4 py-2 rounded-2xl text-black mb-3"
           />
 
           <label className="ml-4">Phone number</label>
           <input
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full border px-4 py-2 rounded-2xl text-black"
+            className="w-full border px-4 py-2 rounded-2xl text-black mb-3"
           />
 
           <label className="ml-4">Password</label>
@@ -149,6 +150,7 @@ function ProfilePage() {
             <input
               type={showPassword ? "text" : "password"}
               value={password}
+              placeholder="********"
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border px-4 py-2 rounded-2xl text-black pr-10"
             />
@@ -156,11 +158,7 @@ function ProfilePage() {
               className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? (
-                <EyeSlashIcon className="h-5 w-5" />
-              ) : (
-                <EyeIcon className="h-5 w-5" />
-              )}
+              {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
             </span>
           </div>
 
@@ -187,7 +185,7 @@ function ProfilePage() {
           ) : outfits.length === 0 ? (
             <p className="text-center">Inga sparade outfits</p>
           ) : (
-            <div className="flex flex-col gap-4 max-h-[500px] overflow-y-auto">
+            <div className="flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
               {outfits.map((outfit) => {
                 const topItem = findClothingItem(outfit.top_id, "top");
                 const bottomItem = findClothingItem(outfit.bottom_id, "bottom");
@@ -195,7 +193,7 @@ function ProfilePage() {
                 return (
                   <div
                     key={outfit._id}
-                    className="bg-white/80 p-4 rounded-2xl border-2 border-purple-700"
+                    className="bg-white/80 p-4 rounded-2xl border-2 border-purple-700 hover:scale-[1.02] transition-transform"
                   >
                     <div className="relative w-full h-48">
                       {bottomItem && (
