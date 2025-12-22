@@ -1,0 +1,26 @@
+{
+  "name": "fastify-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "bun run src/index.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "@fastify/jwt": "^10.0.0",
+    "@types/bcrypt": "^6.0.0",
+    "bcrypt": "^6.0.0",
+    "fastify": "^5.5.0",
+    "fastify-plugin": "^5.0.1",
+    "mongodb": "^6.19.0",
+    "pino": "^9.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "22",
+    "typescript": "^5.9.2"
+  },
+  "engine": {
+    "node": "22.x"
+  }
+}

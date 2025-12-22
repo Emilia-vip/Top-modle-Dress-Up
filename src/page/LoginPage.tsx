@@ -25,6 +25,7 @@ function LoginPage() {
         username,
         password,
       });
+
       saveLogin(response.data);
     } catch (error) {
       alert("Login failed. Check your credentials.");

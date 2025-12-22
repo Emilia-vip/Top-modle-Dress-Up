@@ -1,30 +1,35 @@
 import axios, { AxiosError } from "axios";
-import { BASE_URL, REFRESH_TOKEN } from "../constants";
+import { BASE_URL, REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
 });
-apiClient.interceptors.response.use(
-  (response) => {
-    return response
-  },
-  (error: AxiosError) => {
-    const orginalRequest = error.config
-    if (error.response?.status === 401) {
-      throw new Error("Error ocurred")
+
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-     const refreshToken = localStorage.getItem(REFRESH_TOKEN)
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      return Promise.reject(error);
+    }
+
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN);
     if (!refreshToken) {
-      throw new Error("Auth error but no refresh token")
-   }
+      return Promise.reject(error);
+    }
+
+    return Promise.reject(error);
   }
-)
+);
 
 export default apiClient;
-
-
-
-
-
-
-

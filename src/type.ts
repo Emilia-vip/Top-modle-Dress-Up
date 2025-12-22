@@ -13,3 +13,19 @@ export type User = {
   phone: string;
   created_at: string;
 };
+
+export type Outfit = {
+  _id: string;
+  username: string;
+  top_id: string;
+  bottom_id: string;
+  ratings: Rating[];
+  created_at: string;
+};
+
+export type Rating = {
+  grade: number;
+  username: string;
+};
+
+

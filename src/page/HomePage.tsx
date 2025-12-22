@@ -36,7 +36,7 @@ function HomePage() {
         <div className="space-y-4 text-gray-200">
 
           <div>
-            <h3 className="text-xl font-medium text-white">1. Välj en karaktär</h3>
+            <h3 className="text-xl font-medium text-white">Välj en karaktär</h3>
             <p className="leading-relaxed">
               Börja med att välja den avatar du vill styla. Den fungerar som din modell
               under spelets gång.
@@ -44,14 +44,14 @@ function HomePage() {
           </div>
 
           <div>
-            <h3 className="text-xl font-medium text-white">2. Utforska garderoben</h3>
+            <h3 className="text-xl font-medium text-white">Utforska garderoben</h3>
             <p className="leading-relaxed">
               Bläddra bland tröjor, byxor, klänningar och skor. Varje kategori innehåller flera alternativ att prova.
             </p>
           </div>
 
           <div>
-            <h3 className="text-xl font-medium text-white">3. Klicka för att klä på</h3>
+            <h3 className="text-xl font-medium text-white">Klicka för att klä på</h3>
             <p className="leading-relaxed">
               Tryck på ett plagg för att lägga det på din karaktär. Du kan ändra hur
               mycket du vill tills du hittar den perfekta stilen.
@@ -59,7 +59,7 @@ function HomePage() {
           </div>
 
           <div>
-            <h3 className="text-xl font-medium text-white">4. Spara din look</h3>
+            <h3 className="text-xl font-medium text-white">Spara din look</h3>
             <p className="leading-relaxed">
               När du är nöjd kan du spara din outfit eller börja om och skapa en helt
               ny stil.
@@ -67,7 +67,7 @@ function HomePage() {
           </div>
 
           <div>
-            <h3 className="text-xl font-medium text-white">5. Låt kreativiteten flöda</h3>
+            <h3 className="text-xl font-medium text-white">Låt kreativiteten flöda</h3>
             <p className="leading-relaxed">
               Det finns inga rätt eller fel — spelet handlar om att experimentera,
               testa färger och skapa en stil som känns helt din egen.
