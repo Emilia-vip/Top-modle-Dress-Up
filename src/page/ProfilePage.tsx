@@ -9,6 +9,7 @@ import { tops, bottoms } from "../data/clothes";
 import axios from "axios";
 
 
+
 function ProfilePage() {
   const { user } = useContext(AuthContext);
 
