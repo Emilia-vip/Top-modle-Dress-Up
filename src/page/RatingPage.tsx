@@ -9,8 +9,8 @@ function RatingPage() {
   const { user } = useContext(AuthContext);
   const [outfits, setOutfits] = useState<Outfit[]>([]);
   const [loading, setLoading] = useState(true);
-  const [hovered, setHovered] = useState<number>(0);
-  const [selected, setSelected] = useState<number>(0);
+  const [hovered, setHovered] = useState<{ [outfitId: string]: number }>({});
+  const [selected, setSelected] = useState<{ [outfitId: string]: number }>({});
   const [ratedOutfits, setRatedOutfits] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -104,14 +104,14 @@ function RatingPage() {
                   <span
                     key={star}
                     className={`cursor-pointer text-3xl ${
-                      star <= (hovered || selected)
+                      star <= (hovered[outfit._id] || selected[outfit._id] || 0)
                         ? "text-yellow-400"
                         : "text-gray-400"
                     }`}
-                    onMouseEnter={() => setHovered(star)}
-                    onMouseLeave={() => setHovered(0)}
+                    onMouseEnter={() => setHovered(prev => ({ ...prev, [outfit._id]: star }))}
+                    onMouseLeave={() => setHovered(prev => ({ ...prev, [outfit._id]: 0 }))}
                     onClick={() => {
-                      setSelected(star);
+                      setSelected(prev => ({ ...prev, [outfit._id]: star }));
                       handleRate(outfit._id, star);
                     }}
                   >
