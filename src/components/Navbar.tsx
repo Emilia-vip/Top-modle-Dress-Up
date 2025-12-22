@@ -1,9 +1,15 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
 export default function Navbar() {
   const { logout } = useContext(AuthContext);
+   const navigate = useNavigate();
+
+    const handleLogout = () => {
+    logout();
+    navigate("/")
+  };
 
   return (
     <header
@@ -45,6 +51,17 @@ export default function Navbar() {
         </NavLink>
 
         <NavLink
+          to="/score"
+          className={({ isActive }) =>
+            `text-white font-semibold px-4 py-2 rounded-full transition-colors duration-300 ${
+              isActive ? "bg-gray-700 bg-opacity-50" : "hover:bg-gray-700 hover:bg-opacity-30"
+            }`
+          }
+        >
+          Score
+        </NavLink>
+
+        <NavLink
           to="/game"
           className={({ isActive }) =>
             `text-white font-semibold px-4 py-2 rounded-full transition-colors duration-300 ${
@@ -58,7 +75,7 @@ export default function Navbar() {
 
       {/* Logga ut-knapp */}
       <button
-        onClick={logout}
+        onClick={handleLogout}
         className="ml-6 px-4 py-2 bg-gray-700 bg-opacity-20 hover:bg-gray-600 hover:bg-opacity-30 text-white font-semibold rounded-full shadow-lg transition-all duration-300 border border-gray-500 hover:border-white"
       >
         Logga ut

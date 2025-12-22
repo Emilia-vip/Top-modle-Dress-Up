@@ -48,7 +48,6 @@ function App() {
   return (
     <div className="w-full h-screen flex items-start justify-center">
 
-      {/* 👇 Här är den ENDA viktiga ändringen */}
       <RouterProvider router={user ? appRouter(data) : authRouter} />
 
     </div>

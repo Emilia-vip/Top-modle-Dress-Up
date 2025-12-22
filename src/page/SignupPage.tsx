@@ -7,9 +7,11 @@ import validateEmail from "../utils/validateEmail";
 import { useNavigate } from "react-router";
 import gubbeImage from "../assets/gröngala.png";
 import gubbeImage1 from "../assets/darksin-galablue.png";
+import validateUsername from "../utils/validateUsername";
+import { isUsernameAvailable } from "../api/user";
 
 type SignupData = {
-  name: string;
+  username: string;
   phone: string;
   email: string;
   password: string;
@@ -18,38 +20,80 @@ type SignupData = {
 function SignupPage() {
   const { saveLogin } = useContext(AuthContext);
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState<SignupData>({
-    name: "",
+    username: "",
     phone: "",
     email: "",
     password: "",
   });
+
   const [errorMessage, setErrorMessage] = useState("");
+
+ 
+  const [usernameStatus, setUsernameStatus] = useState<
+    "idle" | "checking" | "available" | "taken"
+  >("idle");
 
   const updateField = (key: keyof SignupData, value: string) => {
     setFormData({ ...formData, [key]: value });
   };
 
+ 
+  const checkUsername = async (username: string) => {
+    if (!validateUsername(username)) {
+      setUsernameStatus("idle");
+      return;
+    }
+
+    setUsernameStatus("checking");
+
+    try {
+      const available = await isUsernameAvailable(username);
+      setUsernameStatus(available ? "available" : "taken");
+    } catch {
+      setUsernameStatus("idle");
+    }
+  };
+
   const submitRegister = async () => {
     setErrorMessage("");
-    if (!formData.name || !formData.email || !formData.phone || !formData.password) {
-      setErrorMessage("Vänligen fyll i alla fält!");
+
+    if (!formData.username || !formData.email || !formData.phone || !formData.password) {
+      setErrorMessage("Please fill in all fields");
       return;
     }
+
+    if (!validateUsername(formData.username)) {
+      setErrorMessage(
+        "Username must be 3–20 characters and can only contain letters, numbers, dots or underscores"
+      );
+      return;
+    }
+
+    if (usernameStatus === "taken") {
+      setErrorMessage("Username is already taken");
+      return;
+    }
+
     if (!validateEmail(formData.email)) {
-      setErrorMessage("Ange en giltig e-postadress!");
+      setErrorMessage("Please enter a valid email address");
       return;
     }
+
     try {
       const response = await apiClient.post<AuthResponse>("/sign_up", formData);
       saveLogin(response.data);
       navigate("/");
+
     } catch (error: any) {
       console.error("Registration error:", error);
+
       if (error.response?.data?.message) {
         setErrorMessage(error.response.data.message);
+        
       } else {
-        setErrorMessage("Registrering misslyckades. Försök igen senare.");
+        setErrorMessage("Registration failed. Please try again later.");
       }
     }
   };
@@ -62,7 +106,6 @@ function SignupPage() {
           "url('https://t3.ftcdn.net/jpg/09/00/33/46/360_F_900334673_iPcSROckgtgBmsRh3WiUENMKxsnmfEBW.jpg')",
       }}
     >
-      {/* Signup-box */}
       <div
         className="rounded-2xl shadow-2xl shadow-black p-10 w-full max-w-sm flex flex-col gap-4"
         style={{
@@ -76,11 +119,25 @@ function SignupPage() {
 
         <label className="text-gray-300">Username</label>
         <MyTextInput
-          value={formData.name}
-          onChange={(e) => updateField("name", e.target.value)}
+          value={formData.username}
+          onChange={(e) => {
+            updateField("username", e.target.value);
+            setUsernameStatus("idle");
+          }}
+          onBlur={() => checkUsername(formData.username)}
           className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-5 py-3 focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
           placeholder="Username"
         />
+
+        {usernameStatus === "checking" && (
+          <p className="text-sm text-gray-300">Checking username...</p>
+        )}
+        {usernameStatus === "available" && (
+          <p className="text-sm text-green-500">Username is available</p>
+        )}
+        {usernameStatus === "taken" && (
+          <p className="text-sm text-red-500">Username is already taken</p>
+        )}
 
         <label className="text-gray-300">Phone</label>
         <MyTextInput
@@ -119,7 +176,6 @@ function SignupPage() {
         </button>
       </div>
 
-      {/* Gubbar */}
       <div className="flex items-center ml-4">
         <img src={gubbeImage} alt="Gubbe" className="w-80 h-auto" />
         <img src={gubbeImage1} alt="Gubbe" className="w-80 h-auto -ml-30" />

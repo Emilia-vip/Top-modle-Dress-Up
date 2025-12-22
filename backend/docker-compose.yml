@@ -1,0 +1,16 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: basic-login-mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=sys25d_students
+      - MONGO_INITDB_ROOT_PASSWORD=iKUfnlN1hlmYZ7sG
+      - MONGO_INITDB_DATABASE=sys25db
+    ports:
+      - "25000:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

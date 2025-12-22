@@ -5,6 +5,7 @@ import HomePage from "../page/HomePage";
 import ProfilePage from "../page/ProfilePage";
 import RatingPage from "../page/RatingPage";
 import GamePage from "../page/GamePage";
+import ScorePage from "../page/ScorePage";
 
 export default function appRouter(data) {
   const { dolls, tops, bottoms } = data;
@@ -17,6 +18,7 @@ export default function appRouter(data) {
         { path: "", element: <HomePage /> },
         { path: "profile", element: <ProfilePage /> },
         { path: "rating", element: <RatingPage /> },
+        { path: "score", element: <ScorePage /> },
         { path: "game", element: <GamePage dolls={dolls} tops={tops} bottoms={bottoms}/> },
       ],
     },

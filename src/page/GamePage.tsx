@@ -1,7 +1,10 @@
 // src/page/GamePage.tsx
 
-import React, { useState, useMemo, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Shirt, Users, Zap } from "lucide-react";
+import React, { useState, useMemo, useEffect, useContext } from "react";
+import { ChevronLeft, ChevronRight, Shirt, Users, } from "lucide-react";
+import runway from "../assets/runway-bla.png"
+import apiClient from "../api/client";
+import { AuthContext } from "../contexts/AuthContext";
 
 // Datatyper
 type ClothingItem = { name: string; image: string };
@@ -17,6 +20,11 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
   const [selectedSkin, setSelectedSkin] = useState<"dark" | "light">("dark");
   const [currentTopIndex, setCurrentTopIndex] = useState(0);
   const [currentBottomIndex, setCurrentBottomIndex] = useState(0);
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "saving" | "success" | "error"
+  >("idle");
+
+  const { user } = useContext(AuthContext);
 
     useEffect(() => {
     setCurrentTopIndex(0);
@@ -29,7 +37,27 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
 
   const currentTop = currentTopsArray[currentTopIndex];
   const currentBottom = currentBottomsArray[currentBottomIndex];
-  
+
+  const handleSaveOutfit = async () => {
+    if (!user || !currentTop || !currentBottom) {
+      return;
+    }
+
+    setSaveStatus("saving");
+    try {
+      await apiClient.post("/outfits", {
+        username: user.username,
+        top_id: currentTop.name,
+        bottom_id: currentBottom.name,
+      });
+      setSaveStatus("success");
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    } catch (error) {
+      console.error("Failed to save outfit", error);
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    }
+  };
 
   const nextTop = () =>
   setCurrentTopIndex((i) => (i + 1) % currentTopsArray.length);
@@ -78,8 +106,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
     <div
       className="min-h-screen w-full flex items-center justify-center bg-cover bg-center"
       style={{
-        backgroundImage:
-          "url('https://t3.ftcdn.net/jpg/09/00/33/46/360_F_900334673_iPcSROckgtgBmsRh3WiUENMKxsnmfEBW.jpg')",
+        backgroundImage: `url(${runway})`,
       }}
     >
       {/* SPELOMRÅDE */}
@@ -87,7 +114,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
 
 
         {/* VÄNSTER KONTROLLER */}
-        <div className="absolute left-0 flex flex-col space-y-8">
+        <div className="absolute left-0 flex flex-col space-y-4">
           <CarouselControls
             onClickPrev={prevTop}
             onClickNext={nextTop}
@@ -104,12 +131,41 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
             currentName={currentBottom?.name || "Ingen"}
           />
 
-          <div className="flex justify-center">
+          <div className="flex flex-col items-start space-y-2 mt-4">
+            <button
+              onClick={handleSaveOutfit}
+              disabled={
+                !user || !currentTop || !currentBottom || saveStatus === "saving"
+              }
+              className={`px-4 py-2 rounded text-white ${
+                !user || !currentTop || !currentBottom
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-green-500 hover:bg-green-600"
+              }`}
+            >
+              {saveStatus === "saving" ? "Sparar outfit..." : "Spara outfit"}
+            </button>
+
+            {!user && (
+              <p className="text-xs text-red-200">
+                Logga in för att kunna spara din outfit.
+              </p>
+            )}
+
+            {saveStatus === "success" && (
+              <p className="text-xs text-green-200">Outfit sparad!</p>
+            )}
+
+            {saveStatus === "error" && (
+              <p className="text-xs text-red-200">
+                Kunde inte spara outfit. Försök igen.
+              </p>
+            )}
           </div>
         </div>
 
           {/* DOCKA */}
-          <div className="relative w-[300px] h-[450px]">
+          <div className="relative w-[300px] h-[450px] mt-40">
   {currentBottom && (
     <img
       src={currentBottom.image}
