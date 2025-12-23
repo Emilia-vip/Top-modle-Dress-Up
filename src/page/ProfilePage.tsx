@@ -6,6 +6,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import apiClient from "../api/client";
 import type { Outfit } from "../type";
 import { tops, bottoms } from "../data/clothes";
+import axios from "axios";
 
 function ProfilePage() {
   const { user } = useContext(AuthContext);
