@@ -162,21 +162,21 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
           </div>
         </div>
 
-        {/* DOCKA */}
-        <div className="relative w-[200px] md:w-[300px] h-[300px] md:h-[450px] mt-20 md:mt-40">
-          {currentBottom && (
-            <img
-              src={currentBottom.image}
-              className="absolute inset-0 w-full h-full object-contain"
-            />
-          )}
-          {currentTop && (
-            <img
-              src={currentTop.image}
-              className="absolute inset-0 w-full h-full object-contain"
-            />
-          )}
-        </div>
+          {/* DOCKA */}
+          <div className="relative w-[300px] h-[450px] mt-40">
+  {currentBottom && (
+    <img
+      src={currentBottom.image}
+      className="absolute inset-0 w-full h-full object-contain z-10"
+    />
+  )}
+  {currentTop && (
+    <img
+      src={currentTop.image}
+      className="absolute inset-0 w-full h-full object-contain"
+    />
+  )}
+</div>
 
         {/* HÖGER – SKIN */}
         <div className="absolute right-0 md:right-0 flex flex-col space-y-2 md:space-y-4">
