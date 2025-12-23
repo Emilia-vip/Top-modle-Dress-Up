@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext, useCallback } from "react";
+import axios from "axios";
 import backstage from "../assets/backstage.png";
 import { BASE_URL } from "../constants";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
@@ -6,72 +7,71 @@ import { AuthContext } from "../contexts/AuthContext";
 import apiClient from "../api/client";
 import type { Outfit } from "../type";
 import { tops, bottoms } from "../data/clothes";
-
+import { useLoading } from "../hooks/useLoading";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function ProfilePage() {
   const { user } = useContext(AuthContext);
+
+  
+  const { loading, setLoading } = useLoading(true);
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // Outfits state
+  // Outfits
   const [outfits, setOutfits] = useState<Outfit[]>([]);
   const [outfitsLoading, setOutfitsLoading] = useState(true);
 
-  // Helper function to find clothing item by name
+  // Hitta kläder
   const findClothingItem = (name: string, type: "top" | "bottom") => {
-    const darkArray = type === "top" ? tops.dark : bottoms.dark;
-    const lightArray = type === "top" ? tops.light : bottoms.light;
+    const dark = type === "top" ? tops.dark : bottoms.dark;
+    const light = type === "top" ? tops.light : bottoms.light;
 
     return (
-      darkArray.find(
-        (item) => item.name.toLowerCase() === name.toLowerCase()
-      ) ||
-      lightArray.find(
-        (item) => item.name.toLowerCase() === name.toLowerCase()
-      ) ||
+      dark.find(i => i.name.toLowerCase() === name.toLowerCase()) ||
+      light.find(i => i.name.toLowerCase() === name.toLowerCase()) ||
       null
     );
   };
 
-  // 1. Hämta användardata
+  // Hämta användare
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await apiClient.get("/user/me");
-        const data = res.data;
-
-        setUsername(data.username || "");
-        setEmail(data.email || "");
-        setPhone(data.phone || "");
+        setUsername(res.data.username || "");
+        setEmail(res.data.email || "");
+        setPhone(res.data.phone || "");
         setPassword("");
       } catch (err) {
         console.error("Kunde inte hämta användardata", err);
       } finally {
-        setLoading(false);
+        setLoading(false); // ✅ från custom hook
       }
     };
 
     fetchUser();
-  }, []);
+  }, [setLoading]);
 
+  // Hämta outfits
   const fetchOutfits = useCallback(async () => {
     if (!user?.username) {
       setOutfitsLoading(false);
       return;
     }
+
     try {
-      const response = await apiClient.get<Outfit[]>(
+      const res = await apiClient.get<Outfit[]>(
         `/outfits/user/${user.username}`
       );
-      setOutfits(response.data);
-    } catch (error) {
-      console.error("Kunde inte hämta outfits", error);
+      setOutfits(res.data);
+    } catch (err) {
+      console.error("Kunde inte hämta outfits", err);
     } finally {
       setOutfitsLoading(false);
     }
@@ -82,22 +82,23 @@ function ProfilePage() {
   }, [fetchOutfits]);
 
   useEffect(() => {
-    const handleFocus = () => fetchOutfits();
-    window.addEventListener("focus", handleFocus);
-    return () => window.removeEventListener("focus", handleFocus);
+    const onFocus = () => fetchOutfits();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
   }, [fetchOutfits]);
 
-  // 3. Spara profiländringar
+  // Spara profil
   const handleSave = async () => {
     try {
       const updateData: any = {};
-
+      updateData.user = user;
       if (email.trim()) updateData.email = email.trim();
       if (phone.trim()) updateData.phone = phone.trim();
       if (password.trim()) updateData.password = password.trim();
 
-      await axios.put(`${BASE_URL}/user/update`, updateData);
+      await apiClient.post("/user/update", updateData);
 
+      // await axios.put(`${BASE_URL}/user/update`, updateData);
       setMessage("Profilen är uppdaterad!");
       setPassword("");
     } catch (err) {
@@ -107,23 +108,19 @@ function ProfilePage() {
   };
 
   if (loading) {
-    return <div className="text-white text-center mt-20">Laddar profil...</div>;
+    return <LoadingSpinner />;
   }
 
   return (
     <div className="relative min-h-screen w-full">
-      <div
-        className="absolute inset-0 bg-cover bg-center z-0"
-        style={{ backgroundImage: `url(${backstage})` }}
-      />
-
-      <div className="relative z-10 flex items-center ml-20 min-h-screen gap-8">
-        <h1 className="absolute top-0 ml-130 mt-30 text-amber-50 text-6xl">
+      <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(${backstage})` }} />
+      <div className="relative z-10 flex flex-row items-center justify-center min-h-screen p-2 md:p-0 gap-2 md:gap-8 flex-wrap">
+        <h1 className="text-3xl md:text-4xl lg:text-6xl text-amber-50 mb-4 md:mb-0 md:absolute md:top-0 md:left-1/2 md:transform md:-translate-x-1/2 md:ml-0 md:mt-30">
           YOUR PROFILE PAGE
         </h1>
 
         {/* Profile form */}
-        <div className="bg-purple-300/90 p-7 rounded-3xl w-80 flex flex-col mt-20">
+        <div className="bg-purple-300/90 p-3 md:p-7 rounded-3xl w-full max-w-xs md:max-w-sm flex flex-col mt-0 md:mt-20 flex-shrink-0">
           <label className="ml-4">Username</label>
           <input
             value={username}
@@ -150,7 +147,7 @@ function ProfilePage() {
             <input
               type={showPassword ? "text" : "password"}
               value={password}
-              placeholder="********"
+              placeholder=""
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border px-4 py-2 rounded-2xl text-black pr-10"
             />
@@ -175,8 +172,8 @@ function ProfilePage() {
         </div>
 
         {/* Saved outfits */}
-        <div className="bg-purple-300/90 p-5 rounded-3xl w-96 flex flex-col gap-4 ml-40 mt-20">
-          <h2 className="text-xl font-bold text-center text-purple-900">
+        <div className="bg-purple-300/90 p-2 md:p-5 rounded-3xl w-full max-w-sm md:max-w-md flex flex-col gap-2 md:gap-4 mt-4 md:mt-20 md:ml-40 flex-shrink-0">
+          <h2 className="text-lg md:text-xl font-bold text-center text-purple-900">
             Sparade Outfits
           </h2>
 
@@ -185,7 +182,7 @@ function ProfilePage() {
           ) : outfits.length === 0 ? (
             <p className="text-center">Inga sparade outfits</p>
           ) : (
-            <div className="flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="flex flex-col gap-4">
               {outfits.map((outfit) => {
                 const topItem = findClothingItem(outfit.top_id, "top");
                 const bottomItem = findClothingItem(outfit.bottom_id, "bottom");
@@ -193,24 +190,23 @@ function ProfilePage() {
                 return (
                   <div
                     key={outfit._id}
-                    className="bg-white/80 p-4 rounded-2xl border-2 border-purple-700 hover:scale-[1.02] transition-transform"
+                    className="bg-white/80 p-3 md:p-4 rounded-2xl border-2 border-purple-700 hover:scale-[1.02] transition-transform"
                   >
-                    <div className="relative w-full h-48">
+                    <div className="relative w-full h-32 md:h-48">
                       {bottomItem && (
                         <img
                           src={bottomItem.image}
-                          className="absolute inset-0 w-full h-full object-contain"
+                          className="absolute inset-0 w-full h-full object-contain mt-2 md:mt-4 scale-110 md:scale-130"
                         />
                       )}
                       {topItem && (
                         <img
                           src={topItem.image}
-                          className="absolute inset-0 w-full h-full object-contain"
+                          className="absolute inset-0 w-full h-full object-contain mt-2 md:mt-4 scale-110 md:scale-130"
                         />
                       )}
                     </div>
-
-                    <div className="mt-2 text-sm">
+                    <div className="mt-2 text-xs md:text-sm">
                       <p>Tröja: {outfit.top_id}</p>
                       <p>Byxor: {outfit.bottom_id}</p>
                       <p className="text-xs">

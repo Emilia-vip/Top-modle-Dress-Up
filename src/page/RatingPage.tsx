@@ -4,13 +4,18 @@ import apiClient from "../api/client";
 import type { Outfit } from "../type";
 import { AuthContext } from "../contexts/AuthContext";
 import { tops, bottoms } from "../data/clothes";
+import { useLoading } from "../hooks/useLoading";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function RatingPage() {
   const { user } = useContext(AuthContext);
+
+  // ✅ Custom hook för loading
+  const { loading, setLoading } = useLoading(true);
+
   const [outfits, setOutfits] = useState<Outfit[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [hovered, setHovered] = useState<{ [outfitId: string]: number }>({});
-  const [selected, setSelected] = useState<{ [outfitId: string]: number }>({});
+  const [hovered, setHovered] = useState<Record<string, number>>({});
+  const [selected, setSelected] = useState<Record<string, number>>({});
   const [ratedOutfits, setRatedOutfits] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -18,7 +23,7 @@ function RatingPage() {
       try {
         const res = await apiClient.get<Outfit[]>("/outfits");
 
-        // ❗ Remove your own outfit
+        // Ta bort ditt eget outfit
         const filtered = res.data.filter(
           (o) => o.username !== user?.username
         );
@@ -27,16 +32,17 @@ function RatingPage() {
       } catch (error) {
         console.error("Failed to fetch outfits", error);
       } finally {
-        setLoading(false);
+        setLoading(false); // ✅ från custom hook
       }
     };
 
     fetchOutfits();
-  }, [user?.username]);
+  }, [user?.username, setLoading]);
 
   const findClothingItem = (name: string, type: "top" | "bottom") => {
     const dark = type === "top" ? tops.dark : bottoms.dark;
     const light = type === "top" ? tops.light : bottoms.light;
+
     return (
       dark.find((i) => i.name === name) ||
       light.find((i) => i.name === name) ||
@@ -45,31 +51,31 @@ function RatingPage() {
   };
 
   const handleRate = async (outfitId: string, rating: number) => {
-    if (!user?.username) {
-      return;
-    }
+    if (!user?.username) return;
 
     try {
       await apiClient.post(`/outfits/${outfitId}/rate`, {
         grade: rating,
-        username: user.username
+        username: user.username,
       });
-      setRatedOutfits(prev => new Set(prev).add(outfitId));
+
+      setRatedOutfits((prev) => new Set(prev).add(outfitId));
     } catch (error) {
       console.error("Failed to rate outfit", error);
     }
   };
 
+  // ✅ Spinner
   if (loading) {
-    return <div className="text-white text-center">Loading outfits...</div>;
+    return <LoadingSpinner />;
   }
 
   return (
     <div
-      className="min-h-screen w-full bg-cover bg-center flex justify-center p-10"
+      className="min-h-screen w-full bg-cover bg-center flex justify-center p-4 md:p-10"
       style={{ backgroundImage: `url(${runway})` }}
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {outfits.map((outfit) => {
           const top = findClothingItem(outfit.top_id, "top");
           const bottom = findClothingItem(outfit.bottom_id, "bottom");
@@ -77,13 +83,13 @@ function RatingPage() {
           return (
             <div
               key={outfit._id}
-              className="mt-40 h-60 bg-white/80 rounded-2xl p-4 flex flex-col items-center height"
+              className="mt-20 md:mt-40 h-48 md:h-60 bg-white/80 rounded-2xl p-3 md:p-4 flex flex-col items-center"
             >
-              <p className="font-bold text-purple-900 mb-2">
+              <p className="font-bold text-sm md:text-base text-purple-900 mb-1 md:mb-2">
                 @{outfit.username}
               </p>
 
-              <div className="relative w-40 h-56">
+              <div className="relative w-32 md:w-40 h-40 md:h-56">
                 {bottom && (
                   <img
                     src={bottom.image}
@@ -98,20 +104,25 @@ function RatingPage() {
                 )}
               </div>
 
-              {/* ⭐ STAR RATING */}
-              <div className="flex gap-1 mt-3">
+              {/* ⭐ Rating */}
+              <div className="flex gap-1 mt-2 md:mt-3">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span
                     key={star}
-                    className={`cursor-pointer text-3xl ${
-                      star <= (hovered[outfit._id] || selected[outfit._id] || 0)
+                    className={`cursor-pointer text-2xl md:text-3xl ${
+                      star <=
+                      (hovered[outfit._id] || selected[outfit._id] || 0)
                         ? "text-yellow-400"
                         : "text-gray-400"
                     }`}
-                    onMouseEnter={() => setHovered(prev => ({ ...prev, [outfit._id]: star }))}
-                    onMouseLeave={() => setHovered(prev => ({ ...prev, [outfit._id]: 0 }))}
+                    onMouseEnter={() =>
+                      setHovered((p) => ({ ...p, [outfit._id]: star }))
+                    }
+                    onMouseLeave={() =>
+                      setHovered((p) => ({ ...p, [outfit._id]: 0 }))
+                    }
                     onClick={() => {
-                      setSelected(prev => ({ ...prev, [outfit._id]: star }));
+                      setSelected((p) => ({ ...p, [outfit._id]: star }));
                       handleRate(outfit._id, star);
                     }}
                   >
@@ -119,12 +130,11 @@ function RatingPage() {
                   </span>
                 ))}
               </div>
-              
-              {/* Send message */}
+
               {ratedOutfits.has(outfit._id) && (
-                <div className="text-green-600 font-semibold text-sm mt-2">
-                  Send!
-                </div>
+                <p className="text-green-600 text-xs md:text-sm mt-1 md:mt-2 font-semibold">
+                  Sent!
+                </p>
               )}
             </div>
           );

@@ -15,7 +15,9 @@ async function start() {
     await mongoClient.close();
   });
 
-  await server.register(cors, {});
+  await server.register(cors, {
+    origin: '*'
+  });
 
   await server.register(auth);
 

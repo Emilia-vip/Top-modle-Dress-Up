@@ -19,7 +19,7 @@ export default function appRouter(data) {
         { path: "profile", element: <ProfilePage /> },
         { path: "rating", element: <RatingPage /> },
         { path: "score", element: <ScorePage /> },
-        { path: "game", element: <GamePage dolls={dolls} tops={tops} bottoms={bottoms}/> },
+        { path: "game", element: <GamePage tops={tops} bottoms={bottoms}/> },
       ],
     },
   ]);
