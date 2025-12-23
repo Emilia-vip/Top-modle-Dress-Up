@@ -407,19 +407,17 @@ export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => 
 
 export const updateUser = async (req: FastifyRequest, res: FastifyReply) => {
   try {
-    const userId = (req as any).user.user_id;
+    const userId = (req as any).body.user._id;
     const { email, phone, password } = req.body as any;
 
     const updateData: any = {};
     if (email) updateData.email = email;
     if (phone) updateData.phone = phone;
     if (password) {
-      // Hash the password
-      const hashedPassword = await bcrypt.hash(password, 10);
-      updateData.password = hashedPassword;
+      updateData.password = password;
     }
 
-    const updatedUser = await repository.updateUserById(userId, updateData);
+    const updatedUser = await repository.updateUserById(req.body.user._id, updateData);
 
     if (!updatedUser) {
       return res.status(404).send({ message: 'User not found' });

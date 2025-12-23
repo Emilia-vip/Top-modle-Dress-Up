@@ -110,11 +110,9 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
       }}
     >
       {/* SPELOMRÅDE */}
-      <div className="relative w-full max-w-6xl h-[520px] flex items-center justify-center">
-
-
+      <div className="relative w-full max-w-6xl h-[400px] md:h-[520px] flex items-center justify-center">
         {/* VÄNSTER KONTROLLER */}
-        <div className="absolute left-0 flex flex-col space-y-4">
+        <div className="absolute left-0 md:left-0 flex flex-col space-y-2 md:space-y-4">
           <CarouselControls
             onClickPrev={prevTop}
             onClickNext={nextTop}
@@ -137,28 +135,28 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
               disabled={
                 !user || !currentTop || !currentBottom || saveStatus === "saving"
               }
-              className={`px-4 py-2 rounded text-white ${
+              className={`px-3 py-1 md:px-4 md:py-2 rounded text-white text-sm md:text-base ${
                 !user || !currentTop || !currentBottom
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-green-500 hover:bg-green-600"
               }`}
             >
-              {saveStatus === "saving" ? "Sparar outfit..." : "Spara outfit"}
+              {saveStatus === "saving" ? "Sparar..." : "Spara outfit"}
             </button>
 
             {!user && (
               <p className="text-xs text-red-200">
-                Logga in för att kunna spara din outfit.
+                Logga in för att spara.
               </p>
             )}
 
             {saveStatus === "success" && (
-              <p className="text-xs text-green-200">Outfit sparad!</p>
+              <p className="text-xs text-green-200">Sparad!</p>
             )}
 
             {saveStatus === "error" && (
               <p className="text-xs text-red-200">
-                Kunde inte spara outfit. Försök igen.
+                Fel.
               </p>
             )}
           </div>
@@ -181,11 +179,11 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
 </div>
 
         {/* HÖGER – SKIN */}
-        <div className="absolute right-0 flex flex-col space-y-4">
+        <div className="absolute right-0 md:right-0 flex flex-col space-y-2 md:space-y-4">
           <button
             onClick={() => setSelectedSkin("dark")}
             disabled={selectedSkin === "dark"}
-            className={`px-4 py-2 rounded text-white ${
+            className={`px-3 py-1 md:px-4 md:py-2 rounded text-white text-sm md:text-base ${
               selectedSkin === "dark"
                 ? "bg-gray-400"
                 : "bg-indigo-500 hover:bg-indigo-600"
@@ -197,7 +195,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
           <button
             onClick={() => setSelectedSkin("light")}
             disabled={selectedSkin === "light"}
-            className={`px-4 py-2 rounded text-white ${
+            className={`px-3 py-1 md:px-4 md:py-2 rounded text-white text-sm md:text-base ${
               selectedSkin === "light"
                 ? "bg-gray-400"
                 : "bg-indigo-500 hover:bg-indigo-600"

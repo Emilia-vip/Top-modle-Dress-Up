@@ -100,20 +100,20 @@ function SignupPage() {
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-start px-10 bg-cover bg-center"
+      className="min-h-screen w-full flex flex-row items-center justify-center px-2 md:px-10 bg-cover bg-center py-2 md:py-0 flex-wrap"
       style={{
         backgroundImage:
           "url('https://t3.ftcdn.net/jpg/09/00/33/46/360_F_900334673_iPcSROckgtgBmsRh3WiUENMKxsnmfEBW.jpg')",
       }}
     >
       <div
-        className="rounded-2xl shadow-2xl shadow-black p-10 w-full max-w-sm flex flex-col gap-4"
+        className="rounded-2xl shadow-2xl shadow-black p-4 md:p-10 w-full max-w-xs md:max-w-sm flex flex-col gap-4 mb-2 md:mb-0 flex-shrink-0"
         style={{
           backgroundColor: "rgba(31, 41, 55, 0.4)",
           backdropFilter: "blur(10px)",
         }}
       >
-        <h1 className="text-3xl font-light text-center mb-6 text-white tracking-wider">
+        <h1 className="text-2xl md:text-3xl font-light text-center mb-6 text-white tracking-wider">
           Create account
         </h1>
 
@@ -176,9 +176,9 @@ function SignupPage() {
         </button>
       </div>
 
-      <div className="flex items-center ml-4">
-        <img src={gubbeImage} alt="Gubbe" className="w-80 h-auto" />
-        <img src={gubbeImage1} alt="Gubbe" className="w-80 h-auto -ml-30" />
+      <div className="flex items-center ml-1 md:ml-4 flex-shrink-0">
+        <img src={gubbeImage} alt="Gubbe" className="w-32 md:w-80 h-auto" />
+        <img src={gubbeImage1} alt="Gubbe" className="w-32 md:w-80 h-auto -ml-10 md:-ml-30" />
       </div>
     </div>
   );

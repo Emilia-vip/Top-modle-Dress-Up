@@ -97,7 +97,7 @@ export const rateOutfit = async (id: string, rating: Rating) => {
 };
 
 export const updateUserById = async (id: string, updateData: any) => {
-  return await MongoConnection.usersCollection().findOneAndUpdate(
+  return await MongoConnection.userCollection().findOneAndUpdate(
     { _id: id },
     { $set: updateData },
     { returnDocument: 'after' }
