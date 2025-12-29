@@ -167,13 +167,13 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
   {currentBottom && (
     <img
       src={currentBottom.image}
-      className="absolute inset-0 w-full h-full object-contain z-10"
+      className="absolute inset-0 w-full h-full object-contain"
     />
   )}
   {currentTop && (
     <img
       src={currentTop.image}
-      className="absolute inset-0 w-full h-full object-contain"
+      className="absolute inset-0 w-full h-full object-contain z-10"
     />
   )}
 </div>
