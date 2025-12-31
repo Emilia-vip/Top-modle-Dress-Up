@@ -26,13 +26,21 @@ function ProfilePage() {
   const [outfitsLoading, setOutfitsLoading] = useState(true);
 
   // Hitta kläder
-  const findClothingItem = (name: string, type: "top" | "bottom") => {
+  const findClothingItem = (identifier: string, type: "top" | "bottom") => {
     const dark = type === "top" ? tops.dark : bottoms.dark;
     const light = type === "top" ? tops.light : bottoms.light;
 
+    // Först försök hitta via id (för nya sparade outfits)
+    const foundById = 
+      dark.find(i => i.id === identifier) ||
+      light.find(i => i.id === identifier);
+    
+    if (foundById) return foundById;
+
+    // Fallback till name (för bakåtkompatibilitet med gamla sparade outfits)
     return (
-      dark.find(i => i.name.toLowerCase() === name.toLowerCase()) ||
-      light.find(i => i.name.toLowerCase() === name.toLowerCase()) ||
+      dark.find(i => i.name.toLowerCase() === identifier.toLowerCase()) ||
+      light.find(i => i.name.toLowerCase() === identifier.toLowerCase()) ||
       null
     );
   };

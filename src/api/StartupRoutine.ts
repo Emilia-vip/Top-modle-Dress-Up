@@ -21,3 +21,4 @@ export function StartupRoutine() {
     })
     .finally(() => console.log("Finally"));
 }
+

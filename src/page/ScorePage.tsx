@@ -22,13 +22,21 @@ function ScorePage() {
   const [topUsers, setTopUsers] = useState<UserScore[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Helper function to find clothing item by name
-  const findClothingItem = (name: string, type: "top" | "bottom") => {
+  // Helper function to find clothing item by id or name
+  const findClothingItem = (identifier: string, type: "top" | "bottom") => {
     const darkArray = type === "top" ? tops.dark : bottoms.dark;
     const lightArray = type === "top" ? tops.light : bottoms.light;
     
-    const darkItem = darkArray.find(item => item.name.toLowerCase() === name.toLowerCase());
-    const lightItem = lightArray.find(item => item.name.toLowerCase() === name.toLowerCase());
+    // Först försök hitta via id (för nya sparade outfits)
+    const foundById = 
+      darkArray.find(item => item.id === identifier) ||
+      lightArray.find(item => item.id === identifier);
+    
+    if (foundById) return foundById;
+
+    // Fallback till name (för bakåtkompatibilitet med gamla sparade outfits)
+    const darkItem = darkArray.find(item => item.name.toLowerCase() === identifier.toLowerCase());
+    const lightItem = lightArray.find(item => item.name.toLowerCase() === identifier.toLowerCase());
     
     return darkItem || lightItem || null;
   };
