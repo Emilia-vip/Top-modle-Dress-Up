@@ -7,7 +7,7 @@ import apiClient from "../api/client";
 import { AuthContext } from "../contexts/AuthContext";
 
 // Datatyper
-type ClothingItem = { name: string; image: string };
+type ClothingItem = { id?: string; name: string; image: string };
 type ClothingCollection = { dark: ClothingItem[]; light: ClothingItem[] };
 
 
@@ -47,8 +47,8 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
     try {
       await apiClient.post("/outfits", {
         username: user.username,
-        top_id: currentTop.name,
-        bottom_id: currentBottom.name,
+        top_id: currentTop.id || currentTop.name,
+        bottom_id: currentBottom.id || currentBottom.name,
       });
       setSaveStatus("success");
       setTimeout(() => setSaveStatus("idle"), 2000);

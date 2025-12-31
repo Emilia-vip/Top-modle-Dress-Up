@@ -39,13 +39,21 @@ function RatingPage() {
     fetchOutfits();
   }, [user?.username, setLoading]);
 
-  const findClothingItem = (name: string, type: "top" | "bottom") => {
+  const findClothingItem = (identifier: string, type: "top" | "bottom") => {
     const dark = type === "top" ? tops.dark : bottoms.dark;
     const light = type === "top" ? tops.light : bottoms.light;
 
+    // Först försök hitta via id (för nya sparade outfits)
+    const foundById = 
+      dark.find(i => i.id === identifier) ||
+      light.find(i => i.id === identifier);
+    
+    if (foundById) return foundById;
+
+    // Fallback till name (för bakåtkompatibilitet med gamla sparade outfits)
     return (
-      dark.find((i) => i.name === name) ||
-      light.find((i) => i.name === name) ||
+      dark.find((i) => i.name === identifier) ||
+      light.find((i) => i.name === identifier) ||
       null
     );
   };
