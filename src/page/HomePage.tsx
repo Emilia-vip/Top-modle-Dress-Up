@@ -22,11 +22,13 @@ function HomePage() {
         }}
       >
         {/* Titel */}
-        <h1 className="text-base md:text-2xl lg:text-3xl font-light text-center text-white tracking-wider mb-2 md:mb-4 mt-2 md:mt-8">
+        <h1 className="text-base md:text-2xl lg:text-6xl font-light ml-45 mr-10 text-white mb-2 md:mb-4 mt-2 md:mt-8 font-italiana">
           Top model
         </h1>
-        <h2> Dress Up </h2>
+        <h2 className=" text-white lg:text-2xl ml-95 absolute mt-22 font-italiana"> Dress Up </h2>
 
+        
+       <div className="mt-10"></div>
         <p className="text-gray-200 leading-relaxed mb-3 md:mb-6 text-xs md:text-base">
           Let your imagination run wild and create your own unique outfits by mixing and matching clothes. 
           The game is designed for anyone who loves fashion, styling, or just wants to have fun while designing unique looks.
