@@ -77,7 +77,7 @@ function LoginPage() {
         }}
       >
         <h1 className="text-xl md:text-3xl font-light text-center mb-3 md:mb-6 text-white tracking-wider">
-          Logga in
+          SIGN IN
         </h1>
 
         <label className="text-gray-300 text-sm md:text-base">Username</label>
@@ -123,7 +123,7 @@ function LoginPage() {
           className="w-full border border-gray-500 text-gray-300 hover:bg-gray-700 hover:bg-opacity-30 active:bg-gray-600 active:bg-opacity-40 hover:text-white font-semibold py-3 md:py-3 rounded-full transition-all duration-300 text-sm md:text-base touch-manipulation min-h-[44px]"
           onClick={() => navigate("/signup")}
         >
-          SKAPA KONTO
+          CREATE ACCOUNT
         </button>
       </form>
 
