@@ -121,74 +121,74 @@ function ProfilePage() {
     <div className="relative min-h-screen w-full">
       <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(${backstage})` }} />
       <div className="relative z-10 flex flex-row items-center justify-center min-h-screen p-2 md:p-0 gap-2 md:gap-8 flex-wrap">
-        <h1 className="text-3xl md:text-4xl lg:text-6xl text-amber-50 mb-4 md:mb-0 md:absolute md:top-0 md:left-1/2 md:transform md:-translate-x-1/2 md:ml-0 md:mt-30">
+        <h1 className="text-lg md:text-4xl lg:text-6xl text-amber-50 mb-2 md:mb-0 md:absolute md:top-0 md:left-1/2 md:transform md:-translate-x-1/2 md:ml-0 md:mt-30">
           YOUR PROFILE PAGE
         </h1>
 
         {/* Profile form */}
-        <div className="bg-purple-300/90 p-3 md:p-7 rounded-3xl w-full max-w-xs md:max-w-sm flex flex-col mt-0 md:mt-20 flex-shrink-0">
-          <label className="ml-4">Username</label>
+        <div className="bg-purple-300/90 p-2 md:p-7 rounded-2xl md:rounded-3xl w-full max-w-xs md:max-w-sm flex flex-col mt-0 md:mt-20 flex-shrink-0">
+          <label className="ml-2 md:ml-4 text-xs md:text-base">Username</label>
           <input
             value={username}
             readOnly
-            className="w-full border px-4 py-2 rounded-2xl text-gray-600 bg-gray-100 cursor-not-allowed mb-3"
+            className="w-full border px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl text-gray-600 bg-gray-100 cursor-not-allowed mb-2 md:mb-3 text-sm md:text-base"
           />
 
-          <label className="ml-4">Email</label>
+          <label className="ml-2 md:ml-4 text-xs md:text-base">Email</label>
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border px-4 py-2 rounded-2xl text-black mb-3"
+            className="w-full border px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl text-black mb-2 md:mb-3 text-sm md:text-base"
           />
 
-          <label className="ml-4">Phone number</label>
+          <label className="ml-2 md:ml-4 text-xs md:text-base">Phone number</label>
           <input
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full border px-4 py-2 rounded-2xl text-black mb-3"
+            className="w-full border px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl text-black mb-2 md:mb-3 text-sm md:text-base"
           />
 
-          <label className="ml-4">Password</label>
+          <label className="ml-2 md:ml-4 text-xs md:text-base">Password</label>
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               value={password}
               placeholder=""
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border px-4 py-2 rounded-2xl text-black pr-10"
+              className="w-full border px-2 py-1 md:px-4 md:py-2 rounded-xl md:rounded-2xl text-black pr-8 md:pr-10 text-sm md:text-base"
             />
             <span
-              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+              className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
+              {showPassword ? <EyeSlashIcon className="h-4 w-4 md:h-5 md:w-5" /> : <EyeIcon className="h-4 w-4 md:h-5 md:w-5" />}
             </span>
           </div>
 
           <button
             onClick={handleSave}
-            className="bg-purple-900 mt-5 rounded-2xl w-20 py-2 text-amber-50 hover:bg-purple-800"
+            className="bg-purple-900 mt-3 md:mt-5 rounded-xl md:rounded-2xl w-16 md:w-20 py-1.5 md:py-2 text-amber-50 hover:bg-purple-800 text-xs md:text-base"
           >
             Save
           </button>
 
           {message && (
-            <p className="text-center text-white mt-3">{message}</p>
+            <p className="text-center text-white mt-2 md:mt-3 text-xs md:text-base">{message}</p>
           )}
         </div>
 
         {/* Saved outfits */}
-        <div className="bg-purple-300/90 p-2 md:p-5 rounded-3xl w-full max-w-sm md:max-w-md flex flex-col gap-2 md:gap-4 mt-4 md:mt-20 md:ml-40 flex-shrink-0">
-          <h2 className="text-lg md:text-xl font-bold text-center text-purple-900">
+        <div className="bg-purple-300/90 p-2 md:p-5 rounded-2xl md:rounded-3xl w-full max-w-sm md:max-w-md flex flex-col gap-2 md:gap-4 mt-2 md:mt-20 md:ml-40 flex-shrink-0">
+          <h2 className="text-sm md:text-xl font-bold text-center text-purple-900">
             Sparade Outfits
           </h2>
 
           {outfitsLoading ? (
-            <p className="text-center">Laddar outfits...</p>
+            <p className="text-center text-xs md:text-base">Laddar outfits...</p>
           ) : outfits.length === 0 ? (
-            <p className="text-center">Inga sparade outfits</p>
+            <p className="text-center text-xs md:text-base">Inga sparade outfits</p>
           ) : (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2 md:gap-4">
               {outfits.map((outfit) => {
                 const topItem = findClothingItem(outfit.top_id, "top");
                 const bottomItem = findClothingItem(outfit.bottom_id, "bottom");
@@ -196,26 +196,26 @@ function ProfilePage() {
                 return (
                   <div
                     key={outfit._id}
-                    className="bg-white/80 p-3 md:p-4 rounded-2xl border-2 border-purple-700 hover:scale-[1.02] transition-transform"
+                    className="bg-white/80 p-2 md:p-4 rounded-xl md:rounded-2xl border-2 border-purple-700 hover:scale-[1.02] transition-transform"
                   >
-                    <div className="relative w-full h-32 md:h-48">
+                    <div className="relative w-full h-24 md:h-48">
                       {bottomItem && (
                         <img
                           src={bottomItem.image}
-                          className="absolute inset-0 w-full h-full object-contain mt-2 md:mt-4 scale-110 md:scale-130"
+                          className="absolute inset-0 w-full h-full object-contain mt-1 md:mt-4 scale-110 md:scale-130"
                         />
                       )}
                       {topItem && (
                         <img
                           src={topItem.image}
-                          className="absolute inset-0 w-full h-full object-contain mt-2 md:mt-4 scale-110 md:scale-130"
+                          className="absolute inset-0 w-full h-full object-contain mt-1 md:mt-4 scale-110 md:scale-130"
                         />
                       )}
                     </div>
-                    <div className="mt-2 text-xs md:text-sm">
+                    <div className="mt-1 md:mt-2 text-[10px] md:text-sm">
                       <p>Tröja: {outfit.top_id}</p>
                       <p>Byxor: {outfit.bottom_id}</p>
-                      <p className="text-xs">
+                      <p className="text-[9px] md:text-xs">
                         Ratings: {outfit.ratings?.length || 0}
                       </p>
                     </div>
