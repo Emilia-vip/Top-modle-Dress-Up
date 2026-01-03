@@ -6,7 +6,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import validateEmail from "../utils/validateEmail";
 import { useNavigate } from "react-router";
 import gubbeImage from "../assets/gröngala.png";
-import gubbeImage1 from "../assets/darksin-galablue.png";
+import gubbeImage1 from "../assets/Bluedress.png";
 import validateUsername from "../utils/validateUsername";
 import { isUsernameAvailable } from "../api/user";
 

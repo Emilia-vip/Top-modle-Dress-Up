@@ -7,7 +7,12 @@ import { BASE_URL } from "../constants";
 import { useNavigate } from "react-router";
 import '../index.css';
 import gubbeImage from "../assets/gröngala.png";
+<<<<<<< Updated upstream
 import gubbeImage1 from "../assets/darksin-galablue.png"
+=======
+import gubbeImage1 from "../assets/Bluedress.png"
+import runway from "../assets/runway,new.png";
+>>>>>>> Stashed changes
 
 function LoginPage() {
   const { saveLogin } = useContext(AuthContext);
