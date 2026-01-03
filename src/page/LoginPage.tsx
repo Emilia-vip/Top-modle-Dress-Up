@@ -7,7 +7,7 @@ import { BASE_URL } from "../constants";
 import { useNavigate } from "react-router";
 import '../index.css';
 import gubbeImage from "../assets/gröngala.png";
-import gubbeImage1 from "../assets/darksin-galablue.png"
+import gubbeImage1 from "../assets/Bluedress.png"
 import runway from "../assets/runway,new.png";
 
 function LoginPage() {
