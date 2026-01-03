@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import runway from "../assets/runway-bla.png";
+import runway from "../assets/runway,new.png";
 import apiClient from "../api/client";
 import { tops, bottoms } from "../data/clothes";
 

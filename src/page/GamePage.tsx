@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useContext } from "react";
 import { ChevronLeft, ChevronRight, Shirt, Users, } from "lucide-react";
-import runway from "../assets/runway-bla.png"
+import runway from "../assets/runway,new.png"
 import apiClient from "../api/client";
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -163,7 +163,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
         </div>
 
           {/* DOCKA */}
-          <div className="relative w-[300px] h-[450px] mt-40">
+          <div className="relative w-[400px] h-[600px] mt-10">
   {currentBottom && (
     <img
       src={currentBottom.image}
