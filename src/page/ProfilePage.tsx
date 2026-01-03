@@ -105,11 +105,11 @@ function ProfilePage() {
       await apiClient.post("/user/update", updateData);
 
       // await axios.put(`${BASE_URL}/user/update`, updateData);
-      setMessage("Profilen är uppdaterad!");
+      setMessage("Profile updated!");
       setPassword("");
     } catch (err) {
       console.error(err);
-      setMessage("Misslyckades att uppdatera profilen");
+      setMessage("Oops! Profile update failed");
     }
   };
 
@@ -180,13 +180,13 @@ function ProfilePage() {
         {/* Saved outfits */}
         <div className="bg-purple-300/90 p-2 md:p-5 rounded-2xl md:rounded-3xl w-full max-w-sm md:max-w-md flex flex-col gap-2 md:gap-4 mt-2 md:mt-20 md:ml-40 flex-shrink-0">
           <h2 className="text-sm md:text-xl font-bold text-center text-purple-900">
-            Sparade Outfits
+            Saved Outfits
           </h2>
 
           {outfitsLoading ? (
-            <p className="text-center text-xs md:text-base">Laddar outfits...</p>
+            <p className="text-center text-xs md:text-base">Loading outfits...</p>
           ) : outfits.length === 0 ? (
-            <p className="text-center text-xs md:text-base">Inga sparade outfits</p>
+            <p className="text-center text-xs md:text-base">No saved outfits</p>
           ) : (
             <div className="flex flex-col gap-2 md:gap-4">
               {outfits.map((outfit) => {
@@ -213,8 +213,8 @@ function ProfilePage() {
                       )}
                     </div>
                     <div className="mt-1 md:mt-2 text-[10px] md:text-sm">
-                      <p>Tröja: {outfit.top_id}</p>
-                      <p>Byxor: {outfit.bottom_id}</p>
+                      <p>Top: {outfit.top_id}</p>
+                      <p>Bottom: {outfit.bottom_id}</p>
                       <p className="text-[9px] md:text-xs">
                         Ratings: {outfit.ratings?.length || 0}
                       </p>

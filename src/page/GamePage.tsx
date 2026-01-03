@@ -119,7 +119,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
             onClickPrev={prevTop}
             onClickNext={nextTop}
             icon={<Shirt />}
-            title="Tröja"
+            title="TOP"
             currentName={currentTop?.name || "Ingen"}
           />
 
@@ -127,7 +127,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
             onClickPrev={prevBottom}
             onClickNext={nextBottom}
             icon={<Users />}
-            title="Byxor"
+            title="BOTTOM"
             currentName={currentBottom?.name || "Ingen"}
           />
 
@@ -143,22 +143,22 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
                   : "bg-green-500 hover:bg-green-600 active:bg-green-700"
               }`}
             >
-              {saveStatus === "saving" ? "Sparar..." : "Spara outfit"}
+              {saveStatus === "saving" ? "Saving..." : "Save outfit"}
             </button>
 
             {!user && (
               <p className="text-[9px] md:text-xs text-red-200">
-                Logga in för att spara.
+                Log in to save.
               </p>
             )}
 
             {saveStatus === "success" && (
-              <p className="text-[9px] md:text-xs text-green-200">Sparad!</p>
+              <p className="text-[9px] md:text-xs text-green-200">Saved!</p>
             )}
 
             {saveStatus === "error" && (
               <p className="text-[9px] md:text-xs text-red-200">
-                Fel.
+                Error.
               </p>
             )}
           </div>
@@ -193,7 +193,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
                 : "bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700"
             }`}
           >
-            Mörk hud
+            Dark skin
           </button>
 
           <button
@@ -205,7 +205,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
                 : "bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700"
             }`}
           >
-            Ljus hud
+            Light skin
           </button>
         </div>
       </div>

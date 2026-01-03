@@ -23,56 +23,61 @@ function HomePage() {
       >
         {/* Titel */}
         <h1 className="text-base md:text-2xl lg:text-3xl font-light text-center text-white tracking-wider mb-2 md:mb-4 mt-2 md:mt-8">
-          Välkommen till vårt kreativa Dress-Up-spel!
+          Top model
         </h1>
+        <h2> Dress Up </h2>
 
         <p className="text-gray-200 leading-relaxed mb-3 md:mb-6 text-xs md:text-base">
-          Här kan du släppa fram din fantasi och skapa helt egna outfits genom att
-          kombinera kläder, färger och accessoarer. Spelet är gjort för alla som
-          gillar mode, styling eller bara vill ha roligt medan de designar unika looks.
+          Let your imagination run wild and create your own unique outfits by mixing and matching clothes. 
+          The game is designed for anyone who loves fashion, styling, or just wants to have fun while designing unique looks.
         </p>
 
         {/* Sektion: Hur fungerar spelet */}
-        <h2 className="text-sm md:text-xl lg:text-2xl font-light text-white mb-2 md:mb-4">🎮 Hur fungerar spelet?</h2>
+        <h2 className="text-sm md:text-xl lg:text-2xl font-light text-white mb-2 md:mb-4"> How does the game work?</h2>
 
         <div className="space-y-2 md:space-y-4 text-gray-200 text-xs md:text-base">
 
           <div>
-            <h3 className="text-xs md:text-lg lg:text-xl font-medium text-white">Välj en karaktär</h3>
+            <h3 className="text-xs md:text-lg lg:text-xl font-medium text-white">Choose a character</h3>
             <p className="leading-relaxed">
-              Börja med att välja den avatar du vill styla. Den fungerar som din modell
-              under spelets gång.
+              Select the model you want to style in the game.
             </p>
           </div>
 
           <div>
-            <h3 className="text-xs md:text-lg lg:text-xl font-medium text-white">Utforska garderoben</h3>
+            <h3 className="text-xs md:text-lg lg:text-xl font-medium text-white"> Explore the wardrobe</h3>
             <p className="leading-relaxed">
-              Bläddra bland tröjor, byxor, klänningar och skor. Varje kategori innehåller flera alternativ att prova.
+             Browse through tops and bottoms. Each category contains a variety of outfits to choose from.
             </p>
           </div>
 
           <div>
-            <h3 className="text-xs md:text-xl font-medium text-white">Klicka för att klä på</h3>
+            <h3 className="text-xs md:text-xl font-medium text-white">Scroll through to dress up</h3>
             <p className="leading-relaxed">
-              Tryck på ett plagg för att lägga det på din karaktär. Du kan ändra hur
-              mycket du vill tills du hittar den perfekta stilen.
+              Browse the clothing items to put them on your model. You can change and adjust as much as you like until you find the perfect style.
             </p>
           </div>
 
           <div>
-            <h3 className="text-xs md:text-xl font-medium text-white">Spara din look</h3>
+            <h3 className="text-xs md:text-xl font-medium text-white">Save your look</h3>
             <p className="leading-relaxed">
-              När du är nöjd kan du spara din outfit eller börja om och skapa en helt
-              ny stil.
+              Once you’re happy, you can save your outfit or start over to create an entirely new style. 
+              You can later find your creations on your profile page.
             </p>
           </div>
 
           <div>
-            <h3 className="text-xs md:text-xl font-medium text-white">Låt kreativiteten flöda</h3>
+            <h3 className="text-xs md:text-xl font-medium text-white">Rate other models</h3>
             <p className="leading-relaxed">
-              Det finns inga rätt eller fel — spelet handlar om att experimentera,
-              testa färger och skapa en stil som känns helt din egen.
+            After creating the perfect look, it’s ready to be rated by other users. 
+            You can also rate other users’ outfits by giving them 1–5 stars. 
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-xs md:text-xl font-medium text-white">Let your creativity flow</h3>
+            <p className="leading-relaxed">
+              Let your creativity flow and see what unique styles you can create!
             </p>
           </div>
 
