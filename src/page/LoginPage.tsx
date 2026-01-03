@@ -91,7 +91,7 @@ function LoginPage() {
           placeholder="Username...."
         />
 
-        <label className="text-gray-300 text-sm md:text-base">Lösenord</label>
+        <label className="text-gray-300 text-sm md:text-base">Password</label>
         <MyTextInput
           type="password"
           value={password}
@@ -100,7 +100,7 @@ function LoginPage() {
             setErrorMessage("");
           }}
           className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-3 py-2 md:px-5 md:py-3 text-sm md:text-base focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
-          placeholder="Lösenord.."
+          placeholder="Password.."
         />
 
         {errorMessage && (
@@ -115,7 +115,7 @@ function LoginPage() {
           className="w-full bg-gray-700 bg-opacity-20 hover:bg-gray-600 hover:bg-opacity-30 active:bg-gray-500 active:bg-opacity-40 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 md:py-3 rounded-full shadow-lg transition-all duration-300 mb-2 md:mb-4 border border-gray-500 hover:border-white text-sm md:text-base touch-manipulation min-h-[44px]"
           onClick={login}
         >
-          {isLoading ? "Loggar in..." : "LOGGA IN"}
+          {isLoading ? "Logging in..." : "LOGIN"}
         </button>
 
         <button
