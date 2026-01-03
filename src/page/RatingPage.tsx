@@ -80,10 +80,10 @@ function RatingPage() {
 
   return (
     <div
-      className="min-h-screen w-full bg-cover bg-center flex justify-center p-4 md:p-10"
+      className="min-h-screen w-full bg-cover bg-center flex justify-center p-2 md:p-10"
       style={{ backgroundImage: `url(${runway})` }}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-6">
         {outfits.map((outfit) => {
           const top = findClothingItem(outfit.top_id, "top");
           const bottom = findClothingItem(outfit.bottom_id, "bottom");
@@ -91,13 +91,13 @@ function RatingPage() {
           return (
             <div
               key={outfit._id}
-              className="mt-20 md:mt-40 h-48 md:h-60 bg-white/80 rounded-2xl p-3 md:p-4 flex flex-col items-center"
+              className="mt-8 md:mt-40 h-36 md:h-60 bg-white/80 rounded-xl md:rounded-2xl p-2 md:p-4 flex flex-col items-center"
             >
-              <p className="font-bold text-sm md:text-base text-purple-900 mb-1 md:mb-2">
+              <p className="font-bold text-xs md:text-base text-purple-900 mb-1 md:mb-2">
                 @{outfit.username}
               </p>
 
-              <div className="relative w-32 md:w-40 h-40 md:h-56">
+              <div className="relative w-24 md:w-40 h-28 md:h-56">
                 {bottom && (
                   <img
                     src={bottom.image}
@@ -113,11 +113,11 @@ function RatingPage() {
               </div>
 
               {/* ⭐ Rating */}
-              <div className="flex gap-1 mt-2 md:mt-3">
+              <div className="flex gap-0.5 md:gap-1 mt-1 md:mt-3">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span
                     key={star}
-                    className={`cursor-pointer text-2xl md:text-3xl ${
+                    className={`cursor-pointer text-lg md:text-3xl touch-manipulation ${
                       star <=
                       (hovered[outfit._id] || selected[outfit._id] || 0)
                         ? "text-yellow-400"
@@ -140,7 +140,7 @@ function RatingPage() {
               </div>
 
               {ratedOutfits.has(outfit._id) && (
-                <p className="text-green-600 text-xs md:text-sm mt-1 md:mt-2 font-semibold">
+                <p className="text-green-600 text-[10px] md:text-sm mt-0.5 md:mt-2 font-semibold">
                   Sent!
                 </p>
               )}

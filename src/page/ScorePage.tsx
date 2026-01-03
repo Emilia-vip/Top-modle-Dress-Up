@@ -123,14 +123,14 @@ function ScorePage() {
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center px-4 md:px-10 py-4 md:py-10"
+      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center px-2 md:px-10 py-2 md:py-10"
       style={{ backgroundImage: `url(${runway})` }}
     >
       <div className="flex flex-row items-end gap-1 md:gap-16 justify-center">
         {/* 2:a plats - vänster */}
         {topUsers[1] && (
           <div className="flex flex-col items-center">
-            <div className="w-20 md:w-28 lg:w-36 h-30 md:h-42 lg:h-52 bg-white rounded-xl flex items-center justify-center shadow-md overflow-hidden relative">
+            <div className="w-14 md:w-28 lg:w-36 h-20 md:h-42 lg:h-52 bg-white rounded-lg md:rounded-xl flex items-center justify-center shadow-md overflow-hidden relative">
               {topUsers[1].outfit && (
                 <>
                   {(() => {
@@ -158,18 +158,18 @@ function ScorePage() {
                 </>
               )}
             </div>
-            <span className="mt-2 md:mt-3 font-bold text-base md:text-xl text-gray-900">{topUsers[1].username}</span>
-            <span className="text-yellow-400 font-extrabold text-base md:text-xl">
+            <span className="mt-1 md:mt-3 font-bold text-xs md:text-xl text-gray-900">{topUsers[1].username}</span>
+            <span className="text-yellow-400 font-extrabold text-xs md:text-xl">
               {topUsers[1].averageRating.toFixed(1)}
             </span>
-            <span className="mt-1 font-semibold text-gray-800 text-xs md:text-base">2nd</span>
+            <span className="mt-0.5 md:mt-1 font-semibold text-gray-800 text-[10px] md:text-base">2nd</span>
           </div>
         )}
 
         {/* 1:a plats - mitten */}
         {topUsers[0] && (
           <div className="flex flex-col items-center">
-            <div className="w-28 md:w-36 lg:w-48 h-42 md:h-54 lg:h-80 bg-white rounded-xl flex items-center justify-center shadow-2xl overflow-hidden relative">
+            <div className="w-20 md:w-36 lg:w-48 h-30 md:h-54 lg:h-80 bg-white rounded-lg md:rounded-xl flex items-center justify-center shadow-2xl overflow-hidden relative">
               {topUsers[0].outfit && (
                 <>
                   {(() => {
@@ -197,18 +197,18 @@ function ScorePage() {
                 </>
               )}
             </div>
-            <span className="mt-2 md:mt-3 font-bold text-lg md:text-2xl lg:text-3xl text-gray-900">{topUsers[0].username}</span>
-            <span className="text-yellow-400 font-extrabold text-lg md:text-2xl lg:text-3xl">
+            <span className="mt-1 md:mt-3 font-bold text-sm md:text-2xl lg:text-3xl text-gray-900">{topUsers[0].username}</span>
+            <span className="text-yellow-400 font-extrabold text-sm md:text-2xl lg:text-3xl">
               {topUsers[0].averageRating.toFixed(1)}
             </span>
-            <span className="mt-1 font-semibold text-gray-900 text-sm md:text-base lg:text-xl">1st</span>
+            <span className="mt-0.5 md:mt-1 font-semibold text-gray-900 text-xs md:text-base lg:text-xl">1st</span>
           </div>
         )}
 
         {/* 3:e plats - höger */}
         {topUsers[2] && (
           <div className="flex flex-col items-center">
-            <div className="w-16 md:w-24 lg:w-32 h-24 md:h-36 lg:h-48 bg-white rounded-xl flex items-center justify-center shadow-sm overflow-hidden relative">
+            <div className="w-12 md:w-24 lg:w-32 h-18 md:h-36 lg:h-48 bg-white rounded-lg md:rounded-xl flex items-center justify-center shadow-sm overflow-hidden relative">
               {topUsers[2].outfit && (
                 <>
                   {(() => {
@@ -236,11 +236,11 @@ function ScorePage() {
                 </>
               )}
             </div>
-            <span className="mt-2 md:mt-3 font-bold text-sm md:text-lg text-gray-900">{topUsers[2].username}</span>
-            <span className="text-yellow-400 font-extrabold text-sm md:text-lg">
+            <span className="mt-1 md:mt-3 font-bold text-[10px] md:text-lg text-gray-900">{topUsers[2].username}</span>
+            <span className="text-yellow-400 font-extrabold text-[10px] md:text-lg">
               {topUsers[2].averageRating.toFixed(1)}
             </span>
-            <span className="mt-1 font-semibold text-gray-800 text-xs md:text-sm">3rd</span>
+            <span className="mt-0.5 md:mt-1 font-semibold text-gray-800 text-[9px] md:text-sm">3rd</span>
           </div>
         )}
       </div>
