@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import '../index.css';
 import gubbeImage from "../assets/gröngala.png";
 import gubbeImage1 from "../assets/darksin-galablue.png"
+import runway from "../assets/runway,new.png";
 
 function LoginPage() {
   const { saveLogin } = useContext(AuthContext);
@@ -34,13 +35,14 @@ function LoginPage() {
   };
 
   return (
-    <div
-      className="min-h-screen w-full flex flex-row items-center justify-center px-2 md:px-10 bg-cover bg-center py-2 md:py-0 flex-wrap"
-      style={{
-        backgroundImage:
-          "url('https://t3.ftcdn.net/jpg/09/00/33/46/360_F_900334673_iPcSROckgtgBmsRh3WiUENMKxsnmfEBW.jpg')",
-      }}
-    >
+     <div
+  className="min-h-screen w-full flex items-center justify-center
+             bg-no-repeat bg-bottom"
+  style={{
+    backgroundImage: `url(${runway})`,
+    backgroundSize: "100% auto",
+  }}
+>
       <div
         className="rounded-2xl shadow-2xl shadow-black p-4 md:p-10 w-full max-w-xs md:max-w-sm flex flex-col gap-4 mb-2 md:mb-0 flex-shrink-0"
         style={{

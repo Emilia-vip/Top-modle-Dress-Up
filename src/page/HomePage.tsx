@@ -1,19 +1,21 @@
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import runway from "../assets/runway,new.png";
 
 function HomePage() {
   const { logout } = useContext(AuthContext);
 
   return (
-    <div
-      className="min-h-screen w-full flex items-center justify-center px-4 md:px-10 py-10 bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url('https://t3.ftcdn.net/jpg/09/00/33/46/360_F_900334673_iPcSROckgtgBmsRh3WiUENMKxsnmfEBW.jpg')",
-      }}
-    >
+     <div
+  className="min-h-screen w-full flex items-center justify-center
+             bg-no-repeat bg-bottom"
+  style={{
+    backgroundImage: `url(${runway})`,
+    backgroundSize: "100% auto",
+  }}
+>
       <div
-        className="rounded-2xl shadow-2xl shadow-black p-6 md:p-10 w-full max-w-3xl flex flex-col gap-5"
+        className="rounded-2xl shadow-2xl shadow-black p-6 md:p-10 w-full max-w-3xl flex flex-col gap-5 mt-20"
         style={{
           backgroundColor: "rgba(31, 41, 55, 0.4)",
           backdropFilter: "blur(10px)",
