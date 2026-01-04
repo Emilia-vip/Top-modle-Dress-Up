@@ -29,4 +29,20 @@ export type Rating = {
   username: string;
 };
 
+export type ClothingItem = { 
+  id?: string; 
+  name: string; 
+  image: string; 
+};
 
+export type ClothingCollection = { 
+  dark: ClothingItem[]; 
+  light: ClothingItem[]; 
+};
+
+export interface UserScore {
+  username: string;
+  averageRating: number;
+  totalRatings: number;
+  outfit?: Outfit;
+}
