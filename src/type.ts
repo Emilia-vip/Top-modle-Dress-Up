@@ -19,6 +19,7 @@ export type Outfit = {
   username: string;
   top_id: string;
   bottom_id: string;
+  skin?: "dark" | "light";
   ratings: Rating[];
   created_at: string;
 };
