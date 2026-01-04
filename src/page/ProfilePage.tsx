@@ -14,6 +14,131 @@ function ProfilePage() {
   } = useProfile();
 
   if (loading) return <LoadingSpinner />;
+  // Outfits
+  const [outfits, setOutfits] = useState<Outfit[]>([]);
+  const [outfitsLoading, setOutfitsLoading] = useState(true);
+
+  // Hitta kläder
+  const findClothingItem = (identifier: string, type: "top" | "bottom", skin?: "dark" | "light") => {
+    const dark = type === "top" ? tops.dark : bottoms.dark;
+    const light = type === "top" ? tops.light : bottoms.light;
+
+    // Försök inferera skin från identifier om det inte är specificerat
+    let inferredSkin = skin;
+    if (!inferredSkin) {
+      // Kolla om identifier innehåller "Light" eller "Dark"
+      if (identifier.includes("Light") || identifier.includes("light")) {
+        inferredSkin = "light";
+      } else if (identifier.includes("Dark") || identifier.includes("dark")) {
+        inferredSkin = "dark";
+      }
+    }
+
+    // Om skin är specificerad (explicit eller infererad), sök ENDAST i den samlingen
+    if (inferredSkin === "light" || inferredSkin === "dark") {
+      const collection = inferredSkin === "dark" ? dark : light;
+      
+      // Först försök hitta via id
+      const foundById = collection.find(i => i.id === identifier);
+      if (foundById) return foundById;
+      
+      // Fallback till name
+      const foundByName = collection.find(i => i.name.toLowerCase() === identifier.toLowerCase());
+      if (foundByName) return foundByName;
+      
+      return null;
+    }
+
+    // Om inget skin kan infereras (bakåtkompatibilitet), sök i båda
+    // Men varning: detta kan ge fel resultat om samma ID finns i båda
+    // Försök hitta i light först om möjligt (för att undvika att alltid hitta dark)
+    const foundByIdLight = light.find(i => i.id === identifier);
+    if (foundByIdLight) return foundByIdLight;
+    
+    const foundByIdDark = dark.find(i => i.id === identifier);
+    if (foundByIdDark) return foundByIdDark;
+
+    // Fallback till name (för bakåtkompatibilitet med gamla sparade outfits)
+    const foundByNameLight = light.find(i => i.name.toLowerCase() === identifier.toLowerCase());
+    if (foundByNameLight) return foundByNameLight;
+    
+    const foundByNameDark = dark.find(i => i.name.toLowerCase() === identifier.toLowerCase());
+    if (foundByNameDark) return foundByNameDark;
+
+    return null;
+  };
+
+  // Hämta användare
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await apiClient.get("/user/me");
+        setUsername(res.data.username || "");
+        setEmail(res.data.email || "");
+        setPhone(res.data.phone || "");
+        setPassword("");
+      } catch (err) {
+        console.error("Kunde inte hämta användardata", err);
+      } finally {
+        setLoading(false); // ✅ från custom hook
+      }
+    };
+
+    fetchUser();
+  }, [setLoading]);
+
+  // Hämta outfits
+  const fetchOutfits = useCallback(async () => {
+    if (!user?.username) {
+      setOutfitsLoading(false);
+      return;
+    }
+
+    try {
+      const res = await apiClient.get<Outfit[]>(
+        `/outfits/user/${user.username}`
+      );
+      setOutfits(res.data);
+    } catch (err) {
+      console.error("Kunde inte hämta outfits", err);
+    } finally {
+      setOutfitsLoading(false);
+    }
+  }, [user?.username]);
+
+  useEffect(() => {
+    fetchOutfits();
+  }, [fetchOutfits]);
+
+  useEffect(() => {
+    const onFocus = () => fetchOutfits();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [fetchOutfits]);
+
+  // Spara profil
+  const handleSave = async () => {
+    try {
+      const updateData: any = {};
+      updateData.user = user;
+      if (email.trim()) updateData.email = email.trim();
+      if (phone.trim()) updateData.phone = phone.trim();
+      if (password.trim()) updateData.password = password.trim();
+
+      await apiClient.post("/user/update", updateData);
+
+      // await axios.put(`${BASE_URL}/user/update`, updateData);
+      setMessage("Profile updated!");
+      setPassword("");
+    } catch (err) {
+      console.error(err);
+      setMessage("Oops! Profile update failed");
+    }
+  };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="relative min-h-screen w-full">
@@ -74,6 +199,9 @@ function ProfilePage() {
               {outfits.map((outfit) => {
                 const topItem = findClothingItem(outfit.top_id, "top");
                 const bottomItem = findClothingItem(outfit.bottom_id, "bottom");
+                const topItem = findClothingItem(outfit.top_id, "top", outfit.skin);
+                const bottomItem = findClothingItem(outfit.bottom_id, "bottom", outfit.skin);
+
                 return (
                   <div key={outfit._id} className="bg-white/80 p-4 rounded-xl border-2 border-purple-700">
                     <div className="relative w-full h-32 md:h-40">

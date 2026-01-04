@@ -16,6 +16,93 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
     selectedSkin, setSelectedSkin, currentTop, currentBottom, 
     saveStatus, user, handlers 
   } = useGameLogic(tops, bottoms);
+  const [selectedSkin, setSelectedSkin] = useState<"dark" | "light">("dark");
+  const [currentTopIndex, setCurrentTopIndex] = useState(0);
+  const [currentBottomIndex, setCurrentBottomIndex] = useState(0);
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "saving" | "success" | "error"
+  >("idle");
+
+  const { user } = useContext(AuthContext);
+
+    useEffect(() => {
+    setCurrentTopIndex(0);
+    setCurrentBottomIndex(0);
+  }, [selectedSkin]);
+
+
+  const currentTopsArray = useMemo(() => tops[selectedSkin], [tops, selectedSkin]);
+  const currentBottomsArray = useMemo(() => bottoms[selectedSkin], [bottoms, selectedSkin]);
+
+  const currentTop = currentTopsArray[currentTopIndex];
+  const currentBottom = currentBottomsArray[currentBottomIndex];
+
+  const handleSaveOutfit = async () => {
+    if (!user || !currentTop || !currentBottom) {
+      return;
+    }
+
+    setSaveStatus("saving");
+    try {
+      await apiClient.post("/outfits", {
+        username: user.username,
+        top_id: currentTop.id || currentTop.name,
+        bottom_id: currentBottom.id || currentBottom.name,
+        skin: selectedSkin,
+      });
+      setSaveStatus("success");
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    } catch (error) {
+      console.error("Failed to save outfit", error);
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    }
+  };
+
+  const nextTop = () =>
+  setCurrentTopIndex((i) => (i + 1) % currentTopsArray.length);
+  const prevTop = () =>
+  setCurrentTopIndex((i) => (i - 1 + currentTopsArray.length) % currentTopsArray.length);
+
+  const nextBottom = () =>
+  setCurrentBottomIndex((i) => (i + 1) % currentBottomsArray.length);
+  const prevBottom = () =>
+  setCurrentBottomIndex((i) => (i - 1 + currentBottomsArray.length) % currentBottomsArray.length);
+
+
+  const CarouselControls: React.FC<{
+    onClickPrev: () => void;
+    onClickNext: () => void;
+    icon: React.ReactNode;
+    title: string;
+    currentName: string;
+  }> = ({ onClickPrev, onClickNext, icon, title, currentName }) => (
+    <div className="flex items-center space-x-1 md:space-x-2">
+      <button
+        onClick={onClickPrev}
+        className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-indigo-500/80 text-white flex items-center justify-center hover:bg-indigo-600 active:bg-indigo-700 transition touch-manipulation"
+        aria-label={`Previous ${title}`}
+      >
+        <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
+      </button>
+
+      <div className="w-14 h-14 md:w-24 md:h-24 bg-white/10 backdrop-blur-sm rounded-lg md:rounded-xl border-2 border-purple-900 flex flex-col items-center justify-center text-white shadow-xl p-1 md:p-1">
+        <div className="text-lg md:text-3xl text-indigo-200">{icon}</div>
+        <div className="text-[9px] md:text-xs text-indigo-200 font-semibold mt-0 md:mt-1">{title}</div>
+        <div className="text-[7px] md:text-[10px] text-gray-400 italic truncate w-full text-center px-0.5">
+          {currentName}
+        </div>
+      </div>
+
+      <button
+        onClick={onClickNext}
+        className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-indigo-500/80 text-white flex items-center justify-center hover:bg-indigo-600 active:bg-indigo-700 transition touch-manipulation"
+        aria-label={`Next ${title}`}
+      >
+        <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+      </button>
+    </div>
+  );
 
   return (
     <div 
