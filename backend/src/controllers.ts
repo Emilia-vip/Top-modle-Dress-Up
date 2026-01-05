@@ -221,6 +221,7 @@ export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
 
   const { username, top_id, bottom_id, skin } = body;
 
+
   if (!username || !top_id || !bottom_id) {
     return res.status(400).send({
       message: 'Required fields: username, top_id, bottom_id',

@@ -16,7 +16,7 @@ export const OutfitCard: React.FC<OutfitCardProps> = ({ outfit, onRate, isRated 
   const bottom = findClothingItem(outfit.bottom_id, "bottom");
 
   return (
-    <div className="mt-8 md:mt-40 h-48 md:h-72 bg-white/80 rounded-xl md:rounded-2xl p-4 flex flex-col items-center shadow-lg">
+    <div className="mt-10 md:mt-20 h-48 md:h-72 bg-white/80 rounded-xl md:rounded-2xl p-4 flex flex-col items-center shadow-lg">
       <p className="font-bold text-xs md:text-base text-purple-900 mb-2">@{outfit.username}</p>
 
       <div className="relative w-24 md:w-40 h-28 md:h-56">

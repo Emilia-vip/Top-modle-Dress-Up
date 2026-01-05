@@ -31,6 +31,7 @@ function SignupPage() {
             value={formData.username}
             onChange={(e) => updateField("username", e.target.value)}
             onBlur={() => checkUsername(formData.username)}
+            className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-3 py-2 md:px-5 md:py-3 text-sm md:text-base focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
             placeholder="Username"
           />
           {usernameStatus === "checking" && <p className="text-[10px] text-gray-300">Checking...</p>}
@@ -41,11 +42,12 @@ function SignupPage() {
         {/* Email, Phone & Password (likadana fält) */}
         {["phone", "email", "password"].map((field) => (
           <div key={field} className="flex flex-col gap-1">
-            <label className="text-gray-300 text-sm capitalize">{field}</label>
+            <label className="text-amber-50 text-sm capitalize">{field}</label>
             <MyTextInput
               type={field === "password" ? "password" : "text"}
               value={(formData as any)[field]}
               onChange={(e) => updateField(field, e.target.value)}
+              className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-3 py-2 md:px-5 md:py-3 text-sm md:text-base focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
               placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
             />
           </div>
