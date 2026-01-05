@@ -31,6 +31,7 @@ export const useGameLogic = (tops: ClothingCollection, bottoms: ClothingCollecti
         username: user.username,
         top_id: currentTop.id || currentTop.name,
         bottom_id: currentBottom.id || currentBottom.name,
+        skin: selectedSkin,
       });
       setSaveStatus("success");
       setTimeout(() => setSaveStatus("idle"), 2000);

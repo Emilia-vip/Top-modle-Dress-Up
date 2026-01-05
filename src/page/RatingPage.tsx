@@ -14,7 +14,7 @@ function RatingPage() {
       className="min-h-screen w-full bg-cover bg-center flex justify-center p-4 md:p-10"
       style={{ backgroundImage: `url(${runway})` }}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start w-auto max-w-7xl">
         {outfits.map((outfit) => (
           <OutfitCard
             key={outfit._id}
