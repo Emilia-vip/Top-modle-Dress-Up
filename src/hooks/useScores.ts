@@ -12,7 +12,7 @@ export const useScores = () => {
         const response = await apiClient.get<Outfit[]>("/outfits");
         const outfits = response.data;
 
-        // Beräkna betyg per användare
+        // Beräkna betyg 
         const userRatings: { [username: string]: number[] } = {};
         outfits.forEach((outfit) => {
           if (!userRatings[outfit.username]) userRatings[outfit.username] = [];

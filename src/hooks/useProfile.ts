@@ -53,7 +53,7 @@ export const useProfile = () => {
     fetchOutfits();
   }, [fetchUser, fetchOutfits]);
 
-  // Uppdatera vid fokus (när användaren kommer tillbaka till fliken)
+ 
   useEffect(() => {
     const onFocus = () => fetchOutfits();
     window.addEventListener("focus", onFocus);

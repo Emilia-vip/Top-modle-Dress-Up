@@ -1,4 +1,3 @@
-// src/page/RatingPage.tsx
 import runway from "../assets/runway,new.png";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { OutfitCard } from "../components/OutfitCard";

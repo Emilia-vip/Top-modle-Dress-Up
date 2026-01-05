@@ -24,7 +24,7 @@ function SignupPage() {
           Create account
         </h1>
 
-        {/* Username Field */}
+        {/* Username Fält */}
         <div className="flex flex-col gap-1">
           <label className="text-gray-300 text-sm">Username</label>
           <MyTextInput

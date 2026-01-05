@@ -21,7 +21,7 @@ function HomePage() {
           backdropFilter: "blur(10px)",
         }}
       >
-        
+
         {/* Titel */}
       <div className="flex flex-col items-center justify-center w-full mt-4 md:mt-8">
         <h1 className="text-6xl md:text-5xl lg:text-7xl font-light text-white font-italiana tracking-widest ">
@@ -39,7 +39,7 @@ function HomePage() {
           The game is designed for anyone who loves fashion, styling, or just wants to have fun while designing unique looks.
         </p>
 
-        {/* Sektion: Hur fungerar spelet */}
+        {/* Sektion: Välkommsttext */}
         <h2 className="text-sm md:text-xl lg:text-2xl font-light text-white mb-2 md:mb-4"> How does the game work?</h2>
 
         <div className="space-y-2 md:space-y-4 text-gray-200 text-xs md:text-base">
