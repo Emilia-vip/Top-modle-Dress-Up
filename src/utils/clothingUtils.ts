@@ -3,9 +3,9 @@ import { tops, bottoms } from "../data/clothes";
 export const findClothingItem = (
   identifier: string, 
   type: "top" | "bottom",
-  skin: "dark" | "light" = "light" // Standard till light om inget anges
+  skin: "dark" | "light" = "light" 
 ) => {
-  // 1. Välj rätt kollektion baserat på skin direkt
+  // 1. Välj rätt kollektion baserat på hud
   const collection = type === "top" ? tops[skin] : bottoms[skin];
 
   // 2. Leta i den valda kollektionen (både på ID och namn)
@@ -15,7 +15,7 @@ export const findClothingItem = (
 
   if (found) return found;
 
-  // 3. Fallback: Om det mot förmodan inte fanns i rätt skin, kolla det andra
+  // 3. Fallback: Om det inte fanns i rätt skin, kolla det andra
   const fallbackSkin = skin === "light" ? "dark" : "light";
   const fallbackCollection = type === "top" ? tops[fallbackSkin] : bottoms[fallbackSkin];
   

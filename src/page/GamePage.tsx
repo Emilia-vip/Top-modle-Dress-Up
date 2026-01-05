@@ -24,7 +24,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
     >
       <div className="relative w-full max-w-6xl h-[400px] md:h-[520px] flex items-center justify-center">
         
-        {/* VÄNSTER KONTROLLER */}
+        {/* VÄNSTER SIDA KONTROLLER */}
         <div className="absolute left-0 flex flex-col space-y-1 md:space-y-4 z-20">
           <CarouselControls
             onClickPrev={handlers.prevTop}
@@ -41,7 +41,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
             currentName={currentBottom?.name || "Ingen"}
           />
           
-          {/* Spara-sektion */}
+          {/* Spara-knapp */}
           <div className="mt-2 md:mt-4">
             <button
               onClick={handlers.handleSaveOutfit}
@@ -62,7 +62,7 @@ const GamePage: React.FC<Props> = ({ tops, bottoms }) => {
           {currentTop && <img src={currentTop.image} className="absolute inset-0 w-full h-full object-contain z-10" alt="Top" />}
         </div>
 
-        {/* HÖGER – SKIN */}
+        {/* HÖGER SIDA SKIN */}
         <div className="absolute right-0 flex flex-col space-y-2 z-20">
           {(["dark", "light"] as const).map((skin) => (
             <button

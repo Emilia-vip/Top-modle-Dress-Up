@@ -2,7 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import type { AuthResponse, User } from "../type";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import apiClient from "../api/client";
-import { useNavigate } from "react-router";
+
+
 type AuthContextType = {
   user: User | null;
   loading: boolean;

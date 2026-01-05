@@ -1,5 +1,4 @@
 // IMPORTERA BASDOCKOR
-//import dollDarkUpper from '../assets/character/character-dark-upperbody.png';
 import dollDarkUpper from '../assets/character/Character-upper-body.png';
 import dollDarkLower from '../assets/character/Character-lower-body.png';
 import dollLightUpper from '../assets/character/Light-doll-upper-body.png';
@@ -199,7 +198,7 @@ const BOTTOMSLIGHT = [
 export const tops = { dark: TOPSDARK, light: TOPSLIGHT };
 export const bottoms = { dark: BOTTOMSDARK, light: BOTTOMSLIGHT };
 
-// Exportera datat i en struktur som är enkel att använda i App/GamePage
+
 export function fetchClothingData() {
   return new Promise((resolve) => {
     setTimeout(() => {

@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import apiClient from "../api/client"; // Vi använder din färdiga klient
+import apiClient from "../api/client"; 
 import type { AuthResponse } from "../type";
 
 export const useLogin = () => {
@@ -20,7 +20,7 @@ export const useLogin = () => {
     
     setIsLoading(true);
     try {
-      // Vi använder /login (apiClient har redan BASE_URL)
+     
       const response = await apiClient.post<AuthResponse>("/login", {
         username,
         password,
