@@ -20,7 +20,7 @@ function ProfilePage() {
       <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: `url(${backstage})` }} />
       
       <div className="relative z-10 flex flex-row items-center justify-center min-h-screen p-2 md:p-0 gap-2 md:gap-8 flex-wrap">
-        <h1 className="text-lg md:text-4xl lg:text-6xl text-amber-50 mb-2 md:mb-0 md:absolute md:top-10 md:left-1/2 md:-translate-x-1/2">
+        <h1 className="ttext-lg md:text-4xl lg:text-6xl text-amber-50 mb-2 md:mb-0 md:absolute md:top-0 md:left-1/2 md:transform md:-translate-x-1/2 md:ml-0 md:mt-30">
           YOUR PROFILE PAGE
         </h1>
 
@@ -72,6 +72,7 @@ function ProfilePage() {
           ) : (
             <div className="flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2">
               {outfits.map((outfit) => {
+
                 const topItem = findClothingItem(outfit.top_id, "top");
                 const bottomItem = findClothingItem(outfit.bottom_id, "bottom");
                 return (
