@@ -38,7 +38,7 @@ export const OutfitCard: React.FC<OutfitCardProps> = ({ outfit, onRate, isRated 
               onRate(outfit._id, star);
             }}
           >
-            ★
+            
           </span>
         ))}
       </div>
