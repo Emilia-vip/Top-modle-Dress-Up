@@ -21,11 +21,16 @@ function HomePage() {
           backdropFilter: "blur(10px)",
         }}
       >
+        
         {/* Titel */}
-        <h1 className="text-base md:text-2xl lg:text-6xl font-light ml-45 mr-10 text-white mb-2 md:mb-4 mt-2 md:mt-8 font-italiana">
-          Top model
+      <div className="flex flex-col items-center justify-center w-full mt-4 md:mt-8">
+        <h1 className="text-6xl md:text-5xl lg:text-7xl font-light text-white font-italiana tracking-widest ">
+         Top model
         </h1>
-        <h2 className=" text-white lg:text-2xl ml-95 absolute mt-22 font-italiana"> Dress Up </h2>
+        <h2 className="text-lg md:text-2xl text-white font-italiana italic transform translate-x-12 md:translate-x-27 -mt-1">
+         Dress Up
+        </h2>
+      </div>
 
         
        <div className="mt-10"></div>

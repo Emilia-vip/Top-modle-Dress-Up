@@ -43,37 +43,37 @@ const TOPSDARK = [
         image: dollDarkUpper
     },
     {
-        id: 'Beige blazer and red top',
+        id: 'Top1Dark',
         name: 'Beige blazer and red top',
         image: top1dark
     },
     {
-        id: 'Blue blazer beige top',
+        id: 'Top2Dark',
         name: 'Blue blazer beige top',
         image: top2dark
     },
     {
-        id: 'Beige cardigan',
+        id: 'Top3Dark',
         name: 'Beige cardigan',
         image: top3dark
     },
     {
-        id: 'Beige top',
+        id: 'Top4Dark',
         name: 'Beige top',
         image: top4dark
     },
     {
-        id: 'Black top',
+        id: 'Top5Dark',
         name: 'Black top',
         image: top5dark
     },
     {
-        id: 'Blue top',
+        id: 'Top6Dark',
         name: 'Blue top',
         image: top6dark
     },
     {
-        id: 'Red top',
+        id: 'Top7Dark',
         name: 'Red top',
         image: top7dark
     },
@@ -87,27 +87,27 @@ const BOTTOMSDARK = [
         image: dollDarkLower
     },
     {
-        id: 'Black suit pants wide',
+        id: 'Bottom1Dark',
         name: 'Black suit pants wide',
         image: bottom1dark
     },
     {
-        id: 'Brown suit pants',
+        id: 'Bottom2Dark',
         name: 'Brown suit pants',
         image: bottom2dark
     },
     {
-        id: 'Green suit pants',
+        id: 'Bottom3Dark',
         name: 'Green suit pants',
         image: bottom3dark
     },
     {
-        id: 'Beige skirt',
+        id: 'Bottom4Dark',
         name: 'Beige skirt',
         image: bottom4dark
     },
     {
-        id: 'Beige skirt with belt ',
+        id: 'Bottom5Dark',
         name: 'Beige skirt with belt ',
         image: bottom5dark
     },
@@ -121,37 +121,37 @@ const TOPSLIGHT = [
         image: dollLightUpper
     },
     {
-        id: 'Beige blazer and red top',
+        id: 'Top1Light',
         name: 'Beige blazer and red top',
         image: top1light
     },
     {
-        id: 'Blue blazer beige top',
+        id: 'Top2Light',
         name: 'Blue blazer beige top',
         image: top2light
     },
     {
-        id: 'Beige cardigan',
+        id: 'Top3Light',
         name: 'Beige cardigan',
         image: top3light
     },
     {
-        id: 'Beige top',
+        id: 'Top4Light',
         name: 'Beige top',
         image: top4light
     },
     {
-        id: 'Black top',
+        id: 'Top5Light',
         name: 'Black top',
         image: top5light
     },
     {
-        id: 'Black top',
+        id: 'Top6Light',
         name: 'Black top',
         image: top6light
     },
     {
-        id: 'Red top',
+        id: 'Top7Light',
         name: 'Red top',
         image: top7light
     },
@@ -164,32 +164,32 @@ const BOTTOMSLIGHT = [
         image: dollLightLower
     },
     {
-        id: 'Black suit pants wide',
+        id: 'Bottom1Light',
         name: 'Black suit pants wide',
         image: bottom1light
     },
     {
-        id: 'Brown suit pants',
+        id: 'Bottom2Light',
         name: 'Brown suit pants',
         image: bottom2light
     },
     {
-        id: 'Green suit pants',
+        id: 'Bottom3Light',
         name: 'Green suit pants',
         image: bottom3light
     },
     {
-        id: 'Beige skirt',
+        id: 'Bottom3Light',
         name: 'Beige skirt',
         image: bottom4light
     },
     {
-        id: 'Beige skirt with belt',
+        id: 'Bottom4Light',
         name: 'Beige skirt with belt',
         image: bottom5light
     },
     {
-        id: 'Black suit pants',
+        id: 'Bottom5Light',
         name: 'Black suit pants',
         image: bottom6light
     },
