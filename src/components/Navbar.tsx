@@ -78,7 +78,7 @@ export default function Navbar() {
         onClick={handleLogout}
         className="ml-2 md:ml-6 px-2 md:px-4 py-1 md:py-2 bg-gray-700 bg-opacity-20 hover:bg-gray-600 hover:bg-opacity-30 text-white font-semibold rounded-full shadow-lg transition-all duration-300 border border-gray-500 hover:border-white text-sm md:text-base"
       >
-        Logga ut
+        Logout
       </button>
     </header>
   );

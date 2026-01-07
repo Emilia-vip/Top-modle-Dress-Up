@@ -219,7 +219,8 @@ export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
     return res.status(400).send({ message: 'Request body is required' });
   }
 
-  const { username, top_id, bottom_id } = body;
+  const { username, top_id, bottom_id, skin } = body;
+
 
   if (!username || !top_id || !bottom_id) {
     return res.status(400).send({
@@ -227,11 +228,15 @@ export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
     });
   }
 
+  // Ensure skin is always set to either "dark" or "light"
+  const outfitSkin: "dark" | "light" = (skin === "light" || skin === "dark") ? skin : "dark";
+
   const outfit: OutfitDatabaseModel = {
     _id: crypto.randomUUID(),
     username,
     top_id,
     bottom_id,
+    skin: outfitSkin,
     ratings: [],
     created_at: new Date().toISOString(),
   };

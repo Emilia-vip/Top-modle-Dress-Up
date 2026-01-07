@@ -1,93 +1,86 @@
-import axios from "axios";
-import MyTextInput from "../components/MyTextInput";
-import { useContext, useState } from "react";
-import type { AuthResponse } from "../type";
-import { AuthContext } from "../contexts/AuthContext";
-import { BASE_URL } from "../constants";
+// src/page/LoginPage.tsx
 import { useNavigate } from "react-router";
-import '../index.css';
+import MyTextInput from "../components/MyTextInput";
+import runway from "../assets/runway,new.png";
 import gubbeImage from "../assets/gröngala.png";
-import gubbeImage1 from "../assets/darksin-galablue.png"
+import gubbeImage1 from "../assets/Bluedress.png";
+import { useLogin } from "../hooks/useLogin";
 
 function LoginPage() {
-  const { saveLogin } = useContext(AuthContext);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const {
+    username, setUsername,
+    password, setPassword,
+    errorMessage, setErrorMessage,
+    isLoading, login
+  } = useLogin();
 
-  const login = async () => {
-    if (!username || !password) {
-      alert("Please fill in all fields");
-      return;
-    }
-    try {
-      const response = await axios.post<AuthResponse>(`${BASE_URL}/login`, {
-        username,
-        password,
-      });
-
-      saveLogin(response.data);
-    } catch (error) {
-      alert("Login failed. Check your credentials.");
-      console.error(error);
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    login();
   };
 
   return (
-    <div
-      className="min-h-screen w-full flex flex-row items-center justify-center px-2 md:px-10 bg-cover bg-center py-2 md:py-0 flex-wrap"
-      style={{
-        backgroundImage:
-          "url('https://t3.ftcdn.net/jpg/09/00/33/46/360_F_900334673_iPcSROckgtgBmsRh3WiUENMKxsnmfEBW.jpg')",
-      }}
+    <div 
+      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center px-2 py-4"
+      style={{ backgroundImage: `url(${runway})` }}
     >
-      <div
-        className="rounded-2xl shadow-2xl shadow-black p-4 md:p-10 w-full max-w-xs md:max-w-sm flex flex-col gap-4 mb-2 md:mb-0 flex-shrink-0"
-        style={{
-          backgroundColor: "rgba(31, 41, 55, 0.4)",
-          backdropFilter: "blur(10px)",
-        }}
+      <form
+        onSubmit={handleSubmit}
+        className="rounded-xl md:rounded-2xl shadow-2xl p-5 md:p-10 w-full max-w-xs md:max-w-sm flex flex-col gap-3 shadow-black"
+        style={{ backgroundColor: "rgba(31, 41, 55, 0.4)", backdropFilter: "blur(10px)" }}
       >
-        <h1 className="text-3xl font-light text-center mb-6 text-white tracking-wider">
-          Logga in
+        <h1 className="text-xl md:text-3xl font-light text-center mb-4 text-white tracking-wider">
+          SIGN IN
         </h1>
 
-        <label className="text-gray-300">Username</label>
-        <MyTextInput
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-5 py-3 focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
-          placeholder="Username...."
-        />
+        <div className="flex flex-col gap-1">
+          <label className="text-gray-300 text-sm md:text-base">Username</label>
+          <MyTextInput
+            value={username}
+            onChange={(e) => { setUsername(e.target.value); setErrorMessage(""); }}
+            className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-3 py-2 md:px-5 md:py-3 text-sm md:text-base focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
+            placeholder="Username...."
+          />
+        </div>
 
-        <label className="text-gray-300">Lösenord</label>
-        <MyTextInput
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-5 py-3 focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
-          placeholder="Lösenord.."
-        />
+        <div className="flex flex-col gap-1">
+          <label className="text-gray-300 text-sm">Password</label>
+          <MyTextInput
+            type="password"
+            value={password}
+            onChange={(e) => { setPassword(e.target.value); setErrorMessage(""); }}
+            className="border-b border-gray-500 bg-gray-700 bg-opacity-20 text-white rounded-full px-3 py-2 md:px-5 md:py-3 text-sm md:text-base focus:outline-none focus:border-white transition-all duration-300 placeholder-gray-400"
+            placeholder="Password.."
+          />
+        </div>
+
+        {errorMessage && (
+          <div className="bg-red-500/20 border border-red-500 rounded-lg p-2">
+            <p className="text-red-200 text-xs text-center">{errorMessage}</p>
+          </div>
+        )}
 
         <button
-          className="w-full bg-gray-700 bg-opacity-20 hover:bg-gray-600 hover:bg-opacity-30 text-white font-semibold py-3 rounded-full shadow-lg transition-all duration-300 mb-4 border border-gray-500 hover:border-white"
-          onClick={login}
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-full border border-gray-500 transition-all mt-2"
         >
-          LOGGA IN
+          {isLoading ? "Logging in..." : "LOGIN"}
         </button>
 
         <button
-          className="w-full border border-gray-500 text-gray-300 hover:bg-gray-700 hover:bg-opacity-30 hover:text-white font-semibold py-3 rounded-full transition-all duration-300"
+          type="button"
+          className="w-full border border-gray-500 text-gray-300 hover:text-white py-3 rounded-full transition-all text-sm"
           onClick={() => navigate("/signup")}
         >
-          SKAPA KONTO
+          CREATE ACCOUNT
         </button>
-      </div>
+      </form>
 
-      {/* Gubbar */}
-      <div className="flex items-center ml-1 md:ml-4 flex-shrink-0">
-        <img src={gubbeImage} alt="Gubbe" className="w-32 md:w-90 h-auto" />
-        <img src={gubbeImage1} alt="Gubbe" className="w-32 md:w-90 h-auto -ml-10 md:-ml-30" />
+      <div className="hidden md:flex items-center ml-4">
+        <img src={gubbeImage} alt="Gubbe" className="w-80 h-auto" />
+        <img src={gubbeImage1} alt="Gubbe" className="w-80 h-auto -ml-30" />
       </div>
     </div>
   );
