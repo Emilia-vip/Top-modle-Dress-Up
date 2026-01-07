@@ -10,7 +10,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 function RatingPage() {
   const { user } = useContext(AuthContext);
 
-  // ✅ Custom hook för loading
+
   const { loading, setLoading } = useLoading(true);
 
   const [outfits, setOutfits] = useState<Outfit[]>([]);
@@ -65,7 +65,6 @@ function RatingPage() {
     }
   };
 
-  // ✅ Spinner
   if (loading) {
     return <LoadingSpinner />;
   }
