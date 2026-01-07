@@ -1,5 +1,4 @@
 // IMPORTERA BASDOCKOR
-//import dollDarkUpper from '../assets/character/character-dark-upperbody.png';
 import dollDarkUpper from '../assets/character/Character-upper-body.png';
 import dollDarkLower from '../assets/character/Character-lower-body.png';
 import dollLightUpper from '../assets/character/Light-doll-upper-body.png';
@@ -43,37 +42,37 @@ const TOPSDARK = [
         image: dollDarkUpper
     },
     {
-        id: 'top-1dark',
+        id: 'Top1Dark',
         name: 'Beige blazer and red top',
         image: top1dark
     },
     {
-        id: 'top-2dark',
+        id: 'Top2Dark',
         name: 'Blue blazer beige top',
         image: top2dark
     },
     {
-        id: 'top-3dark',
+        id: 'Top3Dark',
         name: 'Beige cardigan',
         image: top3dark
     },
     {
-        id: 'top-4dark',
+        id: 'Top4Dark',
         name: 'Beige top',
         image: top4dark
     },
     {
-        id: 'top-5dark',
+        id: 'Top5Dark',
         name: 'Black top',
         image: top5dark
     },
     {
-        id: 'top-6dark',
+        id: 'Top6Dark',
         name: 'Blue top',
         image: top6dark
     },
     {
-        id: 'top-7dark',
+        id: 'Top7Dark',
         name: 'Red top',
         image: top7dark
     },
@@ -87,27 +86,27 @@ const BOTTOMSDARK = [
         image: dollDarkLower
     },
     {
-        id: 'bottom-1dark',
+        id: 'Bottom1Dark',
         name: 'Black suit pants wide',
         image: bottom1dark
     },
     {
-        id: 'bottom-2dark',
+        id: 'Bottom2Dark',
         name: 'Brown suit pants',
         image: bottom2dark
     },
     {
-        id: 'bottom-3dark',
+        id: 'Bottom3Dark',
         name: 'Green suit pants',
         image: bottom3dark
     },
     {
-        id: 'bottom-4dark',
+        id: 'Bottom4Dark',
         name: 'Beige skirt',
         image: bottom4dark
     },
     {
-        id: 'bottom-5dark',
+        id: 'Bottom5Dark',
         name: 'Beige skirt with belt ',
         image: bottom5dark
     },
@@ -121,37 +120,37 @@ const TOPSLIGHT = [
         image: dollLightUpper
     },
     {
-        id: 'top-1light',
+        id: 'Top1Light',
         name: 'Beige blazer and red top',
         image: top1light
     },
     {
-        id: 'top-2light',
+        id: 'Top2Light',
         name: 'Blue blazer beige top',
         image: top2light
     },
     {
-        id: 'top-3light',
+        id: 'Top3Light',
         name: 'Beige cardigan',
         image: top3light
     },
     {
-        id: 'top-4light',
+        id: 'Top4Light',
         name: 'Beige top',
         image: top4light
     },
     {
-        id: 'top-5light',
+        id: 'Top5Light',
         name: 'Black top',
         image: top5light
     },
     {
-        id: 'top-6light',
-        name: 'Blue top',
+        id: 'Top6Light',
+        name: 'Black top',
         image: top6light
     },
     {
-        id: 'top-7light',
+        id: 'Top7Light',
         name: 'Red top',
         image: top7light
     },
@@ -164,32 +163,32 @@ const BOTTOMSLIGHT = [
         image: dollLightLower
     },
     {
-        id: 'bottom-1light',
+        id: 'Bottom1Light',
         name: 'Black suit pants wide',
         image: bottom1light
     },
     {
-        id: 'bottom-2light',
+        id: 'Bottom2Light',
         name: 'Brown suit pants',
         image: bottom2light
     },
     {
-        id: 'bottom-3light',
+        id: 'Bottom3Light',
         name: 'Green suit pants',
         image: bottom3light
     },
     {
-        id: 'bottom-4light',
+        id: 'Bottom3Light',
         name: 'Beige skirt',
         image: bottom4light
     },
     {
-        id: 'bottom-5light',
+        id: 'Bottom4Light',
         name: 'Beige skirt with belt',
         image: bottom5light
     },
     {
-        id: 'bottom-6light',
+        id: 'Bottom5Light',
         name: 'Black suit pants',
         image: bottom6light
     },
@@ -199,7 +198,7 @@ const BOTTOMSLIGHT = [
 export const tops = { dark: TOPSDARK, light: TOPSLIGHT };
 export const bottoms = { dark: BOTTOMSDARK, light: BOTTOMSLIGHT };
 
-// Exportera datat i en struktur som är enkel att använda i App/GamePage
+
 export function fetchClothingData() {
   return new Promise((resolve) => {
     setTimeout(() => {

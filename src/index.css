@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
 @import "tailwindcss";
 
 @tailwind base;
@@ -9,6 +10,7 @@
   to { opacity: 1; }
 }
 
+
 .animate-fadeIn {
   animation: fadeIn 0.7s forwards;
 }
@@ -18,5 +20,9 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+}
+
+.font-italiana {
+  font-family: 'Italiana', sans-serif;
 }
 
