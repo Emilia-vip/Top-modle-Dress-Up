@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import runway from "../assets/runway-bla.png";
+import runway from "../assets/runway,new.png";
 import apiClient from "../api/client";
 import type { Outfit } from "../type";
 import { AuthContext } from "../contexts/AuthContext";

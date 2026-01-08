@@ -1,4 +1,3 @@
-// src/page/SignupPage.tsx
 import MyTextInput from "../components/MyTextInput";
 import runway from "../assets/runway,new.png";
 import gubbeImage from "../assets/gröngala.png";
