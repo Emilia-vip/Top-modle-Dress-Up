@@ -23,7 +23,7 @@ function RatingPage() {
       try {
         const res = await apiClient.get<Outfit[]>("/outfits");
 
-        // Ta bort ditt eget outfit
+       
         const filtered = res.data.filter(
           (o) => o.username !== user?.username
         );
@@ -32,7 +32,7 @@ function RatingPage() {
       } catch (error) {
         console.error("Failed to fetch outfits", error);
       } finally {
-        setLoading(false); // ✅ från custom hook
+        setLoading(false); 
       }
     };
 
