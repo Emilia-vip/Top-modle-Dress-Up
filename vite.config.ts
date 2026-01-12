@@ -4,6 +4,10 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [tailwindcss()],
   server: {
-    host: true, // <-- gör att du får Network-adressen
+    host: true,
+    allowedHosts: true 
   },
+  preview: {
+    allowedHosts: true 
+  }
 })
