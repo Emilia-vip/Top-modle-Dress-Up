@@ -9,11 +9,11 @@ export function StartupRoutine() {
 
   axios
     .get("http://hej.com")
-    .then((response) => {
+    .then(() => {
       console.log("Här är then 1");
       return axios.get("http."); // Ogiltig URL → går till catch
     })
-    .then((response) => {
+    .then(() => {
       console.log("Här är then 2");
     })
     .catch((error) => {
