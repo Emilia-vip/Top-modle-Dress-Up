@@ -22,17 +22,17 @@ import bottom5dark from '../assets/darkskin/bottom/Beige-skirt-belt.png';
 
 import top1light from '../assets/lightskin/top/Beige-Blazer-Red-Top.png';
 import top2light from '../assets/lightskin/top/Blue-Blazer-Beige-Top.png';
-import top3light from '../assets/lightskin/top/Beige-cardigan.png';
+import top3light from '../assets/lightskin/top/Beige-Cardigan.png';
 import top4light from '../assets/lightskin/top/Beige-Top.png';
 import top5light from '../assets/lightskin/top/Black-Top.png';
 import top6light from '../assets/lightskin/top/Blue-Top.png';
 import top7light from '../assets/lightskin/top/Red-Top.png';
-import bottom1light from '../assets/lightskin/bottom/black-pants.png';
+import bottom1light from '../assets/lightskin/bottom/Black-SuitPants.png';
 import bottom2light from '../assets/lightskin/bottom/Brown-SuitPants.png';
 import bottom3light from '../assets/lightskin/bottom/Green-SuitPants.png';
 import bottom4light from '../assets/lightskin/bottom/beige-skirt.png';
 import bottom5light from '../assets/lightskin/bottom/Beige-skirt-belt.png';
-import bottom6light from '../assets/lightskin/bottom/Black-Pants.png';
+import bottom6light from '../assets/lightskin/bottom/black-pants.png';
 
 
 const TOPSDARK = [
