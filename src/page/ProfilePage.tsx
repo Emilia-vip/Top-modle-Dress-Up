@@ -1,5 +1,5 @@
 // src/page/ProfilePage.tsx
-import React, { useState } from "react";
+import { useState } from "react";
 import backstage from "../assets/backstage.png";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import LoadingSpinner from "../components/LoadingSpinner";

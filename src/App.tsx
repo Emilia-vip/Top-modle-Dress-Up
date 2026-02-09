@@ -1,6 +1,6 @@
 // App.tsx
 
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { RouterProvider } from 'react-router';
 import authRouter from './routes/AuthRouter';
 import appRouter from './routes/AppRouter';

@@ -3,7 +3,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import runway from "../assets/runway,new.png";
 
 function HomePage() {
-  const { logout } = useContext(AuthContext);
+  useContext(AuthContext);
 
   return (
      <div
