@@ -6,6 +6,8 @@
   "scripts": {
     "start": "bun run src/index.ts",
   "build": "tsc && vite build"
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@fastify/cors": "^11.1.0",
