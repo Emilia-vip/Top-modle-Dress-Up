@@ -7,8 +7,8 @@ import RatingPage from "../page/RatingPage";
 import GamePage from "../page/GamePage";
 import ScorePage from "../page/ScorePage";
 
-export default function appRouter(data) {
-  const { dolls, tops, bottoms } = data;
+export default function appRouter(data: any) {
+  const { tops, bottoms } = data;
 
   return createBrowserRouter([
     {
