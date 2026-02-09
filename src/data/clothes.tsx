@@ -15,7 +15,7 @@ import top7dark from '../assets/darkskin/top/Red-Top.png';
 import bottom1dark from '../assets/darkskin/bottom/Black-SuitPants.png';
 import bottom2dark from '../assets/darkskin/bottom/Brown-SuitPants.png';
 import bottom3dark from '../assets/darkskin/bottom/Green-SuitPants.png';
-import bottom4dark from '../assets/darkskin/bottom/Beige-Skirt.png';
+import bottom4dark from '../assets/darkskin/bottom/beige-skirt.png';
 import bottom5dark from '../assets/darkskin/bottom/Beige-skirt-belt.png';
 
 
@@ -30,7 +30,7 @@ import top7light from '../assets/lightskin/top/Red-Top.png';
 import bottom1light from '../assets/lightskin/bottom/Black-SuitPants.png';
 import bottom2light from '../assets/lightskin/bottom/Brown-SuitPants.png';
 import bottom3light from '../assets/lightskin/bottom/Green-SuitPants.png';
-import bottom4light from '../assets/lightskin/bottom/Beige-Skirt.png';
+import bottom4light from '../assets/lightskin/bottom/beige-skirt.png';
 import bottom5light from '../assets/lightskin/bottom/Beige-skirt-belt.png';
 import bottom6light from '../assets/lightskin/bottom/Black-Pants.png';
 
