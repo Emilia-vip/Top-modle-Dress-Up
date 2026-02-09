@@ -178,12 +178,12 @@ const BOTTOMSLIGHT = [
         image: bottom3light
     },
     {
-        id: 'Bottom3Light',
+        id: 'Bottom4Light',
         name: 'Beige skirt',
         image: bottom4light
     },
     {
-        id: 'Bottom4Light',
+        id: 'Bottom5Light',
         name: 'Beige skirt with belt',
         image: bottom5light
     },
