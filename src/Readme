@@ -1,0 +1,122 @@
+Examination skriftlig
+
+Applikationen vi har byggt är en spelwebbplats. Spelet vi har återskapat är ett Dress Up Top Model spel. Applikationen är uppbyggd kring fem olika routes samt en logga ut knapp. Spelet inleds med att användaren får välja mellan att skapa ett konto eller logga in med befintliga uppgifter. Detta hanteras via en server på backend. Vi har även modifierat backend logiken så att användaren kan logga in med det användarnamn som skapades vid registrering.
+
+När användaren har autentiserats och erhållit en token eller refresh token, beroende på valt alternativ vid inloggning, får denne tillgång till applikationens skyddade sidor. Den första sidan som visas är en introduktion till spelet, där det tydligt framgår hur spelet fungerar och vilka möjligheter som finns. Därefter kan användaren fritt navigera mellan applikationens olika sidor.
+En av dessa är profilsidan, vars syfte är att användaren ska kunna spara sina outfits samt redigera sina personuppgifter. Uppgifterna är samma som angavs vid konto skapandet, vilket ger användaren möjlighet att exempelvis ändra sitt lösenord om det skulle glömmas bort. Nästa sida kallas Rating och här kan användaren betygsätta andra användares outfits med stjärnor från ett till fem, beroende på hur tilltalande outfiten upplevs. Valet av stjärnbetyg gjordes för att skapa en mer engagerande och visuell upplevelse för användaren.
+
+Därefter finns Score sidan, där de tre högst rankade outfiten visas. Denna lista uppdateras dynamiskt när en ny outfit tar ledningen. Vi har valt att endast visa topp tre för att förstärka känslan av exklusivitet och motivation, samt för att uppmuntra användare att sträva efter att nå denna placering.
+Den sista, och viktigaste, sidan är själva spelsidan. Den är uppbyggd som en karusell där bilder byts ut genom att användaren klickar på pilar, vilket gör att tidigare bilder döljs tills de åter blir synliga. På denna sida finns två knappar som representerar överdelar och underdelar, vilka gör det möjligt att byta klädesplagg på dockan. Det finns även en knapp för att välja hudfärg på dockan. Detta val gjordes för att skapa en mer inkluderande upplevelse och göra spelet tillgängligt och roligt för alla användare, oavsett bakgrund.
+
+Den sista knappen på spelsidan är en spara knapp, vilken gör att outfiten sparas. Detta leder till att dockan uppdateras på profilsidan samt på ranking sidan, där andra användare kan betygsätta outfiten. Om outfiten får tillräckligt höga betyg hamnar den även på Score sidan. Applikationen innehåller dessutom en logga ut knapp. Vid utloggning förlorar användaren åtkomst till de skyddade sidorna och omdirigeras tillbaka till inloggningssidan.
+Färgvalet i hela applikationen är genomtänkt och konsekvent. Blått har valts för att förmedla en modern och trygg känsla, medan lila representerar glädje och ungdomlighet. Eftersom applikationen riktar sig till en yngre målgrupp ansågs dessa färger särskilt passande. Applikationen är utformad för att vara lättförståelig och användarvänlig, med tydlig feedback till användaren genom alerts och informativa texter, exempelvis vid lyckade eller misslyckade uppdateringar.
+
+De viktigaste komponenterna i applikationen är:
+
+ Navbar – navigering mellan sidor samt logga ut knapp
+ Game-komponenter – karusell, docka och knappar för kläder
+ Profile-komponenter – formulär för användaruppgifter och visning av outfits
+ Rating-komponent – stjärnbetyg för outfits
+ Score-komponent – presentation av topp tre outfits
+
+Ett tydligt exempel på en återanvändbar komponent är input komponenten, som används vid inloggning, registrering och profil uppdatering. Genom att samla både logik och styling i en gemensam komponent säkerställs ett konsekvent utseende samt minskad kod duplicering. Vi använder både lokal och global state beroende på användningsområde. Exempel på global state är inloggning, autentisering och hantering av tokens, eftersom dessa behövs på flera sidor i applikationen. Lokal state används bland annat för val av kläder, hudfärg, karusellens funktionalitet samt UI interaktioner såsom hover effekter i rating vyn. Fördelen med lokal state är att det bidrar till bättre prestanda och ökad tydlighet i koden.
+Egna hooks har skapats för återkommande logik, exempelvis hantering av loading states. Syftet med detta är att minska upprepning av kod samt att göra komponenterna lättare och fokusera på sitt specifika ansvar.
+
+Vår mappstruktur är följande:
+
+Frontend
+├── src/
+│   ├── api/
+│   │   ├── api.ts
+│   │   ├── client.ts
+│   │   ├── StartupRoutine.ts
+│   │   └── user.ts
+│   │
+│   ├── assets/
+│   │   ├── character/
+│   │   │
+│   │   ├── darkskin/
+│   │   │   ├── bottom/
+│   │   │   └── top/
+│   │   │
+│   │   ├── lightskin/
+│   │   ├── bottom/
+│   │   └── top/
+│   │   
+│   ├── components/
+│   │   ├── CarouselControls.tsx
+│   │   ├── LoadingSpinner.tsx
+│   │   ├── MyTextInput.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── OutfitCard.tsx
+│   │   └── PodiumPlace.tsx
+│   │
+│   ├── contexts/
+│   │   └── AuthContext.tsx
+│   │
+│   ├── data/
+│   │   └── clothes.tsx
+│   │
+│   ├── hooks/
+│   │   ├── useGameLogic.ts
+│   │   ├── useLoading.ts
+│   │   ├── useLoadingSpinner.tsx
+│   │   ├── useLogin.ts
+│   │   ├── useProfile.ts
+│   │   ├── useRating.ts
+│   │   ├── useScores.ts
+│   │   └── useSignup.ts
+│   │
+│   ├── layouts/
+│   │   └── AppLayout.tsx
+│   │
+│   ├── page/
+│   │   ├── GamePage.tsx
+│   │   ├── HomePage.tsx
+│   │   ├── LoginPage.tsx
+│   │   ├── ProfilePage.tsx
+│   │   ├── RatingPage.tsx
+│   │   ├── ScorePage.tsx
+│   │   └── SignupPage.tsx
+│   │
+│   ├── routes/
+│   │   ├── AppRouter.tsx
+│   │   └── AuthRouter.tsx
+│   │
+│   ├── utils/
+│   │   ├── clothingUtils.ts
+│   │   ├── validateEmail.test.ts
+│   │   ├── validateEmail.ts
+│   │   └── validateUsername.ts
+│   │
+│   ├── App.tsx
+│   ├── constants.ts
+│   ├── index.css
+│   ├── jest.config.js
+│   ├── main.tsx
+│   ├── tailwind.config.js
+│   └── type.ts
+│
+├── node_modules
+│
+├── eslint.config.js
+├── index.html
+├── jest.config.js
+├── package-lock.json
+├── package.json
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+
+Vi har implementerat valideringstester, exempelvis för e postadresser. Detta gjordes för att minska risken för felaktig data vid exempelvis kontosparande. En framtida testning hade varit en komponenttest för karusellen eftersom vi vill säkerställa att kläderna renderas korrekt eftersom det är den största faktorn i applikationen.
+
+MongoDB hade vi som teknikval för backeden då vi tog din backend och det var det du använde så de var inte svårt att välja. För fronted valde vi react eftersom uppgiften var att programmera i det. Men vi har också gjort egna val som hur vi skulle skriva css, där valde vi tailwind för de gav oss mer möjligheter att göra det precis som vi vill. Vi upplevde att vanlig css och även sass var begränsade för de vi ville åstadkomma. För kläderna som är kärnan i applikationen var det viktigt för oss att de skulle vara lätta att få till då vi kände att de skulle bli för mycket kod att bygga. Därför kom vi på att vi kunde göra en karusell som vi gjort i tidigare uppgifter. En nackdel som kommer uppstå i framtiden om man ska vidareutveckla sidan är att det kommer ta lång tid för användaren att bläddra igenom alla kläder ifall vi skulle ha många klädval. Då hade de varit bättre med en garderob där man visuellt ser dem alla. I framtiden hade vi velat ha fler val så som dockas hudfärg, hår, smycken och väskor. De hade gett användaren en bättre upplevelse och ett sätt för användaren att göra dockan precis som den vill. Just nu blir användaren begränsad på grund av att få klädval.
+
+AI baserade verktyg har integrerats i arbetsflödet som ett stöd för problemlösning, kod strukturering och refaktorering. En central del av användningen har varit att accelerera lärandet av Tailwind CSS, särskilt när det gäller implementeringen av en "Mobile First" metodik. Genom att använda AI för att utforska responsiva klasser och brytpunkter har vi kunnat omsätta teoretisk kunskap till praktisk tillämpning mer effektivt.
+
+För att säkerställa kodkvalitet och personligt lärande har vi tillämpat en strikt kontrollprocess: all kod som genererats eller föreslagits av AI har granskats, testats och anpassats manuellt. Detta har varit avgörande för att säkerställa full förståelse för logiken bakom varje lösning och för att garantera en tillförlitlig funktionalitet i applikationen. Processen har inte bara resulterat i en tekniskt stabil produkt, utan har också fungerat som en kraftfull pedagogisk resurs som fördjupat vår förståelse för modern frontend utveckling.
+
+Samarbetet mellan mig och Nana har varit mycket framgångsrikt och präglas av öppen och kontinuerlig kommunikation. Vi har arbetat nära varandra, vilket har möjliggjort ett effektivt kunskapsutbyte där vi stöttat varandra genom komplexa problemlösningar. Genom att upprätthålla en tydlig struktur och gemensamma målsättningar har vi skapat ett effektivt arbetsflöde.
+
+För min egen del har projektet varit mycket lärorikt. Jag har fördjupat min förståelse för hela utvecklingskedjan från systemarkitektur och komponentstruktur till hur de olika delarna i en modern webbapplikation samverkar. Att arbeta i team har gett mig värdefulla insikter i hur man bäst organiserar kod för att den ska vara läsbar och underhållbar för andra, vilket har varit en central del i vår gemensamma utvecklingsprocess.
