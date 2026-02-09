@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-  "dev": "vite",
-  "build": "tsc && vite build",
+  "dev": "vite --config frontend/vite.config.ts",
+  "build": "tsc --build && vite build --config frontend/vite.config.ts",
   "start": "node dist/index.js"
 },
   "dependencies": {
