@@ -4,11 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "bun run src/index.ts",
-  "build": "tsc && vite build"
-    "build": "tsc",
-    "start": "node dist/index.js"
-  },
+  "dev": "vite",
+  "build": "tsc && vite build",
+  "start": "node dist/index.js"
+},
   "dependencies": {
     "@fastify/cors": "^11.1.0",
     "@fastify/jwt": "^10.0.0",
