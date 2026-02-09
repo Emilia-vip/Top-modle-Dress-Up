@@ -29,7 +29,7 @@ async function start() {
 
   // Serve frontend static files (Vite dist folder)
   await server.register(fastifyStatic, {
-    root: path.join(__dirname, '../../dist'),
+    root: path.join(__dirname, '../dist'),
     prefix: '/',
   });
 
