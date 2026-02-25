@@ -1,7 +1,10 @@
+//detta är som ett skyddsnät ifall brevbäraren ramlar längst vägen.
 import axios from "axios";
 
+//funktion som gör en snabb kontroll innan det stora arbetet börjar.
 export function StartupRoutine() {
-  // Exempel på intern async-funktion
+  //vi skapar en hjälpreda som ropar det som står i consolen 
+  //eftrsom det är async körs den i sin egen takt utan att stoppa resten av koden.
   async function Test() {
     console.log("Test-funktion körs");
   }
