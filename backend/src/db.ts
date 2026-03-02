@@ -1,6 +1,9 @@
 import { MongoClient } from 'mongodb';
 import pino from 'pino';
+import dotenv from 'dotenv';
 import { OutfitDatabaseModel, UserDatabaseModel } from './types';
+
+dotenv.config(); 
 
 class MongoConnection {
   private static dbClient: MongoClient;
