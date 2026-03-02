@@ -1,23 +1,29 @@
-// src/page/LoginPage.tsx
 import { useNavigate } from "react-router";
 import MyTextInput from "../components/MyTextInput";
 import runway from "../assets/runway,new.png";
 import gubbeImage from "../assets/gröngala.png";
 import gubbeImage1 from "../assets/Bluedress.png";
 import { useLogin } from "../hooks/useLogin";
+import { useContext } from "react";
+import { AuthContext } from "../Auth0/AuthContext";
 
 function LoginPage() {
   const navigate = useNavigate();
+  
+  // 1. Hämta Auth0-login från din nya context
+  const { login: auth0Login } = useContext(AuthContext);
+
+  // 2. Flytta ut useLogin hit (hooks måste ligga högst upp!)
   const {
     username, setUsername,
     password, setPassword,
     errorMessage, setErrorMessage,
-    isLoading, login
+    isLoading, login: originalLogin
   } = useLogin();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login();
+    originalLogin(); // Kör din gamla inloggningslogik
   };
 
   return (
@@ -33,6 +39,17 @@ function LoginPage() {
         <h1 className="text-xl md:text-3xl font-light text-center mb-4 text-white tracking-wider">
           SIGN IN
         </h1>
+
+        {/* --- AUTH0 KNAPP --- */}
+        <button
+          type="button"
+          onClick={() => auth0Login()} // Använder Auth0-motorn
+          className="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-full shadow-lg transition-all mb-4 border-none animate-bounce"
+        >
+          LOGGA IN MED AUTH0
+        </button>
+
+        <div className="text-gray-400 text-center text-xs mb-2">ELLER ANVÄND GAMMALT KONTO</div>
 
         <div className="flex flex-col gap-1">
           <label className="text-gray-300 text-sm md:text-base">Username</label>

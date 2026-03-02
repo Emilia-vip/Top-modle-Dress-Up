@@ -1,10 +1,8 @@
-// App.tsx
-
-import React, { useContext, useEffect, useState } from 'react';
-import { RouterProvider } from 'react-router';
+import React, { useContext, useEffect, useState,} from 'react';
+import { RouterProvider } from 'react-router-dom';
 import authRouter from './routes/AuthRouter';
 import appRouter from './routes/AppRouter';
-import { AuthContext } from './contexts/AuthContext';
+import { AuthContext } from './Auth0/AuthContext'; // Dubbelkolla sökvägen!
 import { fetchClothingData } from './data/clothes';
 
 
@@ -14,9 +12,11 @@ function App() {
   const [data, setData] = useState<any | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
 
+  console.log("DEBUG:", { authLoading, dataLoading, user });
+
+  // Ladda kläder
   useEffect(() => {
     setDataLoading(true);
-
     fetchClothingData()
       .then((fetchedData) => {
         setData(fetchedData);
@@ -29,10 +29,11 @@ function App() {
       });
   }, []);
 
+  // Visa laddningsskärm om Auth0 eller kläder laddas
   if (authLoading || dataLoading) {
     return (
       <div className="App loading-screen">
-        <h1>Laddar... Vänligen vänta.</h1>
+        <h1>Laddar Top Model... Vänligen vänta.</h1>
       </div>
     );
   }
@@ -47,11 +48,11 @@ function App() {
 
   return (
     <div className="w-full h-screen flex items-start justify-center">
-
+      {/* Om user finns (inloggad via Auth0), visa spelet. Annars login-sidan. */}
       <RouterProvider router={user ? appRouter(data) : authRouter} />
-
     </div>
   );
 }
 
 export default App;
+
