@@ -2,7 +2,7 @@ import fastify, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import MongoConnection from './db';
 import auth from './auth';
-import routes from './route';
+import routes from './routes/route';
 
 const server: FastifyInstance = fastify({ logger: true });
 

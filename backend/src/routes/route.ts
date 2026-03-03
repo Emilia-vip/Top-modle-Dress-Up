@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-  import * as controllers from './controllers';
+  import * as controllers from '../controllers';
 
 function routes(server: FastifyInstance, options: FastifyPluginOptions) {
   server.route({
