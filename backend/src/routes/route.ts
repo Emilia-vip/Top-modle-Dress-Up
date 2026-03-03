@@ -80,6 +80,26 @@ function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     handler: controllers.getCurrentUser,
   });
 
+  // small utility route for frontend to list every user (used in profile/member pages)
+  server.route({
+    method: 'GET',
+    url: '/users',
+    handler: controllers.getAllUsers,
+  });
+
+  // auth0‑specific helpers: check existence and create new record
+  server.route({
+    method: 'GET',
+    url: '/users/:auth0Id',
+    handler: controllers.getUserByAuth0,
+  });
+
+  server.route({
+    method: 'POST',
+    url: '/users',
+    handler: controllers.createUserFromAuth0,
+  });
+
   server.route({
     method: 'POST',
     url: '/user/update',

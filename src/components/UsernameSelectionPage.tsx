@@ -2,29 +2,38 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../Auth0/AuthContext";
 import runway from "../assets/runway,new.png";
+import { BASE_URL } from "../constants"; // use central constant for endpoint
 
-export default function UsernameSelectionPage({ onComplete }: { onComplete: () => void }) {
-  const { user } = useContext(AuthContext);
+export default function UsernameSelectionPage() {
+  const { user, updateDbUser } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [error, setError] = useState("");
 
   const handleSave = async () => {
     if (name.length < 3) return setError("Namnet måste vara minst 3 tecken");
 
-    const response = await fetch("http://localhost:3002/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        auth0Id: user.sub, // Unikt ID från Auth0
-        username: name,
-        email: user.email 
-      }),
-    });
+    try {
+      const response = await fetch(`${BASE_URL}/users`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          auth0Id: user.sub, // Unikt ID från Auth0
+          username: name,
+          email: user.email 
+        }),
+      });
 
-    if (response.ok) {
-      onComplete(); // Detta triggar setHasUsername(true) i App.tsx
-    } else {
-      setError("Namnet är upptaget, prova ett annat!");
+      if (response.ok) {
+        // update context so downstream hooks see the username immediately
+        updateDbUser({ username: name });
+      } else if (response.status === 400) {
+        setError("Namnet är upptaget eller användaren finns redan, prova ett annat!");
+      } else {
+        setError("Något gick fel, försök igen senare.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Nätverksfel, försök igen.");
     }
   };
 

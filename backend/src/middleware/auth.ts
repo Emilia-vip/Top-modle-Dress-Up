@@ -37,3 +37,6 @@ export async function authMiddleware(
     reply.status(401).send({ error: "Invalid token" });
   }
 }
+
+export default authMiddleware;
+

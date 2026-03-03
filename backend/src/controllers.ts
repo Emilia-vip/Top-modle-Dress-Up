@@ -100,6 +100,61 @@ export const login = async (req: FastifyRequest, res: FastifyReply) => {
   res.status(201).send({ ...tokens, user });
 };
 
+export const getAllUsers = async (req: FastifyRequest, res: FastifyReply) => {
+  try {
+    const users = await repository.getAllUsers();
+    // hide passwords before sending
+    const sanitized = users.map(u => {
+      const { password, ...rest } = u as any;
+      return rest;
+    });
+    res.status(200).send(sanitized);
+  } catch (error) {
+    res.status(500).send({ message: 'Failed to fetch users' });
+  }
+};
+
+export const getUserByAuth0 = async (req: FastifyRequest, res: FastifyReply) => {
+  const { auth0Id } = req.params as { auth0Id: string };
+
+  if (!auth0Id) {
+    return res.status(400).send({ message: 'auth0Id is required' });
+  }
+
+  try {
+    const user = await repository.findUserByAuth0Id(auth0Id);
+    if (!user) {
+      return res.status(404).send({});
+    }
+    const { password, ...rest } = user as any;
+    res.status(200).send(rest);
+  } catch (error) {
+    res.status(500).send({ message: 'Failed to fetch user' });
+  }
+};
+
+export const createUserFromAuth0 = async (req: FastifyRequest, res: FastifyReply) => {
+  const { auth0Id, username, email } = req.body as any;
+
+  if (!auth0Id || !username) {
+    return res
+      .status(400)
+      .send({ message: 'auth0Id and username are required' });
+  }
+
+  try {
+    const existing = await repository.findUserByAuth0Id(auth0Id);
+    if (existing) {
+      return res.status(400).send({ message: 'User already exists' });
+    }
+
+    await repository.createUserFromAuth0(auth0Id, username, email);
+    res.status(201).send({ message: 'User created' });
+  } catch (error) {
+    res.status(500).send({ message: 'Failed to create user' });
+  }
+};
+
 export const signUp = async (req: FastifyRequest, res: FastifyReply) => {
   const body = req.body as any;
 

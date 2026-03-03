@@ -13,6 +13,28 @@ export const findUserById = async (id: string) => {
   return await MongoConnection.userCollection().findOne({ _id: id });
 };
 
+// find a user by their Auth0 subject identifier (stored in auth0_id field)
+export const findUserByAuth0Id = async (auth0Id: string) => {
+  return await MongoConnection.userCollection().findOne({ auth0_id: auth0Id });
+};
+
+// create a user record based on Auth0 info (username comes from frontend)
+export const createUserFromAuth0 = async (
+  auth0Id: string,
+  username: string,
+  email?: string
+) => {
+  const doc: any = { auth0_id: auth0Id, username };
+  if (email) doc.email = email;
+  doc.created_at = new Date();
+  return await MongoConnection.userCollection().insertOne(doc);
+};
+
+// Return every user in the collection. Used by the frontend member list.
+export const getAllUsers = async () => {
+  return await MongoConnection.userCollection().find({}).toArray();
+};
+
 export const getAllProducts = async () => {
   return await MongoConnection.productsCollection().find({}).toArray();
 };
