@@ -35,29 +35,6 @@ export const getAllUsers = async () => {
   return await MongoConnection.userCollection().find({}).toArray();
 };
 
-export const getAllProducts = async () => {
-  return await MongoConnection.productsCollection().find({}).toArray();
-};
-
-export const findProductById = async (id: number) => {
-  return await MongoConnection.productsCollection().findOne({ _id: id });
-};
-
-export const updateProduct = async (
-  id: number,
-  updates: {
-    username?: string;
-    description?: string;
-    price?: number;
-    category?: string;
-    image?: string;
-  }
-) => {
-  return await MongoConnection.productsCollection().updateOne(
-    { _id: id },
-    { $set: updates }
-  );
-};
 
 // Outfit related repository methods
 

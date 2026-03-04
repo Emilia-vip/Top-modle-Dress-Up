@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken"; 
 
 // Utöka FastifyRequest för att inkludera auth0Id och email
 interface AuthRequest extends FastifyRequest {
@@ -21,7 +21,7 @@ export async function authMiddleware(
   const token = authHeader.split(" ")[1];
 
   try {
-    // OBS: decode används här för demo, använd verify med jwks-rsa i produktion
+    
     const decoded = jwt.decode(token) as JwtPayload | null;
 
     if (!decoded || typeof decoded.sub !== "string") {

@@ -20,19 +20,7 @@ function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     handler: controllers.login,
   });
 
-  server.route({
-    method: 'GET',
-    url: '/products',
-    preHandler: [server.authenticate], // Valfritt, den gör att endpointen blir skyddad, d.v.s kräver token för att anropas.
-    handler: controllers.getProducts,
-  });
 
-  server.route({
-    method: 'POST',
-    url: '/admin/products/:productId',
-    preHandler: [server.adminAuthenticate],
-    handler: controllers.updateProduct,
-  });
 
   // Outfit routes
 

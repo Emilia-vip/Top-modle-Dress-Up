@@ -57,14 +57,6 @@ export const refreshToken = async (req: FastifyRequest, res: FastifyReply) => {
   res.status(200).send({ ...tokens, user });
 };
 
-export const getProducts = async (req: FastifyRequest, res: FastifyReply) => {
-  try {
-    const products = await repository.getAllProducts();
-    res.status(200).send(products);
-  } catch (error) {
-    res.status(500).send({ message: 'Failed to fetch products' });
-  }
-};
 
 export const login = async (req: FastifyRequest, res: FastifyReply) => {
   const body = req.body as any;
@@ -195,31 +187,6 @@ export const signUp = async (req: FastifyRequest, res: FastifyReply) => {
   res.status(201).send({ ...tokens, user });
 };
 
-export const updateProduct = async (req: FastifyRequest, res: FastifyReply) => {
-  const body = req.body as any;
-
-  if (!body) {
-    return res.status(400).send({ message: 'Request body is required' });
-  }
-
-  const { productId } = req.params as { productId: string };
-  const { username, description, price, category, image } = body;
-
-  if (!productId) {
-    return res.status(400).send({ message: 'Product ID is required' });
-  }
-
-  const productIdNum = parseInt(productId, 10);
-  if (isNaN(productIdNum)) {
-    return res.status(400).send({ message: 'Invalid product ID format' });
-  }
-
-  // Check if product exists
-  const existingProduct = await repository.findProductById(productIdNum);
-  if (!existingProduct) {
-    return res.status(404).send({ message: 'Product not found' });
-  }
-
   // Build update object with only provided fields
   const updates: {
     username?: string;
@@ -229,41 +196,7 @@ export const updateProduct = async (req: FastifyRequest, res: FastifyReply) => {
     image?: string;
   } = {};
 
-  if (username !== undefined) updates.username = username;
-  if (description !== undefined) updates.description = description;
-  if (price !== undefined) {
-    if (typeof price !== 'number' || price < 0) {
-      return res
-        .status(400)
-        .send({ message: 'Price must be a positive number' });
-    }
-    updates.price = price;
-  }
-  if (category !== undefined) updates.category = category;
-  if (image !== undefined) updates.image = image;
-
-  if (Object.keys(updates).length === 0) {
-    return res
-      .status(400)
-      .send({ message: 'At least one field to update is required' });
-  }
-
-  try {
-    const result = await repository.updateProduct(productIdNum, updates);
-
-    if (result.matchedCount === 0) {
-      return res.status(404).send({ message: 'Product not found' });
-    }
-
-    const updatedProduct = await repository.findProductById(productIdNum);
-    res.status(200).send({
-      message: 'Product updated successfully',
-      product: updatedProduct,
-    });
-  } catch (error) {
-    res.status(500).send({ message: 'Failed to update product' });
-  }
-};
+ 
 
 // Outfit related controllers
 

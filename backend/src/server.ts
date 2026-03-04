@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import { connectDB } from "./db"; // din MongoDB setup
+import { connectDB } from "./db"; 
 import syncUserRoutes from "./routes/syncUser";
 
 const app = fastify();

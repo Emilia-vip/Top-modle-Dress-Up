@@ -28,16 +28,7 @@ class MongoConnection {
         'Database client not initialized. Call getDbClient() first.'
       );
     }
-    return this.dbClient.db().collection<UserDatabaseModel>('users');
-  }
-
-  static productsCollection() {
-    if (!this.dbClient) {
-      throw new Error(
-        'Database client not initialized. Call getDbClient() first.'
-      );
-    }
-    return this.dbClient.db().collection('products');
+    return this.dbClient.db().collection<UserDatabaseModel>('Users');
   }
 
   static outfitsCollection() {
