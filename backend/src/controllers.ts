@@ -11,7 +11,7 @@ const generateFreshTokens = async (
   const payload: TokenPayload = {
     user_id: userId,
     role: userRole,
-    type: '', // Will be set below
+    type: '', 
   };
 
   const newAccessToken = await reply.jwtSign(
@@ -50,7 +50,7 @@ export const refreshToken = async (req: FastifyRequest, res: FastifyReply) => {
     return res.status(404).send({ message: 'User not found' });
   }
 
-  // Map 'user' role to 'sales-person' for backward compatibility
+  
   const tokenRole = user.role === 'admin' ? 'admin' : ROLE_SALES_PERSON;
   const tokens = await generateFreshTokens(user._id, tokenRole, res);
 
@@ -85,7 +85,7 @@ export const login = async (req: FastifyRequest, res: FastifyReply) => {
     return res.status(401).send({ message: 'Invalid password' });
   }
 
-  // Map 'user' role to 'sales-person' for backward compatibility
+  
   const tokenRole = user.role === 'admin' ? 'admin' : ROLE_SALES_PERSON;
   const tokens = await generateFreshTokens(user._id, tokenRole, res);
 
@@ -95,7 +95,7 @@ export const login = async (req: FastifyRequest, res: FastifyReply) => {
 export const getAllUsers = async (req: FastifyRequest, res: FastifyReply) => {
   try {
     const users = await repository.getAllUsers();
-    // hide passwords before sending
+    // gömmer lösenord 
     const sanitized = users.map(u => {
       const { password, ...rest } = u as any;
       return rest;
@@ -180,14 +180,14 @@ export const signUp = async (req: FastifyRequest, res: FastifyReply) => {
 
   await repository.insertUser(user);
 
-  // Map 'user' role to 'sales-person' for backward compatibility
+
   const tokenRole = user.role === 'admin' ? 'admin' : ROLE_SALES_PERSON;
   const tokens = await generateFreshTokens(user._id, tokenRole, res);
 
   res.status(201).send({ ...tokens, user });
 };
 
-  // Build update object with only provided fields
+
   const updates: {
     username?: string;
     description?: string;
@@ -196,10 +196,7 @@ export const signUp = async (req: FastifyRequest, res: FastifyReply) => {
     image?: string;
   } = {};
 
- 
-
-// Outfit related controllers
-
+//outfit controller
 export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
   const body = req.body as Partial<OutfitDatabaseModel>;
 
@@ -215,7 +212,6 @@ export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
     });
   }
 
-  // Ensure skin is always set to either "dark" or "light"
   const outfitSkin: "dark" | "light" = (skin === "light" || skin === "dark") ? skin : "dark";
 
   const outfit: OutfitDatabaseModel = {
@@ -228,7 +224,7 @@ export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
     created_at: new Date().toISOString(),
   };
 
-  // Enforce a single outfit per user: remove all existing, then insert the new one
+
   await repository.deleteOutfitsByUsername(username);
   await repository.insertOutfit(outfit);
 
@@ -255,7 +251,7 @@ export const getOutfitsByUserId = async (
   }
 
   try {
-    // Return all outfits for this user
+   
     const outfits = await repository.getOutfitsByUserId(userId);
     res.status(200).send(outfits);
   } catch (error) {
@@ -389,7 +385,7 @@ export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => 
       return res.status(404).send({ message: 'User not found' });
     }
 
-    // Return user data without password
+    
     const { password, ...userData } = user;
     res.status(200).send(userData);
   } catch (error) {
@@ -415,7 +411,7 @@ export const updateUser = async (req: FastifyRequest, res: FastifyReply) => {
       return res.status(404).send({ message: 'User not found' });
     }
 
-    // Return updated user data without password
+  
     const { password: _, ...userData } = updatedUser;
     res.status(200).send(userData);
   } catch (error) {

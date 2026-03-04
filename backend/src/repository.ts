@@ -13,12 +13,12 @@ export const findUserById = async (id: string) => {
   return await MongoConnection.userCollection().findOne({ _id: id });
 };
 
-// find a user by their Auth0 subject identifier (stored in auth0_id field)
+
 export const findUserByAuth0Id = async (auth0Id: string) => {
   return await MongoConnection.userCollection().findOne({ auth0_id: auth0Id });
 };
 
-// create a user record based on Auth0 info (username comes from frontend)
+
 export const createUserFromAuth0 = async (
   auth0Id: string,
   username: string,
@@ -30,31 +30,29 @@ export const createUserFromAuth0 = async (
   return await MongoConnection.userCollection().insertOne(doc);
 };
 
-// Return every user in the collection. Used by the frontend member list.
+
 export const getAllUsers = async () => {
   return await MongoConnection.userCollection().find({}).toArray();
 };
 
 
-// Outfit related repository methods
 
 export const insertOutfit = async (outfit: OutfitDatabaseModel) => {
   return await MongoConnection.outfitsCollection().insertOne(outfit);
 };
 
-// Replace the outfit for a username (keeps only one per user)
+
 export const getAllOutfits = async () => {
   return await MongoConnection.outfitsCollection().find({}).toArray();
 };
 
 export const getOutfitsByUserId = async (userId: string) => {
-  // Here `userId` corresponds to the `username` field from the frontend type
+
   return await MongoConnection.outfitsCollection()
     .find({ username: userId })
     .toArray();
 };
 
-// Get only the latest outfit for a user (by created_at)
 export const getLatestOutfitByUserId = async (userId: string) => {
   return await MongoConnection.outfitsCollection()
     .find({ username: userId })

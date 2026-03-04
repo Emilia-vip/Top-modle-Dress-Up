@@ -4,10 +4,10 @@ import syncUserRoutes from "./routes/syncUser";
 
 const app = fastify();
 
-// Connect to MongoDB
+// kopppla MongoDB
 connectDB();
 
-// Register routes
+// routes till register
 app.register(syncUserRoutes);
 
 app.listen({ port: 3000 }, (err, address) => {

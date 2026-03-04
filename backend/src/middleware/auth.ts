@@ -1,7 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import jwt, { JwtPayload } from "jsonwebtoken"; 
 
-// Utöka FastifyRequest för att inkludera auth0Id och email
 interface AuthRequest extends FastifyRequest {
   auth0Id?: string;
   email?: string;
@@ -22,18 +20,17 @@ export async function authMiddleware(
 
   try {
     
-    const decoded = jwt.decode(token) as JwtPayload | null;
+    const decoded = request.jwt.decode(token) | null;
 
     if (!decoded || typeof decoded.sub !== "string") {
       reply.status(401).send({ error: "Invalid token" });
       return;
     }
 
-    // Sätt värden på request-objektet
     request.auth0Id = decoded.sub;
     request.email = typeof decoded.email === "string" ? decoded.email : undefined;
 
-  } catch (err) {
+  } catch (err: any) {
     reply.status(401).send({ error: "Invalid token" });
   }
 }
