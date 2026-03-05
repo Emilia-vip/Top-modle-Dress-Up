@@ -1,14 +1,25 @@
 services:
+  backend:
+    build: .
+    container_name: basic-login-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+
   mongodb:
     image: mongo:7
     container_name: basic-login-mongodb
     restart: unless-stopped
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=sys25d_students
-      - MONGO_INITDB_ROOT_PASSWORD=iKUfnlN1hlmYZ7sG
-      - MONGO_INITDB_DATABASE=sys25db
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
     ports:
-      - "25000:27017"
+      - "${MONGO_PORT}:27017"
     volumes:
       - mongo_data:/data/db
 

@@ -36,7 +36,7 @@ function LoginPage() {
         className="rounded-xl md:rounded-2xl shadow-2xl p-5 md:p-10 w-full max-w-xs md:max-w-sm flex flex-col gap-3 shadow-black"
         style={{ backgroundColor: "rgba(31, 41, 55, 0.4)", backdropFilter: "blur(10px)" }}
       >
-        <h1 className="text-xl md:text-3xl font-light text-center mb-4 text-white tracking-wider">
+        <h1 className="text-xl md:text-3xl font-light text-center mb-4 text-white cursor-pointer tracking-wider">
           SIGN IN
         </h1>
 
@@ -44,7 +44,7 @@ function LoginPage() {
         <button
           type="button"
           onClick={() => auth0Login()} // Använder Auth0-motorn
-          className="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-full shadow-lg transition-all mb-4 border-none animate-bounce"
+          className="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold cursor-pointer py-3 rounded-full shadow-lg transition-all mb-4 border-none"
         >
           LOGGA IN MED AUTH0
         </button>
@@ -81,14 +81,14 @@ function LoginPage() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-full border border-gray-500 transition-all mt-2"
+          className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 cursor-pointer rounded-full border border-gray-500 transition-all mt-2"
         >
           {isLoading ? "Logging in..." : "LOGIN"}
         </button>
 
         <button
           type="button"
-          className="w-full border border-gray-500 text-gray-300 hover:text-white py-3 rounded-full transition-all text-sm"
+          className="w-full border border-gray-500 text-gray-300 hover:text-white py-3 cursor-pointer rounded-full transition-all text-sm"
           onClick={() => navigate("/signup")}
         >
           CREATE ACCOUNT

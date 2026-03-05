@@ -20,19 +20,7 @@ function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     handler: controllers.login,
   });
 
-  server.route({
-    method: 'GET',
-    url: '/products',
-    preHandler: [server.authenticate], // Valfritt, den gör att endpointen blir skyddad, d.v.s kräver token för att anropas.
-    handler: controllers.getProducts,
-  });
 
-  server.route({
-    method: 'POST',
-    url: '/admin/products/:productId',
-    preHandler: [server.adminAuthenticate],
-    handler: controllers.updateProduct,
-  });
 
   // Outfit routes
 
@@ -78,6 +66,26 @@ function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     url: '/user/me',
     preHandler: [server.authenticate],
     handler: controllers.getCurrentUser,
+  });
+
+  // small utility route for frontend to list every user (used in profile/member pages)
+  server.route({
+    method: 'GET',
+    url: '/users',
+    handler: controllers.getAllUsers,
+  });
+
+  // auth0‑specific helpers: check existence and create new record
+  server.route({
+    method: 'GET',
+    url: '/users/:auth0Id',
+    handler: controllers.getUserByAuth0,
+  });
+
+  server.route({
+    method: 'POST',
+    url: '/users',
+    handler: controllers.createUserFromAuth0,
   });
 
   server.route({

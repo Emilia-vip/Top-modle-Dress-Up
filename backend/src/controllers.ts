@@ -11,7 +11,7 @@ const generateFreshTokens = async (
   const payload: TokenPayload = {
     user_id: userId,
     role: userRole,
-    type: '', // Will be set below
+    type: '', 
   };
 
   const newAccessToken = await reply.jwtSign(
@@ -50,21 +50,13 @@ export const refreshToken = async (req: FastifyRequest, res: FastifyReply) => {
     return res.status(404).send({ message: 'User not found' });
   }
 
-  // Map 'user' role to 'sales-person' for backward compatibility
+  
   const tokenRole = user.role === 'admin' ? 'admin' : ROLE_SALES_PERSON;
   const tokens = await generateFreshTokens(user._id, tokenRole, res);
 
   res.status(200).send({ ...tokens, user });
 };
 
-export const getProducts = async (req: FastifyRequest, res: FastifyReply) => {
-  try {
-    const products = await repository.getAllProducts();
-    res.status(200).send(products);
-  } catch (error) {
-    res.status(500).send({ message: 'Failed to fetch products' });
-  }
-};
 
 export const login = async (req: FastifyRequest, res: FastifyReply) => {
   const body = req.body as any;
@@ -93,11 +85,66 @@ export const login = async (req: FastifyRequest, res: FastifyReply) => {
     return res.status(401).send({ message: 'Invalid password' });
   }
 
-  // Map 'user' role to 'sales-person' for backward compatibility
+  
   const tokenRole = user.role === 'admin' ? 'admin' : ROLE_SALES_PERSON;
   const tokens = await generateFreshTokens(user._id, tokenRole, res);
 
   res.status(201).send({ ...tokens, user });
+};
+
+export const getAllUsers = async (req: FastifyRequest, res: FastifyReply) => {
+  try {
+    const users = await repository.getAllUsers();
+    // gömmer lösenord 
+    const sanitized = users.map(u => {
+      const { password, ...rest } = u as any;
+      return rest;
+    });
+    res.status(200).send(sanitized);
+  } catch (error) {
+    res.status(500).send({ message: 'Failed to fetch users' });
+  }
+};
+
+export const getUserByAuth0 = async (req: FastifyRequest, res: FastifyReply) => {
+  const { auth0Id } = req.params as { auth0Id: string };
+
+  if (!auth0Id) {
+    return res.status(400).send({ message: 'auth0Id is required' });
+  }
+
+  try {
+    const user = await repository.findUserByAuth0Id(auth0Id);
+    if (!user) {
+      return res.status(404).send({});
+    }
+    const { password, ...rest } = user as any;
+    res.status(200).send(rest);
+  } catch (error) {
+    res.status(500).send({ message: 'Failed to fetch user' });
+  }
+};
+
+export const createUserFromAuth0 = async (req: FastifyRequest, res: FastifyReply) => {
+  const { auth0Id, username, email } = req.body as any;
+
+  if (!auth0Id || !username) {
+    return res
+      .status(400)
+      .send({ message: 'auth0Id and username are required' });
+  }
+
+  try {
+    const existing = await repository.findUserByAuth0Id(auth0Id);
+    if (existing) {
+      return res.status(400).send({ message: 'User already exists' });
+    }
+
+    await repository.createUserFromAuth0(auth0Id, username, email);
+    res.status(201).send({ message: 'User created' });
+  } catch (error) {
+    res.status(500).send({ message: 'Failed to create user' });
+  }
 };
 
 export const signUp = async (req: FastifyRequest, res: FastifyReply) => {
@@ -133,39 +180,14 @@ export const signUp = async (req: FastifyRequest, res: FastifyReply) => {
 
   await repository.insertUser(user);
 
-  // Map 'user' role to 'sales-person' for backward compatibility
+
   const tokenRole = user.role === 'admin' ? 'admin' : ROLE_SALES_PERSON;
   const tokens = await generateFreshTokens(user._id, tokenRole, res);
 
   res.status(201).send({ ...tokens, user });
 };
 
-export const updateProduct = async (req: FastifyRequest, res: FastifyReply) => {
-  const body = req.body as any;
 
-  if (!body) {
-    return res.status(400).send({ message: 'Request body is required' });
-  }
-
-  const { productId } = req.params as { productId: string };
-  const { username, description, price, category, image } = body;
-
-  if (!productId) {
-    return res.status(400).send({ message: 'Product ID is required' });
-  }
-
-  const productIdNum = parseInt(productId, 10);
-  if (isNaN(productIdNum)) {
-    return res.status(400).send({ message: 'Invalid product ID format' });
-  }
-
-  // Check if product exists
-  const existingProduct = await repository.findProductById(productIdNum);
-  if (!existingProduct) {
-    return res.status(404).send({ message: 'Product not found' });
-  }
-
-  // Build update object with only provided fields
   const updates: {
     username?: string;
     description?: string;
@@ -174,44 +196,7 @@ export const updateProduct = async (req: FastifyRequest, res: FastifyReply) => {
     image?: string;
   } = {};
 
-  if (username !== undefined) updates.username = username;
-  if (description !== undefined) updates.description = description;
-  if (price !== undefined) {
-    if (typeof price !== 'number' || price < 0) {
-      return res
-        .status(400)
-        .send({ message: 'Price must be a positive number' });
-    }
-    updates.price = price;
-  }
-  if (category !== undefined) updates.category = category;
-  if (image !== undefined) updates.image = image;
-
-  if (Object.keys(updates).length === 0) {
-    return res
-      .status(400)
-      .send({ message: 'At least one field to update is required' });
-  }
-
-  try {
-    const result = await repository.updateProduct(productIdNum, updates);
-
-    if (result.matchedCount === 0) {
-      return res.status(404).send({ message: 'Product not found' });
-    }
-
-    const updatedProduct = await repository.findProductById(productIdNum);
-    res.status(200).send({
-      message: 'Product updated successfully',
-      product: updatedProduct,
-    });
-  } catch (error) {
-    res.status(500).send({ message: 'Failed to update product' });
-  }
-};
-
-// Outfit related controllers
-
+//outfit controller
 export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
   const body = req.body as Partial<OutfitDatabaseModel>;
 
@@ -227,7 +212,6 @@ export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
     });
   }
 
-  // Ensure skin is always set to either "dark" or "light"
   const outfitSkin: "dark" | "light" = (skin === "light" || skin === "dark") ? skin : "dark";
 
   const outfit: OutfitDatabaseModel = {
@@ -240,7 +224,7 @@ export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
     created_at: new Date().toISOString(),
   };
 
-  // Enforce a single outfit per user: remove all existing, then insert the new one
+
   await repository.deleteOutfitsByUsername(username);
   await repository.insertOutfit(outfit);
 
@@ -267,7 +251,7 @@ export const getOutfitsByUserId = async (
   }
 
   try {
-    // Return all outfits for this user
+   
     const outfits = await repository.getOutfitsByUserId(userId);
     res.status(200).send(outfits);
   } catch (error) {
@@ -401,7 +385,7 @@ export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => 
       return res.status(404).send({ message: 'User not found' });
     }
 
-    // Return user data without password
+    
     const { password, ...userData } = user;
     res.status(200).send(userData);
   } catch (error) {
@@ -427,7 +411,7 @@ export const updateUser = async (req: FastifyRequest, res: FastifyReply) => {
       return res.status(404).send({ message: 'User not found' });
     }
 
-    // Return updated user data without password
+  
     const { password: _, ...userData } = updatedUser;
     res.status(200).send(userData);
   } catch (error) {

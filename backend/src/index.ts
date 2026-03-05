@@ -3,6 +3,8 @@ import cors from '@fastify/cors';
 import MongoConnection from './db';
 import auth from './auth';
 import routes from './routes/route';
+import syncUserRoutes from './routes/syncUser';
+import fastifyHelmet from '@fastify/helmet';
 
 const server: FastifyInstance = fastify({ logger: true });
 
@@ -15,15 +17,20 @@ async function start() {
     await mongoClient.close();
   });
 
+
+  await server.register(fastifyHelmet, { contentSecurityPolicy: false });
+
+
   await server.register(cors, {
     origin: '*'
   });
 
   await server.register(auth);
 
-  // Register application routes under an optional base URL prefix.
-  // For example, set API_PREFIX="/api" to serve routes like "/api/login".
+ 
   await server.register(routes);
+
+  await server.register(syncUserRoutes);
 
   server.listen({ host: '0.0.0.0', port }, (err, address) => {
     if (err) {

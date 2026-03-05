@@ -1,10 +1,10 @@
 import { FastifyInstance } from "fastify";
 import User from "../models/user";
-import authMiddleware from "../middleware/auth";
+import authMiddleware from "../middleware/auth"; // now works because auth.ts exports default
 
 export default async function syncUserRoutes(fastify: FastifyInstance) {
   fastify.post("/api/sync-user", { preHandler: authMiddleware }, async (request, reply) => {
-    // @ts-ignore – beroende på hur authMiddleware lägger till auth0Id/email
+
     const { auth0Id, email } = request;
 
     try {

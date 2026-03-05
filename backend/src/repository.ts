@@ -13,49 +13,46 @@ export const findUserById = async (id: string) => {
   return await MongoConnection.userCollection().findOne({ _id: id });
 };
 
-export const getAllProducts = async () => {
-  return await MongoConnection.productsCollection().find({}).toArray();
+
+export const findUserByAuth0Id = async (auth0Id: string) => {
+  return await MongoConnection.userCollection().findOne({ auth0_id: auth0Id });
 };
 
-export const findProductById = async (id: number) => {
-  return await MongoConnection.productsCollection().findOne({ _id: id });
-};
 
-export const updateProduct = async (
-  id: number,
-  updates: {
-    username?: string;
-    description?: string;
-    price?: number;
-    category?: string;
-    image?: string;
-  }
+export const createUserFromAuth0 = async (
+  auth0Id: string,
+  username: string,
+  email?: string
 ) => {
-  return await MongoConnection.productsCollection().updateOne(
-    { _id: id },
-    { $set: updates }
-  );
+  const doc: any = { auth0_id: auth0Id, username };
+  if (email) doc.email = email;
+  doc.created_at = new Date();
+  return await MongoConnection.userCollection().insertOne(doc);
 };
 
-// Outfit related repository methods
+
+export const getAllUsers = async () => {
+  return await MongoConnection.userCollection().find({}).toArray();
+};
+
+
 
 export const insertOutfit = async (outfit: OutfitDatabaseModel) => {
   return await MongoConnection.outfitsCollection().insertOne(outfit);
 };
 
-// Replace the outfit for a username (keeps only one per user)
+
 export const getAllOutfits = async () => {
   return await MongoConnection.outfitsCollection().find({}).toArray();
 };
 
 export const getOutfitsByUserId = async (userId: string) => {
-  // Here `userId` corresponds to the `username` field from the frontend type
+
   return await MongoConnection.outfitsCollection()
     .find({ username: userId })
     .toArray();
 };
 
-// Get only the latest outfit for a user (by created_at)
 export const getLatestOutfitByUserId = async (userId: string) => {
   return await MongoConnection.outfitsCollection()
     .find({ username: userId })

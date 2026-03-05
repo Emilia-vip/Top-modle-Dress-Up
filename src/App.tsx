@@ -4,6 +4,8 @@ import authRouter from './routes/AuthRouter';
 import appRouter from './routes/AppRouter';
 import { AuthContext } from './Auth0/AuthContext'; // Dubbelkolla sökvägen!
 import { fetchClothingData } from './data/clothes';
+import { BASE_URL } from './constants';
+import UsernameSelectionPage from './components/UsernameSelectionPage';
 
 
 function App() {
@@ -29,6 +31,7 @@ function App() {
       });
   }, []);
 
+
   // Visa laddningsskärm om Auth0 eller kläder laddas
   if (authLoading || dataLoading) {
     return (
@@ -44,6 +47,13 @@ function App() {
         <h1>Ett fel uppstod. Kunde inte ladda kläder.</h1>
       </div>
     );
+  }
+
+  // if the Auth0 user exists but has not yet been assigned a username in our
+  // database, prompt them to pick one. `updateDbUser` will merge the new name
+  // into context so everything downstream works.
+  if (user && !user.username) {
+    return <UsernameSelectionPage />;
   }
 
   return (
