@@ -4,6 +4,7 @@ import MongoConnection from './db';
 import auth from './auth';
 import routes from './routes/route';
 import syncUserRoutes from './routes/syncUser';
+import fastifyHelmet from '@fastify/helmet';
 
 const server: FastifyInstance = fastify({ logger: true });
 
@@ -15,6 +16,10 @@ async function start() {
   server.addHook('onClose', async () => {
     await mongoClient.close();
   });
+
+
+  await server.register(fastifyHelmet, { contentSecurityPolicy: false });
+
 
   await server.register(cors, {
     origin: '*'
