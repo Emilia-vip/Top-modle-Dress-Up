@@ -4,9 +4,9 @@ services:
     container_name: basic-login-mongodb
     restart: unless-stopped
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=sys25d_students
-      - MONGO_INITDB_ROOT_PASSWORD=iKUfnlN1hlmYZ7sG
-      - MONGO_INITDB_DATABASE=sys25db
+      - MONGO_INITDB_ROOT_USERNAME=Emilia
+      - MONGO_INITDB_ROOT_PASSWORD=Emilia123
+      - MONGO_INITDB_DATABASE=TopModel
     ports:
       - "25000:27017"
     volumes:

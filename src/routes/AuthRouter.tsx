@@ -11,7 +11,7 @@ const authRouter = createBrowserRouter([
   {
     path: "*",
     element: <Navigate to="/" replace/>
-  }
+  },
   /*{
     path: "/signup",
     element: <SignupPage />,
