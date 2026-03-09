@@ -7,10 +7,12 @@ import { BASE_URL } from "../constants"; // use central constant for endpoint
 export default function UsernameSelectionPage() {
   const { user, updateDbUser } = useContext(AuthContext);
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSave = async () => {
     if (name.length < 3) return setError("Namnet måste vara minst 3 tecken");
+    if (password.length < 4) return setError("Losenordet maste vara minst 4 tecken");
 
     try {
       const response = await fetch(`${BASE_URL}/users`, {
@@ -19,6 +21,7 @@ export default function UsernameSelectionPage() {
         body: JSON.stringify({ 
           auth0Id: user.sub, // Unikt ID från Auth0
           username: name,
+          password,
           email: user.email 
         }),
       });
@@ -27,7 +30,7 @@ export default function UsernameSelectionPage() {
         // update context so downstream hooks see the username immediately
         updateDbUser({ username: name });
       } else if (response.status === 400) {
-        setError("Namnet är upptaget eller användaren finns redan, prova ett annat!");
+        setError("Namnet är upptaget, prova ett annat.");
       } else {
         setError("Något gick fel, försök igen senare.");
       }
@@ -47,6 +50,14 @@ export default function UsernameSelectionPage() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Modellnamn..."
+          className="w-full rounded-full px-5 py-3 bg-white/10 text-white border border-gray-500 focus:outline-none focus:border-pink-500 mb-4"
+        />
+
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Losenord..."
           className="w-full rounded-full px-5 py-3 bg-white/10 text-white border border-gray-500 focus:outline-none focus:border-pink-500 mb-4"
         />
 

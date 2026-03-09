@@ -1,6 +1,5 @@
 import {
   FastifyInstance,
-  FastifyPluginOptions,
   FastifyReply,
   FastifyRequest,
 } from 'fastify';
@@ -26,19 +25,15 @@ declare module 'fastify' {
   }
 }
 
-export const ROLE_SALES_PERSON = 'sales-person';
-export const ROLE_ADMIN = 'admin';
-
 const secretKey = process.env.JWT_SECRET_KEY;
 
 if (secretKey === undefined) throw new Error('Set JWT_SECRET_KEY!');
+const jwtSecret: string = secretKey;
+const ROLE_ADMIN = 'admin';
 
-async function auth(
-  server: FastifyInstance,
-  options: FastifyPluginOptions
-): Promise<void> {
+async function auth(server: FastifyInstance): Promise<void> {
   await server.register(fastifyJwt, {
-    secret: secretKey!!,
+    secret: jwtSecret,
     sign: {
       expiresIn: 10000,
     },
@@ -50,13 +45,10 @@ async function auth(
       try {
         const decodedToken = await request.jwtVerify<TokenPayload>();
 
-        if (
-          decodedToken.role !== ROLE_SALES_PERSON ||
-          decodedToken.type !== 'access'
-        ) {
+        if (decodedToken.type !== 'access') {
           return reply.status(401).send('Not authorized');
         }
-      } catch (err) {
+      } catch {
         return reply.status(401).send('Not authorized');
       }
     }
@@ -68,13 +60,10 @@ async function auth(
       try {
         const decodedToken = await request.jwtVerify<TokenPayload>();
 
-        if (
-          decodedToken.role !== ROLE_ADMIN ||
-          decodedToken.type !== 'access'
-        ) {
+        if (decodedToken.role !== ROLE_ADMIN || decodedToken.type !== 'access') {
           return reply.status(401).send('Not authorized');
         }
-      } catch (error) {
+      } catch {
         return reply.status(401).send('Not authorized');
       }
     }

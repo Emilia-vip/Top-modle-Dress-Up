@@ -1,11 +1,11 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import apiClient from "../api/client";
-import { AuthContext } from "../contexts/AuthContext";
 import type { Outfit } from "../type";
 import { useLoading } from "./useLoading";
+import { useActiveAuth } from "./useActiveAuth";
 
 export const useRating = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useActiveAuth();
   const { loading, setLoading } = useLoading(true);
   const [outfits, setOutfits] = useState<Outfit[]>([]);
   const [ratedOutfits, setRatedOutfits] = useState<Set<string>>(new Set());

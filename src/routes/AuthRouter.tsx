@@ -1,6 +1,6 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import LoginPage from "../page/LoginPage";
-//import SignupPage from "../page/SignupPage";
+import SignupPage from "../page/SignupPage";
 
 const authRouter = createBrowserRouter([
   {
@@ -9,17 +9,13 @@ const authRouter = createBrowserRouter([
   },
 
   {
-    path: "*",
-    element: <Navigate to="/" replace/>
-  },
-  /*{
     path: "/signup",
     element: <SignupPage />,
   },
   {
-    path: "/forgot-password",
-    element: <div>Glömt lösenord</div>,
-  },*/
+    path: "*",
+    element: <Navigate to="/" replace />,
+  },
 ]);
 
 export default authRouter;

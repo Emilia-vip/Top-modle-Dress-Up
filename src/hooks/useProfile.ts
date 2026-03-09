@@ -1,11 +1,11 @@
-import { useState, useEffect, useContext, useCallback } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { useState, useEffect, useCallback } from "react";
 import apiClient from "../api/client";
 import type { Outfit } from "../type";
 import { useLoading } from "./useLoading";
+import { useActiveAuth } from "./useActiveAuth";
 
 export const useProfile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, hasLegacySession } = useActiveAuth();
   const { loading, setLoading } = useLoading(true);
 
   const [profileData, setProfileData] = useState({
@@ -19,6 +19,16 @@ export const useProfile = () => {
   const [outfitsLoading, setOutfitsLoading] = useState(true);
 
   const fetchUser = useCallback(async () => {
+    if (!hasLegacySession) {
+      setProfileData({
+        username: user?.username || "",
+        email: user?.email || "",
+        phone: user?.phone || "",
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await apiClient.get("/user/me");
       setProfileData({
@@ -31,7 +41,7 @@ export const useProfile = () => {
     } finally {
       setLoading(false);
     }
-  }, [setLoading]);
+  }, [hasLegacySession, setLoading, user?.email, user?.phone, user?.username]);
 
   const fetchOutfits = useCallback(async () => {
     if (!user?.username) {
@@ -61,6 +71,11 @@ export const useProfile = () => {
   }, [fetchOutfits]);
 
   const handleSave = async () => {
+    if (!hasLegacySession) {
+      setMessage("Profile updates for Auth0 accounts are not supported in this form yet.");
+      return;
+    }
+
     try {
       const updateData: any = { 
         user, 

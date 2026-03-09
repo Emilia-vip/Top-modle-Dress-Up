@@ -73,8 +73,8 @@ function ProfilePage() {
             <div className="flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2">
               {outfits.map((outfit) => {
 
-                const topItem = findClothingItem(outfit.top_id, "top");
-                const bottomItem = findClothingItem(outfit.bottom_id, "bottom");
+                const topItem = findClothingItem(outfit.top_id, "top", outfit.skin);
+                const bottomItem = findClothingItem(outfit.bottom_id, "bottom", outfit.skin);
                 return (
                   <div key={outfit._id} className="bg-white/80 p-4 rounded-xl border-2 border-purple-700">
                     <div className="relative w-full h-32 md:h-40">
@@ -82,6 +82,7 @@ function ProfilePage() {
                       {topItem && <img src={topItem.image} className="absolute inset-0 w-full h-full object-contain" />}
                     </div>
                     <div className="mt-2 text-xs text-gray-700">
+                      <p><strong>Skin:</strong> {outfit.skin || "unknown"}</p>
                       <p><strong>Top:</strong> {outfit.top_id}</p>
                       <p><strong>Bottom:</strong> {outfit.bottom_id}</p>
                     </div>

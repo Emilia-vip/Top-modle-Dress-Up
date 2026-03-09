@@ -1,10 +1,6 @@
-import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
 import runway from "../assets/runway,new.png";
 
 function HomePage() {
-  const { logout } = useContext(AuthContext);
-
   return (
      <div
   className="min-h-screen w-full flex items-center justify-center
