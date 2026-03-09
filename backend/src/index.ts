@@ -5,6 +5,7 @@ import auth from './auth';
 import routes from './routes/route';
 import syncUserRoutes from './routes/syncUser';
 import fastifyHelmet from '@fastify/helmet';
+import fastifyRateLimit from '@fastify/rate-limit';
 
 const server: FastifyInstance = fastify({ logger: true });
 
@@ -31,6 +32,13 @@ async function start() {
   await server.register(routes);
 
   await server.register(syncUserRoutes);
+
+  await server.register(fastifyRateLimit, {
+    max: 100,                // max antal requests
+    timeWindow: '1 minute',  // per tidsfönster
+    allowList: ['127.0.0.1'], // ev. lägg till egna IP:n du vill undanta
+    keyGenerator: (req) => req.ip, // rate limit per IP
+  });
 
   server.listen({ host: '0.0.0.0', port }, (err, address) => {
     if (err) {

@@ -8,7 +8,7 @@ export const AuthContext = createContext<any>(null);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Här hämtar vi allt från Auth0 SDK
   const { user: auth0User, isAuthenticated, isLoading, loginWithRedirect, logout } = useAuth0();
-  const [dbUser, setDbUser] = useState<any>(null);
+  const [dbUser, setDbUser] = useState<Record<string, unknown> | null>(null);
 
   // när Auth0-användaren ändras, slå upp motsvarande dokument i vår databas
   useEffect(() => {
@@ -19,7 +19,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           if (res.ok) {
             return res.json();
           }
-          // 404 = användaren finns inte ännu; vi återställer dbUser
           if (res.status === 404) return null;
           throw new Error(`HTTP ${res.status}`);
         })
@@ -38,8 +37,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     ? { ...auth0User, ...(dbUser || {}) }
     : null;
 
-  const updateDbUser = (patch: any) => {
-    setDbUser(prev => (prev ? { ...prev, ...patch } : patch));
+  const updateDbUser = (patch: Record<string, unknown>) => {
+    setDbUser((prev: Record<string, unknown> | null) =>
+      prev ? { ...prev, ...patch } : patch
+    );
   };
 
   return (
@@ -47,6 +48,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user: mergedUser,
       loading: isLoading,
       login: () => loginWithRedirect(),
+      signup: () =>
+        loginWithRedirect({
+          authorizationParams: { screen_hint: 'signup' },
+        }),
       logout: () => logout({ logoutParams: { returnTo: window.location.origin } }),
       updateDbUser,
     }}>

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import MyTextInput from "../components/MyTextInput";
 import runway from "../assets/runway,new.png";
 import gubbeImage from "../assets/gröngala.png";
@@ -10,7 +10,6 @@ import { AuthContext } from "../Auth0/AuthContext";
 function LoginPage() {
   const navigate = useNavigate();
   
-  // 1. Hämta Auth0-login från din nya context
   const { login: auth0Login } = useContext(AuthContext);
 
   // 2. Flytta ut useLogin hit (hooks måste ligga högst upp!)
@@ -48,8 +47,6 @@ function LoginPage() {
         >
           LOGGA IN MED AUTH0
         </button>
-
-        <div className="text-gray-400 text-center text-xs mb-2">ELLER ANVÄND GAMMALT KONTO</div>
 
         <div className="flex flex-col gap-1">
           <label className="text-gray-300 text-sm md:text-base">Username</label>
