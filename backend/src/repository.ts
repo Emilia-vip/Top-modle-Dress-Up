@@ -22,12 +22,33 @@ export const findUserByAuth0Id = async (auth0Id: string) => {
 export const createUserFromAuth0 = async (
   auth0Id: string,
   username: string,
+  password: string,
   email?: string
 ) => {
-  const doc: any = { auth0_id: auth0Id, username };
+  const doc: any = {
+    auth0_id: auth0Id,
+    username,
+    password,
+    role: 'user',
+    phone: '',
+  };
   if (email) doc.email = email;
-  doc.created_at = new Date();
+  doc.created_at = new Date().toISOString();
   return await MongoConnection.userCollection().insertOne(doc);
+};
+
+export const linkAuth0ToUsername = async (
+  username: string,
+  auth0Id: string,
+  email?: string
+) => {
+  const updateData: Record<string, unknown> = { auth0_id: auth0Id };
+  if (email) updateData.email = email;
+
+  return await MongoConnection.userCollection().updateOne(
+    { username },
+    { $set: updateData }
+  );
 };
 
 

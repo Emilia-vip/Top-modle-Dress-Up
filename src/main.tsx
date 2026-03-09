@@ -1,7 +1,8 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import AuthProvider from "./Auth0/AuthContext.tsx";
+import Auth0AppProvider from "./Auth0/AuthContext.tsx";
+import LegacyAuthProvider from "./contexts/AuthContext.tsx";
 import { Auth0Provider } from '@auth0/auth0-react';
 
 const rootDiv = document.getElementById("root");
@@ -16,8 +17,10 @@ root.render(
       redirect_uri: window.location.origin,
     }}
   >
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <LegacyAuthProvider>
+      <Auth0AppProvider>
+        <App />
+      </Auth0AppProvider>
+    </LegacyAuthProvider>
   </Auth0Provider>
 );

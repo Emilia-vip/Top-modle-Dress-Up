@@ -1,24 +1,26 @@
-import React, { useContext, useEffect, useState,} from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import authRouter from './routes/AuthRouter';
 import appRouter from './routes/AppRouter';
-import { AuthContext } from './Auth0/AuthContext'; // Dubbelkolla sökvägen!
+import { AuthContext as Auth0Context } from './Auth0/AuthContext';
+import { AuthContext as LegacyAuthContext } from './contexts/AuthContext';
 import { fetchClothingData } from './data/clothes';
-import { BASE_URL } from './constants';
 import UsernameSelectionPage from './components/UsernameSelectionPage';
 
 
 function App() {
-  const { user, loading: authLoading } = useContext(AuthContext);
+  const { user: auth0User, loading: auth0Loading } = useContext(Auth0Context);
+  const { user: legacyUser, loading: legacyLoading } = useContext(LegacyAuthContext);
 
-  const [data, setData] = useState<any | null>(null);
+  const user = legacyUser || auth0User;
+
+  const [data, setData] = useState<unknown | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
 
-  console.log("DEBUG:", { authLoading, dataLoading, user });
+  console.log("DEBUG:", { auth0Loading, legacyLoading, dataLoading, user });
 
   // Ladda kläder
   useEffect(() => {
-    setDataLoading(true);
     fetchClothingData()
       .then((fetchedData) => {
         setData(fetchedData);
@@ -33,7 +35,7 @@ function App() {
 
 
   // Visa laddningsskärm om Auth0 eller kläder laddas
-  if (authLoading || dataLoading) {
+  if (auth0Loading || legacyLoading || dataLoading) {
     return (
       <div className="App loading-screen">
         <h1>Laddar Top Model... Vänligen vänta.</h1>
@@ -52,7 +54,7 @@ function App() {
   // if the Auth0 user exists but has not yet been assigned a username in our
   // database, prompt them to pick one. `updateDbUser` will merge the new name
   // into context so everything downstream works.
-  if (user && !user.username) {
+  if (auth0User && !auth0User.username) {
     return <UsernameSelectionPage />;
   }
 

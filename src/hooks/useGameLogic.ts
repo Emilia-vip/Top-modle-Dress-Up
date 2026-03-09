@@ -1,7 +1,7 @@
-import { useState, useMemo, useEffect, useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { useState, useMemo, useEffect } from "react";
 import apiClient from "../api/client";
 import type { ClothingCollection } from "../type";
+import { useActiveAuth } from "./useActiveAuth";
 
 export const useGameLogic = (tops: ClothingCollection, bottoms: ClothingCollection) => {
   const [selectedSkin, setSelectedSkin] = useState<"dark" | "light">("dark");
@@ -9,7 +9,7 @@ export const useGameLogic = (tops: ClothingCollection, bottoms: ClothingCollecti
   const [currentBottomIndex, setCurrentBottomIndex] = useState(0);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "success" | "error">("idle");
 
-  const { user } = useContext(AuthContext);
+  const { user } = useActiveAuth();
 
   useEffect(() => {
     setCurrentTopIndex(0);
@@ -31,6 +31,7 @@ export const useGameLogic = (tops: ClothingCollection, bottoms: ClothingCollecti
         username: user.username,
         top_id: currentTop.id || currentTop.name,
         bottom_id: currentBottom.id || currentBottom.name,
+        skin: selectedSkin,
       });
       setSaveStatus("success");
       setTimeout(() => setSaveStatus("idle"), 2000);

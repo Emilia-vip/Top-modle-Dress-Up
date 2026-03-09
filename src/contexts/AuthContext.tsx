@@ -2,7 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import type { AuthResponse, User } from "../type";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import apiClient from "../api/client";
-import { useNavigate } from "react-router";
+
+const AUTH_USER = "authUser";
 type AuthContextType = {
   user: User | null;
   loading: boolean;
@@ -27,24 +28,40 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(authData.user);
     localStorage.setItem(REFRESH_TOKEN, authData.refresh_token);
     localStorage.setItem(ACCESS_TOKEN, authData.access_token);
+    localStorage.setItem(AUTH_USER, JSON.stringify(authData.user));
   };
 
   const logout = () => {
     localStorage.removeItem(REFRESH_TOKEN);
     localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(AUTH_USER);
     setUser(null);
   };
 
   useEffect(() => {
     const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN);
+    const storedUser = localStorage.getItem(AUTH_USER);
+
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        localStorage.removeItem(AUTH_USER);
+      }
+    }
+
     const retrieveToken = async () => {
-      const response = await apiClient.post<AuthResponse>(`/refresh_token`, {
-        refresh_token: storedRefreshToken,
-      });
+      try {
+        const response = await apiClient.post<AuthResponse>(`/refresh_token`, {
+          refresh_token: storedRefreshToken,
+        });
 
-
-      saveLogin(response.data);
-      setLoading(false);
+        saveLogin(response.data);
+      } catch {
+        // Keep existing local session on reload; explicit logout is controlled by the logout button.
+      } finally {
+        setLoading(false);
+      }
     };
 
     if (storedRefreshToken) {
