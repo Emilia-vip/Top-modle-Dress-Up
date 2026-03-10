@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import * as controllers from '../controllers';
 import outfitRoutes from "../outfits/outfit.routes"
+import ratingRoutes from '../ratings/rating.routes';
 
 function routes(server: FastifyInstance, options: FastifyPluginOptions) {
   // Auth / User routes
@@ -56,6 +57,7 @@ function routes(server: FastifyInstance, options: FastifyPluginOptions) {
 
   // Registrera outfit-routes som ett eget plugin
   server.register(outfitRoutes);
+  server.register(ratingRoutes);
 }
 
 export default routes;

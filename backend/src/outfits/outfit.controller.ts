@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import * as outfitService from "./outfit.service";
-import { CreateOutfitDto, Rating } from "./types"; 
+import { CreateOutfitDto } from "./types"; 
 
 export const createOutfit = async (
   req: FastifyRequest<{ Body: CreateOutfitDto }>,
@@ -59,26 +59,26 @@ export const updateOutfit = async (
   }
 };
 
-export const rateOutfit = async (
-  req: FastifyRequest<{ Params: { outfitId: string }; Body: Rating }>,
-  reply: FastifyReply
-) => {
-  try {
-    const { outfitId } = req.params;
-    const rating = req.body;
-    const result = await outfitService.rateOutfit(outfitId, rating);
+// export const rateOutfit = async (
+//   req: FastifyRequest<{ Params: { outfitId: string }; Body: Rating }>,
+//   reply: FastifyReply
+// ) => {
+//   try {
+//     const { outfitId } = req.params;
+//     const rating = req.body;
+//     const result = await outfitService.rateOutfit(outfitId, rating);
 
-    const modified =
-      typeof result === "number" ? result : (result?.modifiedCount ?? result?.matchedCount ?? 0);
+//     const modified =
+//       typeof result === "number" ? result : (result?.modifiedCount ?? result?.matchedCount ?? 0);
 
-    if (modified === 0) {
-      return reply.code(404).send({ message: "Outfit not found" });
-    }
-    return reply.code(200).send({ message: "Rating added" });
-  } catch (error: any) {
-    return reply.code(500).send({ message: error?.message ?? "Server error" });
-  }
-};
+//     if (modified === 0) {
+//       return reply.code(404).send({ message: "Outfit not found" });
+//     }
+//     return reply.code(200).send({ message: "Rating added" });
+//   } catch (error: any) {
+//     return reply.code(500).send({ message: error?.message ?? "Server error" });
+//   }
+// };
 
 export const deleteOutfit = async (
   req: FastifyRequest<{ Params: { outfitId: string } }>,
