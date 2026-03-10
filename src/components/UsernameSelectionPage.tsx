@@ -11,8 +11,8 @@ export default function UsernameSelectionPage() {
   const [error, setError] = useState("");
 
   const handleSave = async () => {
-    if (name.length < 3) return setError("Namnet måste vara minst 3 tecken");
-    if (password.length < 4) return setError("Losenordet maste vara minst 4 tecken");
+    if (name.length < 3) return setError("The name must be at least 3 characters.");
+    if (password.length < 4) return setError("The password must be at least 4 characters.");
 
     try {
       const response = await fetch(`${BASE_URL}/users`, {
@@ -30,26 +30,26 @@ export default function UsernameSelectionPage() {
         // update context so downstream hooks see the username immediately
         updateDbUser({ username: name });
       } else if (response.status === 400) {
-        setError("Namnet är upptaget, prova ett annat.");
+        setError("The name is taken, try another one.");
       } else {
-        setError("Något gick fel, försök igen senare.");
+        setError("Something went wrong, try again later.");
       }
     } catch (err) {
       console.error(err);
-      setError("Nätverksfel, försök igen.");
+      setError("Network error, try again.");
     }
   };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${runway})` }}>
       <div className="p-8 bg-gray-900/60 backdrop-blur-md rounded-2xl shadow-2xl w-full max-w-sm border border-white/20 text-center">
-        <h1 className="text-2xl text-white mb-6 tracking-widest uppercase">Välj ditt namn</h1>
+        <h1 className="text-2xl text-white mb-6 tracking-widest uppercase">Pick youre game name</h1>
         
         <input 
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Modellnamn..."
+          placeholder="Game name…"
           className="w-full rounded-full px-5 py-3 bg-white/10 text-white border border-gray-500 focus:outline-none focus:border-pink-500 mb-4"
         />
 
@@ -57,7 +57,7 @@ export default function UsernameSelectionPage() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Losenord..."
+          placeholder="Password..."
           className="w-full rounded-full px-5 py-3 bg-white/10 text-white border border-gray-500 focus:outline-none focus:border-pink-500 mb-4"
         />
 
@@ -67,7 +67,7 @@ export default function UsernameSelectionPage() {
           onClick={handleSave}
           className="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-full transition-all"
         >
-          BÖRJA SPELA
+          START PLAYING
         </button>
       </div>
     </div>

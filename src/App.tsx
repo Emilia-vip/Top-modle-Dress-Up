@@ -38,7 +38,7 @@ function App() {
   if (auth0Loading || legacyLoading || dataLoading) {
     return (
       <div className="App loading-screen">
-        <h1>Laddar Top Model... Vänligen vänta.</h1>
+        <h1>Loading Top Model... Please wait.</h1>
       </div>
     );
   }
@@ -46,7 +46,7 @@ function App() {
   if (!data) {
     return (
       <div className="App error-screen">
-        <h1>Ett fel uppstod. Kunde inte ladda kläder.</h1>
+        <h1>An error occurred. Could not load clothes.</h1>
       </div>
     );
   }
