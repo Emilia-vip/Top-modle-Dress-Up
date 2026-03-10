@@ -27,9 +27,10 @@ export default function UsernameSelectionPage() {
       });
 
       if (response.ok) {
-        // update context so downstream hooks see the username immediately
-        updateDbUser({ username: name });
-      } else if (response.status === 400) {
+        const payload = await response.json();
+        const savedUsername = payload?.user?.username ?? name;
+        updateDbUser({ username: savedUsername });
+      } else if (response.status === 400 || response.status === 409) {
         setError("The name is taken, try another one.");
       } else {
         setError("Something went wrong, try again later.");

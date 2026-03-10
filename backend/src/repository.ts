@@ -68,3 +68,9 @@ export const updateUserById = async (id: string, updateData: any) => {
     { returnDocument: 'after' }
   );
 };
+
+export const deleteUserById = async (id: string) => {
+  const col = await MongoConnection.userCollection();
+  const res = await col.deleteOne({ _id: id });
+  return res.deletedCount ?? 0;
+};

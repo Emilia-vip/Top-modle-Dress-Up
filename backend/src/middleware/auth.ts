@@ -1,37 +1,40 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { sendError } from "../http/errors";
 
-interface AuthRequest extends FastifyRequest {
-  auth0Id?: string;
-  email?: string;
+declare module "fastify" {
+  interface FastifyRequest {
+    auth0Id?: string;
+    email?: string;
+  }
 }
 
 export async function authMiddleware(
-  request: AuthRequest,
+  request: FastifyRequest,
   reply: FastifyReply
 ): Promise<void> {
   const authHeader = request.headers.authorization;
 
   if (!authHeader) {
-    reply.status(401).send({ error: "No token" });
+    sendError(reply, 401, "No token", "UNAUTHORIZED");
     return;
   }
 
   const token = authHeader.split(" ")[1];
 
   try {
-    
-    const decoded = request.jwt.decode(token) | null;
+    const decoded = jwt.decode(token) as JwtPayload | null;
 
     if (!decoded || typeof decoded.sub !== "string") {
-      reply.status(401).send({ error: "Invalid token" });
+      sendError(reply, 401, "Invalid token", "UNAUTHORIZED");
       return;
     }
 
     request.auth0Id = decoded.sub;
     request.email = typeof decoded.email === "string" ? decoded.email : undefined;
 
-  } catch (err: any) {
-    reply.status(401).send({ error: "Invalid token" });
+  } catch {
+    sendError(reply, 401, "Invalid token", "UNAUTHORIZED");
   }
 }
 

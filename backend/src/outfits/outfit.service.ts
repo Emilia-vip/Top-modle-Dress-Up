@@ -2,6 +2,7 @@ import crypto from "crypto";
 import * as repository from "./outfit.repository";
 import * as ratingRepository from "../ratings/rating.repository";
 import { CreateOutfitDto, OutfitDatabaseModel } from "./types";
+import * as userService from "../users/user.service";
 
 export const createOutfit = async (body: CreateOutfitDto) => {
   if (!body || typeof body !== "object") {
@@ -18,6 +19,11 @@ export const createOutfit = async (body: CreateOutfitDto) => {
   }
   if (!bottom_id || typeof bottom_id !== "string" || bottom_id.trim() === "") {
     throw new Error("Invalid or missing 'bottom_id'");
+  }
+
+  const existingUser = await userService.findUserByUsername(username.trim());
+  if (!existingUser) {
+    throw new Error("User does not exist");
   }
 
   const outfitSkin: "dark" | "light" =

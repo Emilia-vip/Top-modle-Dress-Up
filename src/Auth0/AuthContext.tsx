@@ -72,7 +72,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (isAuthenticated && auth0User?.sub) {
       const id = encodeURIComponent(auth0User.sub as string);
-      fetch(`${BASE_URL}/users/${id}`)
+      fetch(`${BASE_URL}/users/auth0/${id}`)
         .then(res => {
           if (res.ok) {
             return res.json();

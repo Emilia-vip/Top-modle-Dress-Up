@@ -33,12 +33,20 @@ function routes(server: FastifyInstance, options: FastifyPluginOptions) {
   server.route({
     method: 'GET',
     url: '/users',
+    preHandler: [server.adminAuthenticateEither],
     handler: controllers.getAllUsers,
   });
 
   server.route({
     method: 'GET',
-    url: '/users/:auth0Id',
+    url: '/users/id/:userId',
+    preHandler: [server.adminAuthenticateEither],
+    handler: controllers.getUserById,
+  });
+
+  server.route({
+    method: 'GET',
+    url: '/users/auth0/:auth0Id',
     handler: controllers.getUserByAuth0,
   });
 
@@ -53,6 +61,27 @@ function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     url: '/user/update',
     preHandler: [server.authenticate],
     handler: controllers.updateUser,
+  });
+
+  server.route({
+    method: 'PUT',
+    url: '/users/:userId',
+    preHandler: [server.adminAuthenticateEither],
+    handler: controllers.updateUserById,
+  });
+
+  server.route({
+    method: 'PUT',
+    url: '/users/:userId/role',
+    preHandler: [server.adminAuthenticateEither],
+    handler: controllers.updateUserRole,
+  });
+
+  server.route({
+    method: 'DELETE',
+    url: '/users/:userId',
+    preHandler: [server.adminAuthenticateEither],
+    handler: controllers.deleteUserById,
   });
 
   // Registrera outfit-routes som ett eget plugin

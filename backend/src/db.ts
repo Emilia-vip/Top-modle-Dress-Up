@@ -42,16 +42,14 @@ class MongoConnection {
   // Outfits collection
   static async outfitsCollection(): Promise<Collection<OutfitDatabaseModel>> {
     const client = await this.getDbClient();
-    const dbName = process.env.MONGODB_DB;
-    if (!dbName) throw new Error('NO MONGODB_DB SET!');
+    const dbName = this.getDbName();
     return client.db(dbName).collection<OutfitDatabaseModel>('outfits');
   }
 
   // Ratings collection
   static async ratingsCollection(): Promise<Collection<RatingDatabaseModel>> {
     const client = await this.getDbClient();
-    const dbName = process.env.MONGODB_DB;
-    if (!dbName) throw new Error('NO MONGODB_DB SET!');
+    const dbName = this.getDbName();
     return client.db(dbName).collection<RatingDatabaseModel>('ratings');
   }
 
