@@ -17,5 +17,9 @@ Outfit Runway is a fashion game where players create outfits, rate other players
 
 ## How to Run
 ```bash
+FRONTEND
 npm install
 npm run dev
+BACKEND
+bun install
+bun run src/index.ts
