@@ -1,5 +1,5 @@
 import MongoConnection from '../db';
-import { OutfitDatabaseModel, Rating } from './types';
+import { OutfitDatabaseModel } from './types';
 
 // --- Outfits ---
 
@@ -36,10 +36,10 @@ export const updateOutfit = async (
   return await col.updateOne({ _id: id }, { $set: updates });
 };
 
-export const rateOutfit = async (id: string, rating: Rating) => {
-  const col = await MongoConnection.outfitsCollection();
-  return await col.updateOne({ _id: id }, { $push: { ratings: rating } });
-};
+// export const rateOutfit = async (id: string, rating: Rating) => {
+//   const col = await MongoConnection.outfitsCollection();
+//   return await col.updateOne({ _id: id }, { $push: { ratings: rating } });
+// };
 
 export const deleteOutfitById = async (id: string) => {
   const col = await MongoConnection.outfitsCollection();

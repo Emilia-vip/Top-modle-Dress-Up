@@ -1,7 +1,7 @@
-export type Rating = {
-  grade: number;
-  username: string;
-};
+// export type Rating = {
+//   grade: number;
+//   username: string;
+// };
 
 // För flexibilitet: _id kan vara string (du använder crypto.randomUUID) eller MongoDB ObjectId
 export type OutfitDatabaseModel = {
@@ -10,7 +10,6 @@ export type OutfitDatabaseModel = {
   top_id: string;
   bottom_id: string;
   skin?: "dark" | "light";
-  ratings: Rating[];
   created_at: string; // ISO timestamp string
 };
 
