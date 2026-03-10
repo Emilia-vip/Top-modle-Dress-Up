@@ -7,6 +7,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 
 const rootDiv = document.getElementById("root");
 const root = createRoot(rootDiv!);
+const auth0Audience = import.meta.env.VITE_AUTH0_AUDIENCE as string | undefined;
 
 root.render(
  
@@ -15,6 +16,7 @@ root.render(
     clientId="CP9CP9RFcy4X5uPKNdFQvgC2gzTpTTLc"
     authorizationParams={{
       redirect_uri: window.location.origin,
+      ...(auth0Audience ? { audience: auth0Audience } : {}),
     }}
   >
     <LegacyAuthProvider>

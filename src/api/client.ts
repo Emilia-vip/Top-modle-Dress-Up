@@ -4,8 +4,10 @@
 //vi hämtar brevbäraren igen 
 //och vår adressbok (constants). Den innehåller hemliga koder (tokens) och 
 // den stora huvudadressen till servern.
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { BASE_URL, REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
+
+const AUTH0_ACCESS_TOKEN_KEY = 'auth0_access_token';
 
 //Istället för att skriva hela adressen varje gång, skapar vi ett eget kontor som 
 // redan vet vart det ska (BASE_URL). Det är som att ha en förvald destination på GPS:en.
@@ -17,6 +19,12 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   //inuti config står allt som brevbäraren behöver veta den skickas til servern 
   (config) => {
+    const auth0Token = sessionStorage.getItem(AUTH0_ACCESS_TOKEN_KEY);
+    if (auth0Token) {
+      config.headers.Authorization = `Bearer ${auth0Token}`;
+      return config;
+    }
+
     //letar efter nyckeln som heter access_token i localstorage 
     const token = localStorage.getItem(ACCESS_TOKEN);
     //om token finns

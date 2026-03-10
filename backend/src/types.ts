@@ -14,19 +14,4 @@ export interface TokenPayload {
   type: string;
 }
 
-// export type Rating = {
-//   grade: number;
-//   username: string;
-// };
-
-// export type OutfitDatabaseModel = {
-//   _id: string;
-//   username: string;
-//   top_id: string;
-//   bottom_id: string;
-//   skin?: "dark" | "light";
-//   ratings: Rating[];
-//   created_at: string;
-// };
-
 export type { UserDatabaseModel };
