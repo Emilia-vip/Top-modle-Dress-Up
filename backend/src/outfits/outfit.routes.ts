@@ -5,11 +5,12 @@ import * as controllers from "./outfit.controller";
 export default async function routes(
   server: FastifyInstance
 ) {
-  server.route({
-    method: 'POST',
-    url: '/outfits',
-    handler: controllers.createOutfit,
-  });
+ server.route({
+  method: 'POST',
+  url: '/outfits',
+  preHandler: [server.authenticate],
+  handler: controllers.createOutfit,
+});
 
   server.route({
     method: 'GET',

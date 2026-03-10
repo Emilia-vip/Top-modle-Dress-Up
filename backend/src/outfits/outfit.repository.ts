@@ -1,12 +1,12 @@
-import MongoConnection from './db';
+import MongoConnection from '../db';
 import { OutfitDatabaseModel, Rating } from './types';
 
+// --- Outfits ---
 
 export const insertOutfit = async (outfit: OutfitDatabaseModel) => {
   const col = await MongoConnection.outfitsCollection();
   return await col.insertOne(outfit);
 };
-
 
 export const getAllOutfits = async () => {
   const col = await MongoConnection.outfitsCollection();
@@ -28,29 +28,9 @@ export const getLatestOutfitByUserId = async (userId: string) => {
   return arr[0] ?? null;
 };
 
-export const deleteOutfitsByUsername = async (username: string) => {
-  const col = await MongoConnection.outfitsCollection();
-  const res = await col.deleteMany({ username });
-  return res.deletedCount ?? 0;
-};
-
-export const deleteOutfitById = async (id: string) => {
-  const col = await MongoConnection.outfitsCollection();
-  const res = await col.deleteOne({ _id: id });
-  return res.deletedCount ?? 0;
-};
-
-export const findOutfitById = async (id: string) => {
-  const col = await MongoConnection.outfitsCollection();
-  return await col.findOne({ _id: id });
-};
-
 export const updateOutfit = async (
   id: string,
-  updates: {
-    top_id?: string;
-    bottom_id?: string;
-  }
+  updates: { top_id?: string; bottom_id?: string }
 ) => {
   const col = await MongoConnection.outfitsCollection();
   return await col.updateOne({ _id: id }, { $set: updates });
@@ -61,11 +41,19 @@ export const rateOutfit = async (id: string, rating: Rating) => {
   return await col.updateOne({ _id: id }, { $push: { ratings: rating } });
 };
 
-export const updateUserById = async (id: string, updateData: any) => {
-  const col = await MongoConnection.userCollection();
-  return await col.findOneAndUpdate(
-    { _id: id },
-    { $set: updateData },
-    { returnDocument: 'after' }
-  );
+export const deleteOutfitById = async (id: string) => {
+  const col = await MongoConnection.outfitsCollection();
+  const res = await col.deleteOne({ _id: id });
+  return res.deletedCount ?? 0;
+};
+
+export const deleteOutfitsByUsername = async (username: string) => {
+  const col = await MongoConnection.outfitsCollection();
+  const res = await col.deleteMany({ username });
+  return res.deletedCount ?? 0;
+};
+
+export const findOutfitById = async (id: string) => {
+  const col = await MongoConnection.outfitsCollection();
+  return await col.findOne({ _id: id });
 };
