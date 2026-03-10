@@ -5,6 +5,7 @@ import {
 } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import fastifyJwt from '@fastify/jwt';
+import { sendError } from './http/errors';
 
 export interface TokenPayload {
   user_id: string;
@@ -46,10 +47,10 @@ async function auth(server: FastifyInstance): Promise<void> {
         const decodedToken = await request.jwtVerify<TokenPayload>();
 
         if (decodedToken.type !== 'access') {
-          return reply.status(401).send('Not authorized');
+          return sendError(reply, 401, 'Not authorized', 'UNAUTHORIZED');
         }
       } catch {
-        return reply.status(401).send('Not authorized');
+        return sendError(reply, 401, 'Not authorized', 'UNAUTHORIZED');
       }
     }
   );
@@ -61,10 +62,10 @@ async function auth(server: FastifyInstance): Promise<void> {
         const decodedToken = await request.jwtVerify<TokenPayload>();
 
         if (decodedToken.role !== ROLE_ADMIN || decodedToken.type !== 'access') {
-          return reply.status(401).send('Not authorized');
+          return sendError(reply, 401, 'Not authorized', 'UNAUTHORIZED');
         }
       } catch {
-        return reply.status(401).send('Not authorized');
+        return sendError(reply, 401, 'Not authorized', 'UNAUTHORIZED');
       }
     }
   );

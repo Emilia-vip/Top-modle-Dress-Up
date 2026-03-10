@@ -1,20 +1,20 @@
 # Base image
-FROM node:20
+FROM oven/bun:1
 
 # Skapa app folder
 WORKDIR /app
 
-# Kopiera package files
-COPY package*.json ./
+# Kopiera package files och lock-fil
+COPY package.json bun.lock ./
 
 # Install dependencies
-RUN npm install
+RUN bun install --frozen-lockfile
 
 # Kopiera resten av koden
 COPY . .
 
 # Expose port
-EXPOSE 3000
+EXPOSE 3002
 
 # Starta servern
-CMD ["npm", "start"]
+CMD ["bun", "run", "src/index.ts"]

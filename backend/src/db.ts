@@ -31,27 +31,30 @@ class MongoConnection {
     return this.dbClient;
   }
 
+  private static getDbName(): string {
+    const dbName = process.env.MONGODB_DB || process.env.MONGO_DATABASE;
+    if (!dbName) throw new Error('NO MONGODB_DB OR MONGO_DATABASE SET!');
+    return dbName;
+  }
+
   // Users collection
   static async userCollection(): Promise<Collection<UserDatabaseModel>> {
     const client = await this.getDbClient();
-    const dbName = process.env.MONGODB_DB;
-    if (!dbName) throw new Error('NO MONGODB_DB SET!');
+    const dbName = this.getDbName();
     return client.db(dbName).collection<UserDatabaseModel>('Users');
   }
 
   // Outfits collection
   static async outfitsCollection(): Promise<Collection<OutfitDatabaseModel>> {
     const client = await this.getDbClient();
-    const dbName = process.env.MONGODB_DB;
-    if (!dbName) throw new Error('NO MONGODB_DB SET!');
+    const dbName = this.getDbName();
     return client.db(dbName).collection<OutfitDatabaseModel>('outfits');
   }
 
   // Ratings collection
   static async ratingsCollection(): Promise<Collection<RatingDatabaseModel>> {
     const client = await this.getDbClient();
-    const dbName = process.env.MONGODB_DB;
-    if (!dbName) throw new Error('NO MONGODB_DB SET!');
+    const dbName = this.getDbName();
     return client.db(dbName).collection<RatingDatabaseModel>('ratings');
   }
 

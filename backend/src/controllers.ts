@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import * as repository from './repository';
 import crypto from 'crypto';
 import {TokenPayload, UserDatabaseModel } from './types';
 import bcrypt from 'bcrypt';
+import { sendError } from './http/errors';
+import * as userService from './users/user.service';
 
 const BCRYPT_SALT_ROUNDS = 10;
 
@@ -26,6 +27,8 @@ type SignUpBody = {
 const sanitizeUser = (user: unknown) => {
   const safeUser = { ...(user as Record<string, unknown>) };
   delete safeUser.password;
+  delete safeUser.refresh_token_hash;
+  delete safeUser.refresh_token_expires_at;
   return safeUser;
 };
 
@@ -46,8 +49,11 @@ const generateFreshTokens = async (
   );
   const refresh_token = await reply.jwtSign(
     { ...payload, type: 'refresh' },
-    { expiresIn: '10y' }
+    { expiresIn: '7d' }
   );
+
+  const refreshExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+  await userService.storeRefreshToken(userId, refresh_token, refreshExpiresAt);
 
   return { access_token, refresh_token };
 };
@@ -64,19 +70,30 @@ export const refreshToken = async (req: FastifyRequest, res: FastifyReply) => {
   const body = req.body as { refresh_token?: string };
 
   if (!body?.refresh_token) {
-    return res.status(400).send({ message: 'Refresh token is required' });
+    return sendError(res, 400, 'Refresh token is required', 'BAD_REQUEST');
   }
 
-  const decoded = req.server.jwt.decode<TokenPayload>(body.refresh_token);
+  let decoded: TokenPayload;
 
-  if (!decoded || decoded.type !== 'refresh') {
-    return res.status(401).send({ message: 'Invalid refresh token' });
+  try {
+    decoded = await req.server.jwt.verify<TokenPayload>(body.refresh_token);
+  } catch {
+    return sendError(res, 401, 'Invalid refresh token', 'UNAUTHORIZED');
   }
 
-  const user = (await repository.findUserById(decoded.user_id)) as UserDatabaseModel | null;
+  if (decoded.type !== 'refresh') {
+    return sendError(res, 401, 'Invalid refresh token', 'UNAUTHORIZED');
+  }
+
+  const user = (await userService.findUserById(decoded.user_id)) as UserDatabaseModel | null;
 
   if (!user) {
-    return res.status(404).send({ message: 'User not found' });
+    return sendError(res, 404, 'User not found', 'NOT_FOUND');
+  }
+
+  const isStoredTokenValid = await userService.verifyStoredRefreshToken(user, body.refresh_token);
+  if (!isStoredTokenValid) {
+    return sendError(res, 401, 'Invalid refresh token', 'UNAUTHORIZED');
   }
 
   return res.status(200).send(await createAuthResponse(user, res));
@@ -86,19 +103,17 @@ export const login = async (req: FastifyRequest, res: FastifyReply) => {
   const body = req.body as LoginBody;
 
   if (!body?.username || !body?.password) {
-    return res.status(400).send({ message: 'Username and password are required' });
+    return sendError(res, 400, 'Username and password are required', 'BAD_REQUEST');
   }
 
-  const user = (await repository.findUserByUsername(body.username)) as UserDatabaseModel | null;
+  const user = (await userService.findUserByUsername(body.username)) as UserDatabaseModel | null;
 
   if (!user) {
-    return res.status(404).send({ message: 'User not found' });
+    return sendError(res, 404, 'User not found', 'NOT_FOUND');
   }
 
   if (!user.password) {
-    return res
-      .status(400)
-      .send({ message: 'This account uses Auth0. Please log in with Auth0.' });
+    return sendError(res, 400, 'This account uses Auth0. Please log in with Auth0.', 'BAD_REQUEST');
   }
 
   let isPasswordValid = false;
@@ -110,12 +125,12 @@ export const login = async (req: FastifyRequest, res: FastifyReply) => {
     isPasswordValid = body.password === user.password;
     if (isPasswordValid) {
       const migratedPassword = await bcrypt.hash(body.password, BCRYPT_SALT_ROUNDS);
-      await repository.updateUserById(user._id, { password: migratedPassword });
+      await userService.updateUserById(user._id, { password: migratedPassword });
     }
   }
 
   if (!isPasswordValid) {
-    return res.status(401).send({ message: 'Invalid password' });
+    return sendError(res, 401, 'Invalid password', 'UNAUTHORIZED');
   }
 
   return res.status(200).send(await createAuthResponse(user, res));
@@ -125,15 +140,13 @@ export const signUp = async (req: FastifyRequest, res: FastifyReply) => {
   const body = req.body as SignUpBody;
 
   if (!body?.username || !body?.phone || !body?.email || !body?.password) {
-    return res
-      .status(400)
-      .send({ message: 'Required fields: username, phone, email, password' });
+    return sendError(res, 400, 'Required fields: username, phone, email, password', 'BAD_REQUEST');
   }
 
-  const existingUser = await repository.findUserByUsername(body.username);
+  const existingUser = await userService.findUserByUsername(body.username);
 
   if (existingUser) {
-    return res.status(400).send({ message: 'User already exists' });
+    return sendError(res, 400, 'User already exists', 'CONFLICT');
   }
 
   const hashedPassword = await bcrypt.hash(body.password, BCRYPT_SALT_ROUNDS);
@@ -148,17 +161,37 @@ export const signUp = async (req: FastifyRequest, res: FastifyReply) => {
     created_at: new Date().toISOString(),
   };
 
-  await repository.insertUser(user);
+  await userService.insertUser(user);
 
   return res.status(201).send(await createAuthResponse(user, res));
 };
 
 export const getAllUsers = async (_req: FastifyRequest, res: FastifyReply) => {
   try {
-    const users = await repository.getAllUsers();
+    const users = await userService.getAllUsers();
     return res.status(200).send(users.map((u) => sanitizeUser(u)));
   } catch {
-    return res.status(500).send({ message: 'Failed to fetch users' });
+    return sendError(res, 500, 'Failed to fetch users', 'INTERNAL_ERROR');
+  }
+};
+
+export const getUserById = async (req: FastifyRequest, res: FastifyReply) => {
+  const { userId } = req.params as { userId?: string };
+
+  if (!userId) {
+    return sendError(res, 400, 'userId is required', 'BAD_REQUEST');
+  }
+
+  try {
+    const user = await userService.findUserById(userId);
+
+    if (!user) {
+      return sendError(res, 404, 'User not found', 'NOT_FOUND');
+    }
+
+    return res.status(200).send(sanitizeUser(user));
+  } catch {
+    return sendError(res, 500, 'Failed to fetch user', 'INTERNAL_ERROR');
   }
 };
 
@@ -166,18 +199,18 @@ export const getUserByAuth0 = async (req: FastifyRequest, res: FastifyReply) => 
   const { auth0Id } = req.params as { auth0Id?: string };
 
   if (!auth0Id) {
-    return res.status(400).send({ message: 'auth0Id is required' });
+    return sendError(res, 400, 'auth0Id is required', 'BAD_REQUEST');
   }
 
   try {
-    const user = await repository.findUserByAuth0Id(auth0Id);
+    const user = await userService.findUserByAuth0Id(auth0Id);
     if (!user) {
-      return res.status(404).send({});
+      return sendError(res, 404, 'User not found', 'NOT_FOUND');
     }
 
     return res.status(200).send(sanitizeUser(user));
   } catch {
-    return res.status(500).send({ message: 'Failed to fetch user' });
+    return sendError(res, 500, 'Failed to fetch user', 'INTERNAL_ERROR');
   }
 };
 
@@ -190,51 +223,78 @@ export const createUserFromAuth0 = async (req: FastifyRequest, res: FastifyReply
   };
   const { auth0Id, username, email, password } = body || {};
 
-  if (!auth0Id || !username || !password) {
-    return res.status(400).send({ message: 'auth0Id, username and password are required' });
+  if (!auth0Id || !username) {
+    return sendError(res, 400, 'auth0Id and username are required', 'BAD_REQUEST');
   }
 
   try {
-    const existingByAuth0Id = await repository.findUserByAuth0Id(auth0Id);
+    const existingByAuth0Id = await userService.findUserByAuth0Id(auth0Id);
     if (existingByAuth0Id) {
+      const trimmedUsername = username.trim();
+
+      if (!trimmedUsername) {
+        return sendError(res, 400, 'Username cannot be empty', 'BAD_REQUEST');
+      }
+
+      const existingByUsername = await userService.findUserByUsername(trimmedUsername);
+
+      if (existingByUsername && existingByUsername._id !== existingByAuth0Id._id) {
+        return sendError(res, 400, 'Username is already taken', 'CONFLICT');
+      }
+
+      const updateData: Record<string, unknown> = { username: trimmedUsername };
+      if (email) {
+        updateData.email = email;
+      }
+
+      const updatedUser = await userService.updateUserById(existingByAuth0Id._id, updateData);
+
       return res.status(200).send({
-        message: 'User already linked',
-        user: sanitizeUser(existingByAuth0Id),
+        message: 'User updated',
+        user: updatedUser ? sanitizeUser(updatedUser) : sanitizeUser(existingByAuth0Id),
       });
     }
 
-    const existingByUsername = await repository.findUserByUsername(username);
+    const trimmedUsername = username.trim();
 
-    if (existingByUsername) {
-      return res.status(400).send({ message: 'Username is already taken' });
+    if (!trimmedUsername) {
+      return sendError(res, 400, 'Username cannot be empty', 'BAD_REQUEST');
     }
 
-    const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
+    const existingByUsername = await userService.findUserByUsername(trimmedUsername);
 
-    await repository.createUserFromAuth0(auth0Id, username, hashedPassword, email);
-    const createdUser = await repository.findUserByAuth0Id(auth0Id);
+    if (existingByUsername) {
+      return sendError(res, 400, 'Username is already taken', 'CONFLICT');
+    }
+
+    const hashedPassword = password
+      ? await bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
+      : '';
+
+    await userService.createUserFromAuth0(auth0Id, trimmedUsername, hashedPassword, email);
+    const createdUser = await userService.findUserByAuth0Id(auth0Id);
 
     return res.status(201).send({
       message: 'User created',
       user: createdUser ? sanitizeUser(createdUser) : null,
     });
   } catch {
-    return res.status(500).send({ message: 'Failed to create or link user' });
+    return sendError(res, 500, 'Failed to create or link user', 'INTERNAL_ERROR');
   }
 };
 
 export const getCurrentUser = async (req: FastifyRequest, res: FastifyReply) => {
   try {
     const userId = (req as FastifyRequest & { user: TokenPayload }).user.user_id;
-    const user = await repository.findUserById(userId);
+    const user = await userService.findUserById(userId);
 
     if (!user) {
-      return res.status(404).send({ message: 'User not found' });
+      return sendError(res, 404, 'User not found', 'NOT_FOUND');
     }
 
     return res.status(200).send(sanitizeUser(user));
   } catch {
-    return res.status(500).send({ message: 'Failed to get user data' });
+    return sendError(res, 500, 'Failed to get user data', 'INTERNAL_ERROR');
   }
 };
 
@@ -250,7 +310,7 @@ export const updateUser = async (req: FastifyRequest, res: FastifyReply) => {
     const userId = body?.user?._id;
 
     if (!userId) {
-      return res.status(400).send({ message: 'user._id is required' });
+      return sendError(res, 400, 'user._id is required', 'BAD_REQUEST');
     }
 
     const updateData: {
@@ -265,15 +325,101 @@ export const updateUser = async (req: FastifyRequest, res: FastifyReply) => {
       updateData.password = await bcrypt.hash(body.password, BCRYPT_SALT_ROUNDS);
     }
 
-    const updatedUser = await repository.updateUserById(userId, updateData);
+    const updatedUser = await userService.updateUserById(userId, updateData);
 
     if (!updatedUser) {
-      return res.status(404).send({ message: 'User not found' });
+      return sendError(res, 404, 'User not found', 'NOT_FOUND');
     }
 
     return res.status(200).send(sanitizeUser(updatedUser));
   } catch {
-    return res.status(500).send({ message: 'Failed to update user' });
+    return sendError(res, 500, 'Failed to update user', 'INTERNAL_ERROR');
+  }
+};
+
+export const updateUserById = async (req: FastifyRequest, res: FastifyReply) => {
+  try {
+    const { userId } = req.params as { userId?: string };
+    const body = req.body as {
+      email?: string;
+      phone?: string;
+      password?: string;
+    };
+
+    if (!userId) {
+      return sendError(res, 400, 'userId is required', 'BAD_REQUEST');
+    }
+
+    const updateData: {
+      email?: string;
+      phone?: string;
+      password?: string;
+    } = {};
+
+    if (body?.email) updateData.email = body.email;
+    if (body?.phone) updateData.phone = body.phone;
+    if (body?.password) {
+      updateData.password = await bcrypt.hash(body.password, BCRYPT_SALT_ROUNDS);
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return sendError(res, 400, 'No fields to update', 'BAD_REQUEST');
+    }
+
+    const updatedUser = await userService.updateUserById(userId, updateData);
+
+    if (!updatedUser) {
+      return sendError(res, 404, 'User not found', 'NOT_FOUND');
+    }
+
+    return res.status(200).send(sanitizeUser(updatedUser));
+  } catch {
+    return sendError(res, 500, 'Failed to update user', 'INTERNAL_ERROR');
+  }
+};
+
+export const deleteUserById = async (req: FastifyRequest, res: FastifyReply) => {
+  const { userId } = req.params as { userId?: string };
+
+  if (!userId) {
+    return sendError(res, 400, 'userId is required', 'BAD_REQUEST');
+  }
+
+  try {
+    const deletedCount = await userService.deleteUserById(userId);
+
+    if (deletedCount === 0) {
+      return sendError(res, 404, 'User not found', 'NOT_FOUND');
+    }
+
+    return res.status(200).send({ message: 'User deleted' });
+  } catch {
+    return sendError(res, 500, 'Failed to delete user', 'INTERNAL_ERROR');
+  }
+};
+
+export const updateUserRole = async (req: FastifyRequest, res: FastifyReply) => {
+  const { userId } = req.params as { userId?: string };
+  const body = req.body as { role?: 'user' | 'admin' };
+
+  if (!userId) {
+    return sendError(res, 400, 'userId is required', 'BAD_REQUEST');
+  }
+
+  if (body?.role !== 'user' && body?.role !== 'admin') {
+    return sendError(res, 400, 'role must be either user or admin', 'BAD_REQUEST');
+  }
+
+  try {
+    const updatedUser = await userService.updateUserById(userId, { role: body.role });
+
+    if (!updatedUser) {
+      return sendError(res, 404, 'User not found', 'NOT_FOUND');
+    }
+
+    return res.status(200).send(sanitizeUser(updatedUser));
+  } catch {
+    return sendError(res, 500, 'Failed to update user role', 'INTERNAL_ERROR');
   }
 };
 

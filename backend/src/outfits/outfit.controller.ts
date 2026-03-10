@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import * as outfitService from "./outfit.service";
 import { CreateOutfitDto } from "./types"; 
+import { sendError } from "../http/errors";
 
 export const createOutfit = async (
   req: FastifyRequest<{ Body: CreateOutfitDto }>,
@@ -11,7 +12,7 @@ export const createOutfit = async (
     return reply.code(201).send(outfit);
   } catch (error: any) {
     const message = error?.message ?? "Could not create outfit";
-    return reply.code(400).send({ message });
+    return sendError(reply, 400, message, "BAD_REQUEST");
   }
 };
 
@@ -20,7 +21,7 @@ export const getOutfits = async (_req: FastifyRequest, reply: FastifyReply) => {
     const outfits = await outfitService.getOutfits();
     return reply.code(200).send(outfits);
   } catch (error: any) {
-    return reply.code(500).send({ message: error?.message ?? "Server error" });
+    return sendError(reply, 500, error?.message ?? "Server error", "INTERNAL_ERROR");
   }
 };
 
@@ -33,7 +34,7 @@ export const getOutfitsByUserId = async (
     const outfits = await outfitService.getOutfitsByUserId(userId);
     return reply.code(200).send(outfits);
   } catch (error: any) {
-    return reply.code(500).send({ message: error?.message ?? "Server error" });
+    return sendError(reply, 500, error?.message ?? "Server error", "INTERNAL_ERROR");
   }
 };
 
@@ -51,11 +52,11 @@ export const updateOutfit = async (
       typeof result === "number" ? result : (result?.modifiedCount ?? result?.matchedCount ?? 0);
 
     if (modified === 0) {
-      return reply.code(404).send({ message: "Outfit not found or not modified" });
+      return sendError(reply, 404, "Outfit not found or not modified", "NOT_FOUND");
     }
     return reply.code(200).send({ message: "Outfit updated" });
   } catch (error: any) {
-    return reply.code(500).send({ message: error?.message ?? "Server error" });
+    return sendError(reply, 500, error?.message ?? "Server error", "INTERNAL_ERROR");
   }
 };
 
@@ -88,10 +89,10 @@ export const deleteOutfit = async (
     const { outfitId } = req.params;
     const deleted = await outfitService.deleteOutfit(outfitId);
     if (deleted === 0) {
-      return reply.code(404).send({ message: 'Outfit not found' });
+      return sendError(reply, 404, 'Outfit not found', 'NOT_FOUND');
     }
     return reply.code(200).send({ message: 'Outfit deleted' });
   } catch (error: any) {
-    return reply.code(500).send({ message: error?.message ?? "Server error" });
+    return sendError(reply, 500, error?.message ?? 'Server error', 'INTERNAL_ERROR');
   }
 };

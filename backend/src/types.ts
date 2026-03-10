@@ -5,6 +5,8 @@ type UserDatabaseModel = {
   email: string;
   phone: string;
   password: string;
+  refresh_token_hash?: string;
+  refresh_token_expires_at?: string;
   created_at: string;
 };
 

@@ -39,3 +39,52 @@ export const rateOutfit = async (outfitId: string, rating: CreateRatingDto) => {
 
   return await ratingRepository.insertRating(ratingToSave);
 };
+
+export const getRatings = async () => {
+  return ratingRepository.getAllRatings();
+};
+
+export const getRatingById = async (ratingId: string) => {
+  if (!ratingId || typeof ratingId !== "string" || ratingId.trim() === "") {
+    throw new Error("Rating ID is required");
+  }
+
+  return ratingRepository.getRatingById(ratingId.trim());
+};
+
+export const updateRating = async (
+  ratingId: string,
+  updates: { grade?: number; username?: string }
+) => {
+  if (!ratingId || typeof ratingId !== "string" || ratingId.trim() === "") {
+    throw new Error("Rating ID is required");
+  }
+
+  if (!updates || typeof updates !== "object") {
+    throw new Error("Updates are required");
+  }
+
+  const sanitizedUpdates: { grade?: number; username?: string } = {};
+
+  if (typeof updates.grade === "number") {
+    sanitizedUpdates.grade = updates.grade;
+  }
+
+  if (typeof updates.username === "string" && updates.username.trim() !== "") {
+    sanitizedUpdates.username = updates.username.trim();
+  }
+
+  if (Object.keys(sanitizedUpdates).length === 0) {
+    throw new Error("At least one updatable field is required");
+  }
+
+  return ratingRepository.updateRatingById(ratingId.trim(), sanitizedUpdates);
+};
+
+export const deleteRating = async (ratingId: string) => {
+  if (!ratingId || typeof ratingId !== "string" || ratingId.trim() === "") {
+    throw new Error("Rating ID is required");
+  }
+
+  return ratingRepository.deleteRatingById(ratingId.trim());
+};

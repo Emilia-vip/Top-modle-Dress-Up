@@ -2,10 +2,33 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
+import { sendError } from './http/errors';
+import { TokenPayload } from './types';
 
 type Auth0TokenPayload = JwtPayload & {
   sub: string;
   email?: string;
+};
+
+const ROLE_ADMIN = 'admin';
+
+const getAuth0Roles = (payload: Auth0TokenPayload): string[] => {
+  const namespacedRoles = payload['https://topmodelrunway/roles'];
+  if (Array.isArray(namespacedRoles)) {
+    return namespacedRoles.filter((item): item is string => typeof item === 'string');
+  }
+
+  const directRoles = (payload as JwtPayload & { roles?: unknown }).roles;
+  if (Array.isArray(directRoles)) {
+    return directRoles.filter((item): item is string => typeof item === 'string');
+  }
+
+  const realmRoles = (payload as JwtPayload & { realm_access?: { roles?: unknown } }).realm_access?.roles;
+  if (Array.isArray(realmRoles)) {
+    return realmRoles.filter((item): item is string => typeof item === 'string');
+  }
+
+  return [];
 };
 
 const auth0Domain = process.env.AUTH0_DOMAIN;
@@ -81,6 +104,7 @@ declare module 'fastify' {
   interface FastifyInstance {
     authenticateAuth0(request: FastifyRequest, reply: FastifyReply): Promise<void>;
     authenticateEither(request: FastifyRequest, reply: FastifyReply): Promise<void>;
+    adminAuthenticateEither(request: FastifyRequest, reply: FastifyReply): Promise<void>;
   }
 }
 
@@ -92,7 +116,7 @@ async function auth0(server: FastifyInstance): Promise<void> {
         const decoded = await verifyAuth0BearerToken(request);
         request.auth0User = decoded;
       } catch {
-        return reply.status(401).send({ message: 'Not authorized' });
+        return sendError(reply, 401, 'Not authorized', 'UNAUTHORIZED');
       }
     }
   );
@@ -102,8 +126,10 @@ async function auth0(server: FastifyInstance): Promise<void> {
     'authenticateEither',
     async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
       try {
-        await request.jwtVerify();
-        return;
+        const decodedToken = await request.jwtVerify<TokenPayload>();
+        if (decodedToken.type === 'access') {
+          return;
+        }
       } catch {
         // Fallback to Auth0 JWT validation.
       }
@@ -112,8 +138,35 @@ async function auth0(server: FastifyInstance): Promise<void> {
         const decoded = await verifyAuth0BearerToken(request);
         request.auth0User = decoded;
       } catch {
-        return reply.status(401).send({ message: 'Not authorized' });
+        return sendError(reply, 401, 'Not authorized', 'UNAUTHORIZED');
       }
+    }
+  );
+
+  server.decorate(
+    'adminAuthenticateEither',
+    async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
+      try {
+        const decodedToken = await request.jwtVerify<TokenPayload>();
+        if (decodedToken.type === 'access' && decodedToken.role === ROLE_ADMIN) {
+          return;
+        }
+      } catch {
+        // Fallback to Auth0 JWT validation.
+      }
+
+      try {
+        const decoded = await verifyAuth0BearerToken(request);
+        request.auth0User = decoded;
+        const roles = getAuth0Roles(decoded);
+        if (roles.includes(ROLE_ADMIN)) {
+          return;
+        }
+      } catch {
+        return sendError(reply, 401, 'Not authorized', 'UNAUTHORIZED');
+      }
+
+      return sendError(reply, 403, 'Forbidden', 'FORBIDDEN');
     }
   );
 }
