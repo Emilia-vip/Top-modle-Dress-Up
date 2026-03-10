@@ -8,7 +8,7 @@ export default async function routes(
  server.route({
   method: 'POST',
   url: '/outfits',
-  preHandler: [server.authenticate],
+  preHandler: [server.authenticateEither],
   handler: controllers.createOutfit,
 });
 

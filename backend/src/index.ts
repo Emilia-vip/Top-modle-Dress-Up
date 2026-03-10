@@ -2,8 +2,8 @@ import fastify, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import MongoConnection from './db';
 import auth from './auth';
+import auth0 from './auth0';
 import routes from './routes/route';
-import outfitRoutes from './outfits/outfit.routes';
 import syncUserRoutes from './routes/syncUser';
 import fastifyHelmet from '@fastify/helmet';
 import fastifyRateLimit from '@fastify/rate-limit';
@@ -30,6 +30,7 @@ async function start() {
   });
 
   await server.register(auth);
+  await server.register(auth0);
 
   await server.register(routes);
 
