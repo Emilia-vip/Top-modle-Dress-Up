@@ -1,7 +1,9 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-  import * as controllers from '../controllers';
+import * as controllers from '../controllers';
+import outfitRoutes from "../outfits/outfit.routes"
 
 function routes(server: FastifyInstance, options: FastifyPluginOptions) {
+  // Auth / User routes
   server.route({
     method: 'POST',
     url: '/sign_up',
@@ -20,47 +22,6 @@ function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     handler: controllers.login,
   });
 
-
-
-  // Outfit routes
-
-  server.route({
-    method: 'POST',
-    url: '/outfits',
-    handler: controllers.createOutfit,
-  });
-
-  server.route({
-    method: 'GET',
-    url: '/outfits',
-    handler: controllers.getOutfits,
-  });
-
-  server.route({
-    method: 'GET',
-    url: '/outfits/user/:userId',
-    handler: controllers.getOutfitsByUserId,
-  });
-
-  server.route({
-    method: 'PUT',
-    url: '/outfits/:outfitId',
-    handler: controllers.updateOutfit,
-  });
-
-  server.route({
-    method: 'POST',
-    url: '/outfits/:outfitId/rate',
-    handler: controllers.rateOutfit,
-  });
-
-  server.route({
-    method: 'DELETE',
-    url: '/outfits/:outfitId',
-    handler: controllers.deleteOutfit,
-  });
-
-  // User routes
   server.route({
     method: 'GET',
     url: '/user/me',
@@ -68,14 +29,12 @@ function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     handler: controllers.getCurrentUser,
   });
 
-  // small utility route for frontend to list every user (used in profile/member pages)
   server.route({
     method: 'GET',
     url: '/users',
     handler: controllers.getAllUsers,
   });
 
-  // auth0‑specific helpers: check existence and create new record
   server.route({
     method: 'GET',
     url: '/users/:auth0Id',
@@ -94,6 +53,9 @@ function routes(server: FastifyInstance, options: FastifyPluginOptions) {
     preHandler: [server.authenticate],
     handler: controllers.updateUser,
   });
+
+  // Registrera outfit-routes som ett eget plugin
+  server.register(outfitRoutes);
 }
 
 export default routes;

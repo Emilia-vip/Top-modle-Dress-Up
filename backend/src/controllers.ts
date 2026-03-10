@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import * as repository from './repository';
+import crypto from 'crypto';
 import { OutfitDatabaseModel, Rating, TokenPayload, UserDatabaseModel } from './types';
 
 type TokensResponse = {
@@ -254,122 +255,122 @@ export const updateUser = async (req: FastifyRequest, res: FastifyReply) => {
   }
 };
 
-export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
-  const body = req.body as {
-    username?: string;
-    top_id?: string;
-    bottom_id?: string;
-    skin?: 'dark' | 'light';
-  };
+// export const createOutfit = async (req: FastifyRequest, res: FastifyReply) => {
+//   const body = req.body as {
+//     username?: string;
+//     top_id?: string;
+//     bottom_id?: string;
+//     skin?: 'dark' | 'light';
+//   };
 
-  if (!body?.username || !body?.top_id || !body?.bottom_id) {
-    return res.status(400).send({ message: 'username, top_id and bottom_id are required' });
-  }
+//   if (!body?.username || !body?.top_id || !body?.bottom_id) {
+//     return res.status(400).send({ message: 'username, top_id and bottom_id are required' });
+//   }
 
-  const outfit: OutfitDatabaseModel = {
-    _id: crypto.randomUUID(),
-    username: body.username,
-    top_id: body.top_id,
-    bottom_id: body.bottom_id,
-    skin: body.skin,
-    ratings: [],
-    created_at: new Date().toISOString(),
-  };
+//   const outfit: OutfitDatabaseModel = {
+//     _id: crypto.randomUUID(),
+//     username: body.username,
+//     top_id: body.top_id,
+//     bottom_id: body.bottom_id,
+//     skin: body.skin,
+//     ratings: [],
+//     created_at: new Date().toISOString(),
+//   };
 
-  // Keep exactly one saved outfit per user by replacing previous entries.
-  await repository.deleteOutfitsByUsername(body.username);
-  await repository.insertOutfit(outfit);
-  return res.status(201).send(outfit);
-};
+//   // Keep exactly one saved outfit per user by replacing previous entries.
+//   await repository.deleteOutfitsByUsername(body.username);
+//   await repository.insertOutfit(outfit);
+//   return res.status(201).send(outfit);
+// };
 
-export const getOutfits = async (_req: FastifyRequest, res: FastifyReply) => {
-  try {
-    const outfits = await repository.getAllOutfits();
-    return res.status(200).send(outfits);
-  } catch {
-    return res.status(500).send({ message: 'Failed to fetch outfits' });
-  }
-};
+// export const getOutfits = async (_req: FastifyRequest, res: FastifyReply) => {
+//   try {
+//     const outfits = await repository.getAllOutfits();
+//     return res.status(200).send(outfits);
+//   } catch {
+//     return res.status(500).send({ message: 'Failed to fetch outfits' });
+//   }
+// };
 
-export const getOutfitsByUserId = async (req: FastifyRequest, res: FastifyReply) => {
-  const { userId } = req.params as { userId?: string };
+// export const getOutfitsByUserId = async (req: FastifyRequest, res: FastifyReply) => {
+//   const { userId } = req.params as { userId?: string };
 
-  if (!userId) {
-    return res.status(400).send({ message: 'userId is required' });
-  }
+//   if (!userId) {
+//     return res.status(400).send({ message: 'userId is required' });
+//   }
 
-  try {
-    const outfits = await repository.getOutfitsByUserId(userId);
-    return res.status(200).send(outfits);
-  } catch {
-    return res.status(500).send({ message: 'Failed to fetch outfits for user' });
-  }
-};
+//   try {
+//     const outfits = await repository.getOutfitsByUserId(userId);
+//     return res.status(200).send(outfits);
+//   } catch {
+//     return res.status(500).send({ message: 'Failed to fetch outfits for user' });
+//   }
+// };
 
-export const updateOutfit = async (req: FastifyRequest, res: FastifyReply) => {
-  const { outfitId } = req.params as { outfitId?: string };
-  const body = req.body as { top_id?: string; bottom_id?: string };
+// export const updateOutfit = async (req: FastifyRequest, res: FastifyReply) => {
+//   const { outfitId } = req.params as { outfitId?: string };
+//   const body = req.body as { top_id?: string; bottom_id?: string };
 
-  if (!outfitId) {
-    return res.status(400).send({ message: 'outfitId is required' });
-  }
+//   if (!outfitId) {
+//     return res.status(400).send({ message: 'outfitId is required' });
+//   }
 
-  if (!body?.top_id && !body?.bottom_id) {
-    return res.status(400).send({ message: 'Nothing to update' });
-  }
+//   if (!body?.top_id && !body?.bottom_id) {
+//     return res.status(400).send({ message: 'Nothing to update' });
+//   }
 
-  await repository.updateOutfit(outfitId, {
-    top_id: body.top_id,
-    bottom_id: body.bottom_id,
-  });
+//   await repository.updateOutfit(outfitId, {
+//     top_id: body.top_id,
+//     bottom_id: body.bottom_id,
+//   });
 
-  const updated = await repository.findOutfitById(outfitId);
-  if (!updated) {
-    return res.status(404).send({ message: 'Outfit not found' });
-  }
+//   const updated = await repository.findOutfitById(outfitId);
+//   if (!updated) {
+//     return res.status(404).send({ message: 'Outfit not found' });
+//   }
 
-  return res.status(200).send({ message: 'Outfit updated successfully', outfit: updated });
-};
+//   return res.status(200).send({ message: 'Outfit updated successfully', outfit: updated });
+// };
 
-export const rateOutfit = async (req: FastifyRequest, res: FastifyReply) => {
-  const { outfitId } = req.params as { outfitId?: string };
-  const body = req.body as { grade?: number; username?: string };
+// export const rateOutfit = async (req: FastifyRequest, res: FastifyReply) => {
+//   const { outfitId } = req.params as { outfitId?: string };
+//   const body = req.body as { grade?: number; username?: string };
 
-  if (!outfitId) {
-    return res.status(400).send({ message: 'outfitId is required' });
-  }
+//   if (!outfitId) {
+//     return res.status(400).send({ message: 'outfitId is required' });
+//   }
 
-  if (!body?.username || typeof body.grade !== 'number') {
-    return res.status(400).send({ message: 'grade and username are required' });
-  }
+//   if (!body?.username || typeof body.grade !== 'number') {
+//     return res.status(400).send({ message: 'grade and username are required' });
+//   }
 
-  const rating: Rating = {
-    grade: body.grade,
-    username: body.username,
-  };
+//   const rating: Rating = {
+//     grade: body.grade,
+//     username: body.username,
+//   };
 
-  await repository.rateOutfit(outfitId, rating);
-  const updated = await repository.findOutfitById(outfitId);
+//   await repository.rateOutfit(outfitId, rating);
+//   const updated = await repository.findOutfitById(outfitId);
 
-  if (!updated) {
-    return res.status(404).send({ message: 'Outfit not found' });
-  }
+//   if (!updated) {
+//     return res.status(404).send({ message: 'Outfit not found' });
+//   }
 
-  return res.status(200).send(updated);
-};
+//   return res.status(200).send(updated);
+// };
 
-export const deleteOutfit = async (req: FastifyRequest, res: FastifyReply) => {
-  const { outfitId } = req.params as { outfitId?: string };
+// export const deleteOutfit = async (req: FastifyRequest, res: FastifyReply) => {
+//   const { outfitId } = req.params as { outfitId?: string };
 
-  if (!outfitId) {
-    return res.status(400).send({ message: 'outfitId is required' });
-  }
+//   if (!outfitId) {
+//     return res.status(400).send({ message: 'outfitId is required' });
+//   }
 
-  const existing = await repository.findOutfitById(outfitId);
-  if (!existing) {
-    return res.status(404).send({ message: 'Outfit not found' });
-  }
+//   const existing = await repository.findOutfitById(outfitId);
+//   if (!existing) {
+//     return res.status(404).send({ message: 'Outfit not found' });
+//   }
 
-  await repository.deleteOutfitById(outfitId);
-  return res.status(204).send();
-};
+//   await repository.deleteOutfitById(outfitId);
+//   return res.status(204).send();
+// };
