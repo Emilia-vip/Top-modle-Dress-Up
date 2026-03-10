@@ -1,6 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import * as repository from './repository';
 import { OutfitDatabaseModel, Rating, TokenPayload, UserDatabaseModel } from './types';
+import bcrypt from 'bcrypt';
+
+const BCRYPT_SALT_ROUNDS = 10;
 
 type TokensResponse = {
   access_token: string;
@@ -97,7 +100,20 @@ export const login = async (req: FastifyRequest, res: FastifyReply) => {
       .send({ message: 'This account uses Auth0. Please log in with Auth0.' });
   }
 
-  if (body.password !== user.password) {
+  let isPasswordValid = false;
+
+  try {
+    isPasswordValid = await bcrypt.compare(body.password, user.password);
+  } catch {
+    // Support legacy plaintext passwords during migration.
+    isPasswordValid = body.password === user.password;
+    if (isPasswordValid) {
+      const migratedPassword = await bcrypt.hash(body.password, BCRYPT_SALT_ROUNDS);
+      await repository.updateUserById(user._id, { password: migratedPassword });
+    }
+  }
+
+  if (!isPasswordValid) {
     return res.status(401).send({ message: 'Invalid password' });
   }
 
@@ -119,10 +135,12 @@ export const signUp = async (req: FastifyRequest, res: FastifyReply) => {
     return res.status(400).send({ message: 'User already exists' });
   }
 
+  const hashedPassword = await bcrypt.hash(body.password, BCRYPT_SALT_ROUNDS);
+
   const user: UserDatabaseModel = {
     _id: crypto.randomUUID(),
     email: body.email,
-    password: body.password,
+    password: hashedPassword,
     username: body.username,
     role: 'user',
     phone: body.phone,
@@ -190,7 +208,9 @@ export const createUserFromAuth0 = async (req: FastifyRequest, res: FastifyReply
       return res.status(400).send({ message: 'Username is already taken' });
     }
 
-    await repository.createUserFromAuth0(auth0Id, username, password, email);
+    const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
+
+    await repository.createUserFromAuth0(auth0Id, username, hashedPassword, email);
     const createdUser = await repository.findUserByAuth0Id(auth0Id);
 
     return res.status(201).send({
@@ -240,7 +260,9 @@ export const updateUser = async (req: FastifyRequest, res: FastifyReply) => {
 
     if (body.email) updateData.email = body.email;
     if (body.phone) updateData.phone = body.phone;
-    if (body.password) updateData.password = body.password;
+    if (body.password) {
+      updateData.password = await bcrypt.hash(body.password, BCRYPT_SALT_ROUNDS);
+    }
 
     const updatedUser = await repository.updateUserById(userId, updateData);
 

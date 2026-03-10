@@ -45,7 +45,7 @@ function LoginPage() {
           onClick={() => auth0Login()} // Använder Auth0-motorn
           className="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold cursor-pointer py-3 rounded-full shadow-lg transition-all mb-4 border-none"
         >
-          LOGGA IN MED AUTH0
+          Log in with Google
         </button>
 
         <div className="flex flex-col gap-1">
