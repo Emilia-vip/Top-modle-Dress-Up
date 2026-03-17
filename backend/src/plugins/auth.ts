@@ -5,16 +5,8 @@ import {
 } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import fastifyJwt from '@fastify/jwt';
-import { sendError } from './http/errors';
-
-export interface TokenPayload {
-  user_id: string;
-  email: string;
-  phone: string;
-  display_name: string;
-  role: string;
-  type: string;
-}
+import { sendError } from '../http/errors';
+import { TokenPayload } from '../users/types';
 
 declare module 'fastify' {
   interface FastifyInstance {

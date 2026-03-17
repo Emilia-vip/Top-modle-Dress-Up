@@ -1,4 +1,4 @@
-type UserDatabaseModel = {
+export type UserDatabaseModel = {
   _id: string;
   username: string;
   role: 'user' | 'admin';
@@ -15,5 +15,3 @@ export interface TokenPayload {
   role: string;
   type: string;
 }
-
-export type { UserDatabaseModel };

@@ -1,8 +1,8 @@
 import fastify, { FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
-import MongoConnection from './db';
-import auth from './auth';
-import auth0 from './auth0';
+import MongoConnection from './database/db';
+import auth from './plugins/auth';
+import auth0 from './plugins/auth0';
 import routes from './routes/route';
 import syncUserRoutes from './routes/syncUser';
 import fastifyHelmet from '@fastify/helmet';
