@@ -40,8 +40,7 @@ class MongoConnection {
 
   static async userCollection(): Promise<Collection<UserDatabaseModel>> {
     const client = await this.getDbClient();
-    const dbName = process.env.MONGODB_DB;
-    if (!dbName) throw new Error('NO MONGODB_DB SET!');
+    const dbName = this.getDbName();
     return client.db(dbName).collection<UserDatabaseModel>('Users');
   }
 
