@@ -2,8 +2,8 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
-import { sendError } from './http/errors';
-import { TokenPayload } from './types';
+import { sendError } from '../http/errors';
+import { TokenPayload } from '../users/types';
 
 type Auth0TokenPayload = JwtPayload & {
   sub: string;
@@ -121,7 +121,6 @@ async function auth0(server: FastifyInstance): Promise<void> {
     }
   );
 
-  // Accept either legacy local JWTs or Auth0 JWTs during migration.
   server.decorate(
     'authenticateEither',
     async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {

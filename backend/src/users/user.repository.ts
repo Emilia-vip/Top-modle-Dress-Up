@@ -1,7 +1,5 @@
-import MongoConnection from './db';
+import MongoConnection from '../database/db';
 import { UserDatabaseModel } from './types';
-
-// --- Users ---
 
 export const insertUser = async (user: UserDatabaseModel) => {
   const col = await MongoConnection.userCollection();
@@ -30,7 +28,7 @@ export const createUserFromAuth0 = async (
   email?: string
 ) => {
   const col = await MongoConnection.userCollection();
-  const doc: any = {
+  const doc: Record<string, unknown> = {
     auth0_id: auth0Id,
     username,
     password,
@@ -38,21 +36,12 @@ export const createUserFromAuth0 = async (
     phone: '',
     created_at: new Date().toISOString(),
   };
-  if (email) doc.email = email;
+
+  if (email) {
+    doc.email = email;
+  }
 
   return await col.insertOne(doc);
-};
-
-export const linkAuth0ToUsername = async (
-  username: string,
-  auth0Id: string,
-  email?: string
-) => {
-  const col = await MongoConnection.userCollection();
-  const updateData: Record<string, unknown> = { auth0_id: auth0Id };
-  if (email) updateData.email = email;
-
-  return await col.updateOne({ username }, { $set: updateData });
 };
 
 export const getAllUsers = async () => {
@@ -60,7 +49,7 @@ export const getAllUsers = async () => {
   return await col.find({}).toArray();
 };
 
-export const updateUserById = async (id: string, updateData: any) => {
+export const updateUserById = async (id: string, updateData: Record<string, unknown>) => {
   const col = await MongoConnection.userCollection();
   return await col.findOneAndUpdate(
     { _id: id },

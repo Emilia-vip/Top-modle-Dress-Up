@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import crypto from 'crypto';
-import {TokenPayload, UserDatabaseModel } from './types';
 import bcrypt from 'bcrypt';
-import { sendError } from './http/errors';
-import * as userService from './users/user.service';
+import { sendError } from '../http/errors';
+import { TokenPayload, UserDatabaseModel } from './types';
+import * as userService from './user.service';
 
 const BCRYPT_SALT_ROUNDS = 10;
 
@@ -121,7 +121,6 @@ export const login = async (req: FastifyRequest, res: FastifyReply) => {
   try {
     isPasswordValid = await bcrypt.compare(body.password, user.password);
   } catch {
-    // Support legacy plaintext passwords during migration.
     isPasswordValid = body.password === user.password;
     if (isPasswordValid) {
       const migratedPassword = await bcrypt.hash(body.password, BCRYPT_SALT_ROUNDS);
@@ -422,4 +421,3 @@ export const updateUserRole = async (req: FastifyRequest, res: FastifyReply) => 
     return sendError(res, 500, 'Failed to update user role', 'INTERNAL_ERROR');
   }
 };
-

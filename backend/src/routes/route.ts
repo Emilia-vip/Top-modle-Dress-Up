@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import * as controllers from '../controllers';
+import * as controllers from '../users/user.controller';
 import outfitRoutes from "../outfits/outfit.routes"
 import ratingRoutes from '../ratings/rating.routes';
 

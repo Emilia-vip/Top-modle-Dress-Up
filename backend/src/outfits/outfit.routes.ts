@@ -30,12 +30,6 @@ export default async function routes(
     handler: controllers.updateOutfit,
   });
 
-  // server.route({
-  //   method: 'POST',
-  //   url: '/outfits/:outfitId/rate',
-  //   handler: controllers.rateOutfit,
-  // });
-
   server.route({
     method: 'DELETE',
     url: '/outfits/:outfitId',

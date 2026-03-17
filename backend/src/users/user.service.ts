@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
-import { UserDatabaseModel } from '../types';
-import * as repository from '../repository';
+import { UserDatabaseModel } from './types';
+import * as repository from './user.repository';
 
 const BCRYPT_SALT_ROUNDS = 10;
 

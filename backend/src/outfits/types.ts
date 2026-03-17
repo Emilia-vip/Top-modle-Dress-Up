@@ -1,7 +1,3 @@
-// export type Rating = {
-//   grade: number;
-//   username: string;
-// };
 
 // För flexibilitet: _id kan vara string (du använder crypto.randomUUID) eller MongoDB ObjectId
 export type OutfitDatabaseModel = {

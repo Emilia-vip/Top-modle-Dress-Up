@@ -1,8 +1,9 @@
 import { Collection, MongoClient } from 'mongodb';
 import pino from 'pino';
 import dotenv from 'dotenv';
-import { OutfitDatabaseModel, UserDatabaseModel } from './types';
-import { RatingDatabaseModel } from './ratings/types';
+import { UserDatabaseModel } from '../users/types';
+import { OutfitDatabaseModel } from '../outfits/types';
+import { RatingDatabaseModel } from '../ratings/types';
 
 dotenv.config();
 
@@ -37,28 +38,24 @@ class MongoConnection {
     return dbName;
   }
 
-  // Users collection
   static async userCollection(): Promise<Collection<UserDatabaseModel>> {
     const client = await this.getDbClient();
     const dbName = this.getDbName();
     return client.db(dbName).collection<UserDatabaseModel>('Users');
   }
 
-  // Outfits collection
   static async outfitsCollection(): Promise<Collection<OutfitDatabaseModel>> {
     const client = await this.getDbClient();
     const dbName = this.getDbName();
     return client.db(dbName).collection<OutfitDatabaseModel>('outfits');
   }
 
-  // Ratings collection
   static async ratingsCollection(): Promise<Collection<RatingDatabaseModel>> {
     const client = await this.getDbClient();
     const dbName = this.getDbName();
     return client.db(dbName).collection<RatingDatabaseModel>('ratings');
   }
 
-  // Stäng alla anslutningar
   static async close(): Promise<void> {
     if (this.dbClient) {
       await this.dbClient.close();

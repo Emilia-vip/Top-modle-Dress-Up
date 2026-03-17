@@ -1,4 +1,4 @@
-import MongoConnection from "../db";
+import MongoConnection from "../database/db";
 import { RatingDatabaseModel } from "./types";
 
 export const insertRating = async (rating: RatingDatabaseModel) => {
