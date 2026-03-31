@@ -130,7 +130,7 @@ async function auth0(server: FastifyInstance): Promise<void> {
           return;
         }
       } catch {
-        // Fallback to Auth0 JWT validation.
+        
       }
 
       try {
@@ -151,7 +151,7 @@ async function auth0(server: FastifyInstance): Promise<void> {
           return;
         }
       } catch {
-        // Fallback to Auth0 JWT validation.
+        
       }
 
       try {
