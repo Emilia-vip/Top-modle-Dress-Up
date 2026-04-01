@@ -8,25 +8,25 @@
     "start": "bun run src/index.ts"
   },
   "dependencies": {
-    "@fastify/cors": "^11.1.0",
-    "@fastify/helmet": "^13.0.2",
-    "@fastify/jwt": "^10.0.0",
-    "@fastify/rate-limit": "^10.3.0",
-    "@types/jsonwebtoken": "^9.0.10",
-    "bcrypt": "^6.0.0",
-    "dotenv": "^17.3.1",
-    "fastify": "^5.7.4",
-    "fastify-plugin": "^5.0.1",
-    "jsonwebtoken": "^9.0.3",
-    "jwks-rsa": "^4.0.1",
-    "mongodb": "^6.21.0",
-    "mongoose": "^9.2.4",
-    "pino": "^9.9.2"
+    "@fastify/cors": "11.1.0",
+    "@fastify/helmet": "13.0.2",
+    "@fastify/jwt": "10.0.0",
+    "@fastify/rate-limit": "10.3.0",
+    "@types/jsonwebtoken": "9.0.10",
+    "bcrypt": "6.0.0",
+    "dotenv": "17.3.1",
+    "fastify": "5.7.4",
+    "fastify-plugin": "5.0.1",
+    "jsonwebtoken": "9.0.3",
+    "jwks-rsa": "4.0.1",
+    "mongodb": "6.21.0",
+    "mongoose": "9.2.4",
+    "pino": "9.9.2"
   },
   "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
+    "@types/bcrypt": "6.0.0",
     "@types/node": "22",
-    "typescript": "^5.9.2"
+    "typescript": "5.9.2"
   },
   "engine": {
     "node": "22.x"

@@ -1,7 +1,7 @@
-
+import { ObjectId } from "mongodb";
 
 export type OutfitDatabaseModel = {
-  _id: string | import('mongodb').ObjectId;
+  _id: string | ObjectId;
   username: string;
   top_id: string;
   bottom_id: string;
