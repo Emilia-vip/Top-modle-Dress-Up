@@ -3,7 +3,7 @@ import mongoose, { Document, Schema, Model } from "mongoose";
 export interface IUser extends Document {
   auth0_id: string;
   email: string;
-  username?: string;
+  username: string;
   created_at: Date;
 }
 

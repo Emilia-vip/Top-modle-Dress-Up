@@ -1,12 +1,12 @@
-import { ObjectId } from "mongodb";
+
 
 export type OutfitDatabaseModel = {
-  _id: string | ObjectId;
+  _id: string;
   username: string;
   top_id: string;
   bottom_id: string;
   skin?: "dark" | "light";
-  created_at: string; 
+  created_at: string;
 };
 
 

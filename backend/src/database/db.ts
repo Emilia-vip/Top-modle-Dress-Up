@@ -33,7 +33,7 @@ class MongoConnection {
   }
 
   private static getDbName(): string {
-    const dbName = process.env.MONGODB_DB || process.env.MONGO_DATABASE;
+    const dbName = process.env.MONGODB_DATABASE;
     if (!dbName) throw new Error('NO MONGODB_DB OR MONGO_DATABASE SET!');
     return dbName;
   }

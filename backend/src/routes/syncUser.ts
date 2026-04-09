@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import User from "../models/user";
-import authMiddleware from "../middleware/auth"; // now works because auth.ts exports default
+import authMiddleware from "../middleware/auth"; 
 import { sendError } from "../http/errors";
 
 export default async function syncUserRoutes(fastify: FastifyInstance) {
@@ -19,7 +19,7 @@ export default async function syncUserRoutes(fastify: FastifyInstance) {
         user = await User.create({
           auth0_id: auth0Id,
           email: email,
-          username: email.split("@")[0], // default username
+          username: email.split("@")[0], // default andvändarnamn
         });
       }
 
